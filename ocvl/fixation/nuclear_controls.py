@@ -3,7 +3,7 @@ import PySide6.QtCore
 import sys
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QTabWidget, QWidget, QFormLayout, QLineEdit, \
-    QHBoxLayout, QRadioButton, QSlider, QAbstractSlider
+    QHBoxLayout, QRadioButton, QSlider, QAbstractSlider, QPushButton, QColorDialog, QVBoxLayout
 
 print(PySide6.__version__)  # Prints the pyside6 version
 print(PySide6.QtCore.__version__)  # Prints Qt version used to compile Pyside6
@@ -14,6 +14,7 @@ class Tabs(QTabWidget):
         super(Tabs, self).__init__(parent)
 
         # Generate the Tabs for the window to hold the settings
+        self.color_label = None
         self.tab1 = QWidget()
         self.tab2 = QWidget()
         self.tab3 = QWidget()
@@ -24,6 +25,8 @@ class Tabs(QTabWidget):
         self.label_size = None
         self.test_label = None
         self.size_bar = None
+        self.image_cal_button = None
+        self.load_bg_image_button = None
 
         # Set the position of the tabs to be on the right
         self.setTabPosition(QTabWidget.East)
@@ -67,7 +70,13 @@ class Tabs(QTabWidget):
         # Widget for the shape objects for the fixation target
         fix_shape = QHBoxLayout()
 
-        # Radio Buttons to be used
+        # Color wheel for selecting the color of the target
+        color_button = QPushButton("Select Color")
+        self.color_label = QLabel("")
+        color_button.clicked.connect(self.onpresscolor)
+
+
+        # Radio Buttons to be used for target shape
         cross = QRadioButton("Large Crosshair")
         s_cross = QRadioButton("Small Crosshair")
         square_out = QRadioButton("Square Outline")
@@ -107,7 +116,9 @@ class Tabs(QTabWidget):
         fix_size.addWidget(self.size_bar)
 
         # Add all the other widgets to the main layout and set priority
-        layout2.addRow("Color:", QLineEdit())
+        # layout2.addRow("Color:", QLineEdit())
+        layout2.addRow(color_button)
+        layout2.addRow(self.color_label)
         layout2.addRow(QLabel(""))
         layout2.addRow(QLabel("Shape:"), fix_shape)  # Adds the radio buttons for the shape to the main layout
         layout2.addRow(self.test_label)
@@ -128,36 +139,77 @@ class Tabs(QTabWidget):
         txt = str(self.size_bar.value())
         self.label_size.setText(txt)
 
+    def onpresscolor(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            self.color_label.setText("Current Color selected: " + str(color.name()))
+
     # Function for the UI of Tab 3 - Image Calibration Control
     def tab3ui(self):
         layout3 = QFormLayout()
 
+        # Generate buttons needed for image calibration control
+        self.load_bg_image_button = QPushButton()
+        self.load_bg_image_button.setText("Load Background Image")
+        self.image_cal_button = QPushButton()
+        self.image_cal_button.setText("Start Image Calibration")
+        center_fovea_button = QPushButton()
+        center_fovea_button.setText("Center Fovea")
+
+        # Add the image calibration button to its slot when pressed
+        self.image_cal_button.clicked.connect(self.onpresscal)
+        self.load_bg_image_button.clicked.connect(self.onpressload)
+
         # Add all the widgets to the main layout and set priority
-        layout3.addRow("Load Background Image:", QLineEdit())
-        layout3.addRow("Center Fovea:", QLineEdit())
-        layout3.addRow("Start Image Calibration:", QLineEdit())
+        layout3.addRow(self.load_bg_image_button)
+        layout3.addRow(self.image_cal_button)
+        layout3.addRow(center_fovea_button)
+
         self.setTabText(2, "Image Calibration Control")
-        self.tab2.setLayout(layout3)
+        self.tab3.setLayout(layout3)
+
+    def onpresscal(self):
+        button = self.sender()
+        txt = str(button.text())
+        match txt:
+            case "Start Image Calibration":
+                self.image_cal_button.setText("Select 1st Point on Image")
+            case "Select 1st Point on Image":
+                self.image_cal_button.setText("Select Corresponding Point")
+            case "Select Corresponding Point":
+                self.image_cal_button.setText("New Calibration")
+            case "New Calibration":
+                self.image_cal_button.setText("Start Image Calibration")
+            case _:
+                self.image_cal_button.setText("Something went wrong!!!!")
+
+    def onpressload(self):
+        button = self.sender()
 
     # Function for the UI of Tab 4 - Protocol Control
     def tab4ui(self):
         layout4 = QFormLayout()
 
+        # Generate buttons needed for protocol control
+        load_p_button = QPushButton()
+        load_p_button.setText("Load Protocol")
+        save_p_button = QPushButton()
+        save_p_button.setText("Save Protocol")
+
         # Add all the widgets to the main layout and set priority
-        layout4.addRow("Load Protocol:", QLineEdit())  # Should mark locations with size of FOV on display screen
-        layout4.addRow("Save Protocol", QLineEdit())
+        layout4.addRow(load_p_button)  # Should mark locations with size of FOV on display screen
+        layout4.addRow(save_p_button)
 
         self.setTabText(3, "Protocol Control")
-        self.tab2.setLayout(layout4)
+        self.tab4.setLayout(layout4)
 
     # Function for the UI of Tab 5 - Help
     def tab5ui(self):
         layout5 = QFormLayout()
-
         # Add all the widgets to the main layout and set priority
-        layout5.addRow("Load Background Image:", QLineEdit())
+        layout5.addRow("Help:", QLineEdit())
         self.setTabText(4, "Help")
-        self.tab2.setLayout(layout5)
+        self.tab5.setLayout(layout5)
 
 
 if __name__ == "__main__":
