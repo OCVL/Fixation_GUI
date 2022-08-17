@@ -20,6 +20,11 @@ class Tabs(QTabWidget):
         self.tab4 = QWidget()
         self.tab5 = QWidget()
 
+        # Generate class variables used in slots and signals
+        self.label_size = None
+        self.test_label = None
+        self.size_bar = None
+
         # Set the position of the tabs to be on the right
         self.setTabPosition(QTabWidget.East)
 
@@ -59,34 +64,69 @@ class Tabs(QTabWidget):
     def tab2ui(self):
         layout2 = QFormLayout()
 
-        # Generate the radio button for fixation target shape
+        # Widget for the shape objects for the fixation target
         fix_shape = QHBoxLayout()
-        fix_shape.addWidget(QRadioButton("Crosshair"))
-        fix_shape.addWidget(QRadioButton("Circle"))
-        fix_shape.addWidget(QRadioButton("Square"))
+
+        # Radio Buttons to be used
+        cross = QRadioButton("Large Crosshair")
+        s_cross = QRadioButton("Small Crosshair")
+        square_out = QRadioButton("Square Outline")
+        square = QRadioButton("Square")
+        circle = QRadioButton("Circle")
+        self.test_label = QLabel("")
+
+        # Adding the radio buttons to the shape widget
+        fix_shape.addWidget(cross)
+        fix_shape.addWidget(s_cross)
+        fix_shape.addWidget(square_out)
+        fix_shape.addWidget(square)
+        fix_shape.addWidget(circle)
+
+        # What will happen when a specific radio button is called
+        cross.toggled.connect(self.onclick)
+        s_cross.toggled.connect(self.onclick)
+        square_out.toggled.connect(self.onclick)
+        square.toggled.connect(self.onclick)
+        circle.toggled.connect(self.onclick)
 
         # Generate the scroll bar for the size of the fixation target
         fix_size = QHBoxLayout()
-        size_bar = QSlider(Qt.Horizontal)
-        label_size = QLabel()
-        size_bar.setMinimum(1)
-        size_bar.setMaximum(20)
-        size_bar.setValue(5)
-        size_bar.setTickPosition(QSlider.TicksBelow)
-        size_bar.setTickInterval(1)
-        # Need to figure out how to get it to update when value is changed
-        size_bar.valueChanged.connect(label_size.setText(str(size_bar.value())))
+        self.size_bar = QSlider(Qt.Horizontal)
+        self.label_size = QLabel()
+        self.size_bar.setMinimum(1)
+        self.size_bar.setMaximum(20)
+        self.size_bar.setValue(5)
+        self.size_bar.setTickPosition(QSlider.TicksBelow)
+        self.size_bar.setTickInterval(1)
+        self.label_size.setText(str(self.size_bar.value()))
+        self.size_bar.valueChanged.connect(self.sizechange)
 
         # Add scroll bar and label to the main widget
-        fix_size.addWidget(label_size)
-        fix_size.addWidget(size_bar)
+        fix_size.addWidget(self.label_size)
+        fix_size.addWidget(QLabel(""))
+        fix_size.addWidget(self.size_bar)
 
         # Add all the other widgets to the main layout and set priority
         layout2.addRow("Color:", QLineEdit())
+        layout2.addRow(QLabel(""))
         layout2.addRow(QLabel("Shape:"), fix_shape)  # Adds the radio buttons for the shape to the main layout
+        layout2.addRow(self.test_label)
+        layout2.addRow(QLabel(""))
         layout2.addRow(QLabel("Size:"), fix_size)
         self.setTabText(1, "Fixation Target Control")
         self.tab2.setLayout(layout2)
+
+    # Slot for the shape of the fixation target being completed
+    def onclick(self):
+        button = self.sender()
+        if button.isChecked():
+            # Will be changed to what each shape will look like in the future
+            self.test_label.setText("You pressed the button called: " + button.text())
+
+    # Slot for displaying the value of the fixation target as it moves
+    def sizechange(self):
+        txt = str(self.size_bar.value())
+        self.label_size.setText(txt)
 
     # Function for the UI of Tab 3 - Image Calibration Control
     def tab3ui(self):
@@ -124,7 +164,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
     widget = Tabs()
-    widget.resize(600, 800)
+    widget.resize(800, 800)
     widget.show()
 
     sys.exit(app.exec())
