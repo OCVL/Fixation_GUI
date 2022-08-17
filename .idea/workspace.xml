@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10265a4d-0c1d-4a65-8747-ae54663009dc" name="Default Changelist" comment="">
+    <list default="true" id="10265a4d-0c1d-4a65-8747-ae54663009dc" name="Default Changelist" comment="-Added the ability to press F4 on the fixation target and have it start a record on the host application.">
+      <change afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fixationgui/wxFixGUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/fixationgui/wxFixGUI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fixationgui/wxFixProc.py" beforeDir="false" afterPath="$PROJECT_DIR$/fixationgui/wxFixProc.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +135,7 @@
       <recent name="$PROJECT_DIR$/fixationgui" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.wxFixGUI">
+  <component name="RunManager" selected="Python.nuclear_notes">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="Fixation_GUI" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -148,6 +149,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="nuclear_notes" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Fixation_GUI" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -261,42 +283,21 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="wxSaviorBottomPanel" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pre_modified_server_side_scripts" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pre_modified_server_side_scripts/wxSaviorBottomPanel.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.wxFixProc" />
       <item itemvalue="Python.plannerMode" />
       <item itemvalue="Python.protocolPane" />
       <item itemvalue="Python.testImage" />
       <item itemvalue="Python.wxFixGUI" />
-      <item itemvalue="Python.wxSaviorBottomPanel" />
+      <item itemvalue="Python.nuclear_notes" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.nuclear_notes" />
         <item itemvalue="Python.wxFixGUI" />
         <item itemvalue="Python.plannerMode" />
         <item itemvalue="Python.testImage" />
         <item itemvalue="Python.protocolPane" />
-        <item itemvalue="Python.wxSaviorBottomPanel" />
       </list>
     </recent_temporary>
   </component>
@@ -429,6 +430,7 @@
         <watch expression="protocolref.selfArray" language="Python" />
         <watch expression="self.listevt" language="Python" />
         <watch expression="self.protoVidNum" language="Python" />
+        <watch expression="settings" language="Python" />
       </configuration>
     </watches-manager>
   </component>
