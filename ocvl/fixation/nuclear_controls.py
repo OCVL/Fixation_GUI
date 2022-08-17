@@ -71,7 +71,9 @@ class Tabs(QTabWidget):
         fix_shape = QHBoxLayout()
 
         # Color wheel for selecting the color of the target
+        self.color_layout = QHBoxLayout()
         color_button = QPushButton("Select Color")
+        self.color_layout.addWidget(color_button)
         self.color_label = QLabel("")
         color_button.clicked.connect(self.onpresscolor)
 
@@ -79,24 +81,30 @@ class Tabs(QTabWidget):
         # Radio Buttons to be used for target shape
         cross = QRadioButton("Large Crosshair")
         s_cross = QRadioButton("Small Crosshair")
+        m_cross = QRadioButton("Maltese Cross")
         square_out = QRadioButton("Square Outline")
         square = QRadioButton("Square")
         circle = QRadioButton("Circle")
+        twinkle = QRadioButton("Twinkle")
         self.test_label = QLabel("")
 
         # Adding the radio buttons to the shape widget
         fix_shape.addWidget(cross)
         fix_shape.addWidget(s_cross)
+        fix_shape.addWidget(m_cross)
         fix_shape.addWidget(square_out)
         fix_shape.addWidget(square)
         fix_shape.addWidget(circle)
+        fix_shape.addWidget(twinkle)
 
         # What will happen when a specific radio button is called
         cross.toggled.connect(self.onclick)
         s_cross.toggled.connect(self.onclick)
+        m_cross.toggled.connect(self.onclick)
         square_out.toggled.connect(self.onclick)
         square.toggled.connect(self.onclick)
         circle.toggled.connect(self.onclick)
+        twinkle.toggled.connect(self.onclick)
 
         # Generate the scroll bar for the size of the fixation target
         fix_size = QHBoxLayout()
@@ -117,7 +125,7 @@ class Tabs(QTabWidget):
 
         # Add all the other widgets to the main layout and set priority
         # layout2.addRow("Color:", QLineEdit())
-        layout2.addRow(color_button)
+        layout2.addRow(self.color_layout)
         layout2.addRow(self.color_label)
         layout2.addRow(QLabel(""))
         layout2.addRow(QLabel("Shape:"), fix_shape)  # Adds the radio buttons for the shape to the main layout
@@ -150,7 +158,7 @@ class Tabs(QTabWidget):
 
         # Generate buttons needed for image calibration control
         self.load_bg_image_button = QPushButton()
-        self.load_bg_image_button.setText("Load Background Image")
+        self.load_bg_image_button.setText("Load Background Image") #Open file explore and select image
         self.image_cal_button = QPushButton()
         self.image_cal_button.setText("Start Image Calibration")
         center_fovea_button = QPushButton()
@@ -175,8 +183,18 @@ class Tabs(QTabWidget):
             case "Start Image Calibration":
                 self.image_cal_button.setText("Select 1st Point on Image")
             case "Select 1st Point on Image":
-                self.image_cal_button.setText("Select Corresponding Point")
-            case "Select Corresponding Point":
+                self.image_cal_button.setText("Select Corresponding Point (1st Point)")
+            case "Select Corresponding Point (1st Point)":
+                self.image_cal_button.setText("Select 2nd Point on Image")
+            case "Select 2nd Point on Image":
+                self.image_cal_button.setText("Select Corresponding Point (2nd Point)")
+            case "Select Corresponding Point (2nd Point)":
+                self.image_cal_button.setText("Select 3rd Point on Image")
+            case "Select 3rd Point on Image":
+                self.image_cal_button.setText("Select Corresponding Point (3rd Point)")
+            case "Select Corresponding Point (3rd Point)":
+                self.image_cal_button.setText("Start Calibration")
+            case "Start Calibration":
                 self.image_cal_button.setText("New Calibration")
             case "New Calibration":
                 self.image_cal_button.setText("Start Image Calibration")
@@ -192,7 +210,7 @@ class Tabs(QTabWidget):
 
         # Generate buttons needed for protocol control
         load_p_button = QPushButton()
-        load_p_button.setText("Load Protocol")
+        load_p_button.setText("Load Protocol") # Need an advance button
         save_p_button = QPushButton()
         save_p_button.setText("Save Protocol")
 
