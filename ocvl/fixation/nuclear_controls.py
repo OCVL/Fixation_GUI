@@ -20,6 +20,7 @@ class Tabs(QTabWidget):
         super(Tabs, self).__init__(parent)
 
         # Generate the Tabs for the window to hold the settings
+        self.custom_color = QtGui.QColor('green')
         self.image_label = None
         self.twinkle = None
         self.circle = None
@@ -211,7 +212,7 @@ class Tabs(QTabWidget):
 
         # Generate buttons needed for protocol control
         load_p_button = QPushButton()
-        load_p_button.setText("Load Protocol") # Need an advance button
+        load_p_button.setText("Load Protocol")  # Need an advance button
         save_p_button = QPushButton()
         save_p_button.setText("Save Protocol")
 
@@ -235,6 +236,7 @@ class Tabs(QTabWidget):
     """
     Functions below are used in the UI for Tab 2
     """
+
     def drawtargets(self):
         """
         Function that calls each function in charge of drawing on the fixation target to be selected
@@ -252,9 +254,7 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('green'))
+        pen = QtGui.QPen(self.custom_color, 10)
         painter.setPen(pen)
         painter.drawLine(10, 50, 90, 50)
         painter.drawLine(50, 10, 50, 90)
@@ -267,9 +267,7 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('red'))
+        pen = QtGui.QPen(self.custom_color, 10)
         painter.setPen(pen)
         painter.drawLine(35, 50, 65, 50)
         painter.drawLine(50, 35, 50, 65)
@@ -282,11 +280,9 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('blue'))
+        pen = QtGui.QPen(self.custom_color, 10)
         painter.setPen(pen)
-        painter.setBrush(QtGui.QColor('blue'))
+        painter.setBrush(self.custom_color)
         painter.drawRect(15, 15, 70, 70)
         painter.end()
         self.square.setIcon(canvas)
@@ -297,9 +293,8 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('orange'))
+        pen = QtGui.QPen(self.custom_color, 10)
+        pen = QtGui.QPen(self.custom_color, 10)
         painter.setPen(pen)
         painter.drawLine(20, 20, 20, 80)
         painter.drawLine(20, 20, 80, 20)
@@ -314,11 +309,9 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('yellow'))
+        pen = QtGui.QPen(self.custom_color, 10)
         painter.setPen(pen)
-        painter.setBrush(QtGui.QColor('yellow'))
+        painter.setBrush(QtGui.QColor(self.custom_color))
         center = QPointF(50, 50)
         painter.drawEllipse(center, 35, 35)
         painter.end()
@@ -330,9 +323,7 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('purple'))
+        pen = QtGui.QPen(self.custom_color, 10)
         painter.setPen(pen)
         painter.drawLine(35, 50, 65, 50)
         painter.drawLine(15, 50, 15, 50)
@@ -351,9 +342,7 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(5)
-        pen.setColor(QtGui.QColor('white'))
+        pen = QtGui.QPen(self.custom_color, 5)
         painter.setPen(pen)
         painter.drawLine(30, 10, 70, 90)
         painter.drawLine(70, 10, 30, 90)
@@ -375,6 +364,7 @@ class Tabs(QTabWidget):
     """
     Slots that are used in the UI for Tab 2
     """
+
     def onclick(self):
         """
         Slot for the shape of the fixation target to be selected
@@ -415,15 +405,15 @@ class Tabs(QTabWidget):
         """
         Slot used to select the color of the fixation target
         """
-        color = QColorDialog.getColor() # Might want to make a class variable to change the color of the fixation target to the one selected
+        color = QColorDialog.getColor()  # Might want to make a class variable to change the color of the fixation target to the one selected
+        self.custom_color = color
         if color.isValid():
             self.color_name_label.setText("Current Color selected: " + str(color.name()))
             self.color_display_label.setGeometry(100, 100, 200, 60)
-            self.color_display_label.setStyleSheet("QLabel"
-                         "{"
-                         "border : 5px solid black;"
-                         "background-color: color;"
-                         "}")
+            self.color_display_label.setStyleSheet("QLabel""{"
+                                                   "border : 5px solid black;"
+                                                   "background-color: color;"
+                                                   "}")
             # setting graphic effect to the label
             self.graphic = QGraphicsColorizeEffect()
             # setting color to the graphic
@@ -431,9 +421,12 @@ class Tabs(QTabWidget):
             # setting graphic to the label
             self.color_display_label.setGraphicsEffect(self.graphic)
 
+            self.drawtargets()
+
     """
     Slots that are used in the UI for Tab 3
     """
+
     def onpresscal(self):
         button = self.sender()
         txt = str(button.text())
@@ -464,7 +457,6 @@ class Tabs(QTabWidget):
         image_path = filedialog.askopenfilenames()
         print(image_path)
         self.image_label.setText(str(image_path))
-
 
 
 if __name__ == "__main__":
