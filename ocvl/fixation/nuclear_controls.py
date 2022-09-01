@@ -1,7 +1,10 @@
+from tkinter import filedialog
 from PySide6 import QtCore, QtWidgets, QtGui
 import PySide6.QtCore
 import sys
-from PySide6.QtCore import Qt, QSize
+import cv2
+from PySide6.QtGui import *
+from PySide6.QtCore import Qt, QSize, QPointF
 from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QTabWidget, QWidget, QFormLayout, QLineEdit, \
     QHBoxLayout, QRadioButton, QSlider, QAbstractSlider, QPushButton, QColorDialog, QVBoxLayout, QGraphicsColorizeEffect
 
@@ -11,9 +14,23 @@ print(PySide6.QtCore.__version__)  # Prints Qt version used to compile Pyside6
 
 class Tabs(QTabWidget):
     def __init__(self, parent=None):
+        """
+        Initialization of the class variables
+        """
         super(Tabs, self).__init__(parent)
 
         # Generate the Tabs for the window to hold the settings
+        self.image_label = None
+        self.twinkle = None
+        self.circle = None
+        self.square = None
+        self.m_cross = None
+        self.square_out = None
+        self.s_cross = None
+        self.cross = None
+        self.color_display_label = None
+        self.color_name_label = None
+        self.color_layout = None
         self.graphic = None
         self.color_label = None
         self.tab1 = QWidget()
@@ -49,8 +66,10 @@ class Tabs(QTabWidget):
         # Set the Title of the Window
         self.setWindowTitle("Control Settings")
 
-    # Function for the UI of Tab 1 - Stimulus control
     def tab1ui(self):
+        """
+        Function for the UI properties and functionality of Tab 1 - Stimulus control
+        """
         layout1 = QFormLayout()
         layout1.addRow("Port Number:", QLineEdit())
 
@@ -64,8 +83,10 @@ class Tabs(QTabWidget):
         self.setTabText(0, "Stimulus Control")
         self.tab1.setLayout(layout1)
 
-    # Function for the UI of Tab 2 - Fixation Target Control
     def tab2ui(self):
+        """
+        Function for the UI properties and functionality of Tab 2 - Fixation Target Control
+        """
         layout2 = QFormLayout()
 
         # Widget for the shape objects for the fixation target
@@ -100,10 +121,7 @@ class Tabs(QTabWidget):
         self.twinkle.setFixedSize(QSize(100, 100))
 
         # Call the functions to draw the different targets
-        self.drawcross()
-        self.drawsmallcross()
-        self.drawsqaure()
-        self.drawsquareoutline()
+        self.drawtargets()
 
         # Adding the radio buttons to the shape widget
         fix_shape.addWidget(self.cross)
@@ -154,8 +172,213 @@ class Tabs(QTabWidget):
         self.setTabText(1, "Fixation Target Control")
         self.tab2.setLayout(layout2)
 
-    # Slot for the shape of the fixation target being completed
+    def tab3ui(self):
+        """
+        Function for the UI properties and functionality of Tab 3 - Image Calibration Control
+        """
+        layout3 = QFormLayout()
+
+        # Attributes needed to display an image
+        self.image_label = QLabel("")
+        self.image_label.resize(500, 500)
+
+        # Generate buttons needed for image calibration control
+        self.load_bg_image_button = QPushButton()
+        self.load_bg_image_button.setText("Load Background Image")  # Open file explore and select image
+        self.image_cal_button = QPushButton()
+        self.image_cal_button.setText("Start Image Calibration")
+        center_fovea_button = QPushButton()
+        center_fovea_button.setText("Center Fovea")
+
+        # Add the image calibration button to its slot when pressed
+        self.image_cal_button.clicked.connect(self.onpresscal)
+        self.load_bg_image_button.clicked.connect(self.onpressload)
+
+        # Add all the widgets to the main layout and set priority
+        layout3.addRow(self.load_bg_image_button)
+        layout3.addRow(self.image_label)
+        layout3.addRow(self.image_cal_button)
+        layout3.addRow(center_fovea_button)
+
+        self.setTabText(2, "Image Calibration Control")
+        self.tab3.setLayout(layout3)
+
+    def tab4ui(self):
+        """
+        Function for the UI properties and functionality of Tab 4 - Protocol Control
+        """
+        layout4 = QFormLayout()
+
+        # Generate buttons needed for protocol control
+        load_p_button = QPushButton()
+        load_p_button.setText("Load Protocol") # Need an advance button
+        save_p_button = QPushButton()
+        save_p_button.setText("Save Protocol")
+
+        # Add all the widgets to the main layout and set priority
+        layout4.addRow(load_p_button)  # Should mark locations with size of FOV on display screen
+        layout4.addRow(save_p_button)
+
+        self.setTabText(3, "Protocol Control")
+        self.tab4.setLayout(layout4)
+
+    def tab5ui(self):
+        """
+        Function for the UI properties and functionality of Tab 5 - Help and Hot Key Shortcuts
+        """
+        layout5 = QFormLayout()
+        # Add all the widgets to the main layout and set priority
+        layout5.addRow("Help:", QLineEdit())
+        self.setTabText(4, "Help")
+        self.tab5.setLayout(layout5)
+
+    """
+    Functions below are used in the UI for Tab 2
+    """
+    def drawtargets(self):
+        """
+        Function that calls each function in charge of drawing on the fixation target to be selected
+        """
+        # Call the functions to draw the different targets
+        self.drawcross()
+        self.drawsmallcross()
+        self.drawsqaure()
+        self.drawsquareoutline()
+        self.drawcircle()
+        self.drawtwinkle()
+        self.drawmaltcross()
+
+    def drawcross(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('green'))
+        painter.setPen(pen)
+        painter.drawLine(10, 50, 90, 50)
+        painter.drawLine(50, 10, 50, 90)
+        painter.end()
+        self.cross.setIcon(canvas)
+        self.cross.setIconSize(QSize(100, 100))
+        self.cross.setStyleSheet("text-align: left;")
+
+    def drawsmallcross(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('red'))
+        painter.setPen(pen)
+        painter.drawLine(35, 50, 65, 50)
+        painter.drawLine(50, 35, 50, 65)
+        painter.end()
+        self.s_cross.setIcon(canvas)
+        self.s_cross.setIconSize(QSize(100, 100))
+        self.s_cross.setStyleSheet("text-align: left;")
+
+    def drawsqaure(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('blue'))
+        painter.setPen(pen)
+        painter.setBrush(QtGui.QColor('blue'))
+        painter.drawRect(15, 15, 70, 70)
+        painter.end()
+        self.square.setIcon(canvas)
+        self.square.setIconSize(QSize(100, 100))
+        self.square.setStyleSheet("text-align: left;")
+
+    def drawsquareoutline(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('orange'))
+        painter.setPen(pen)
+        painter.drawLine(20, 20, 20, 80)
+        painter.drawLine(20, 20, 80, 20)
+        painter.drawLine(80, 20, 80, 80)
+        painter.drawLine(20, 80, 80, 80)
+        painter.end()
+        self.square_out.setIcon(canvas)
+        self.square_out.setIconSize(QSize(100, 100))
+        self.square_out.setStyleSheet("text-align: left;")
+
+    def drawcircle(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('yellow'))
+        painter.setPen(pen)
+        painter.setBrush(QtGui.QColor('yellow'))
+        center = QPointF(50, 50)
+        painter.drawEllipse(center, 35, 35)
+        painter.end()
+        self.circle.setIcon(canvas)
+        self.circle.setIconSize(QSize(100, 100))
+        self.circle.setStyleSheet("text-align: left;")
+
+    def drawtwinkle(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('purple'))
+        painter.setPen(pen)
+        painter.drawLine(35, 50, 65, 50)
+        painter.drawLine(15, 50, 15, 50)
+        painter.drawLine(85, 50, 85, 50)
+        painter.drawLine(50, 35, 50, 65)
+        painter.drawLine(50, 85, 50, 85)
+        painter.drawLine(50, 15, 50, 15)
+        painter.drawLine(25, 25, 75, 75)
+        painter.drawLine(75, 25, 25, 75)
+        painter.end()
+        self.twinkle.setIcon(canvas)
+        self.twinkle.setIconSize(QSize(100, 100))
+        self.twinkle.setStyleSheet("text-align: left;")
+
+    def drawmaltcross(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(5)
+        pen.setColor(QtGui.QColor('white'))
+        painter.setPen(pen)
+        painter.drawLine(30, 10, 70, 90)
+        painter.drawLine(70, 10, 30, 90)
+        painter.drawLine(10, 30, 90, 70)
+        painter.drawLine(10, 70, 90, 30)
+        painter.drawLine(50, 25, 30, 10)
+        painter.drawLine(50, 25, 70, 10)
+        painter.drawLine(50, 75, 30, 90)
+        painter.drawLine(50, 75, 70, 90)
+        painter.drawLine(25, 50, 10, 70)
+        painter.drawLine(25, 50, 10, 30)
+        painter.drawLine(75, 50, 90, 70)
+        painter.drawLine(75, 50, 90, 30)
+        painter.end()
+        self.m_cross.setIcon(canvas)
+        self.m_cross.setIconSize(QSize(100, 100))
+        self.m_cross.setStyleSheet("text-align: left;")
+
+    """
+    Slots that are used in the UI for Tab 2
+    """
     def onclick(self):
+        """
+        Slot for the shape of the fixation target to be selected
+        """
         button = self.sender()
         txt = str(button.text())
         match txt:
@@ -181,13 +404,18 @@ class Tabs(QTabWidget):
                 # Will be changed to what each shape will look like in the future
                 self.test_label.setText("You pressed the button called: " + txt)
 
-    # Slot for displaying the value of the fixation target as it moves
     def sizechange(self):
+        """
+        Slot for displaying the size of the fixation target as it moves
+        """
         txt = str(self.size_bar.value())
         self.label_size.setText(txt)
 
     def onpresscolor(self):
-        color = QColorDialog.getColor()
+        """
+        Slot used to select the color of the fixation target
+        """
+        color = QColorDialog.getColor() # Might want to make a class variable to change the color of the fixation target to the one selected
         if color.isValid():
             self.color_name_label.setText("Current Color selected: " + str(color.name()))
             self.color_display_label.setGeometry(100, 100, 200, 60)
@@ -203,30 +431,9 @@ class Tabs(QTabWidget):
             # setting graphic to the label
             self.color_display_label.setGraphicsEffect(self.graphic)
 
-    # Function for the UI of Tab 3 - Image Calibration Control
-    def tab3ui(self):
-        layout3 = QFormLayout()
-
-        # Generate buttons needed for image calibration control
-        self.load_bg_image_button = QPushButton()
-        self.load_bg_image_button.setText("Load Background Image") #Open file explore and select image
-        self.image_cal_button = QPushButton()
-        self.image_cal_button.setText("Start Image Calibration")
-        center_fovea_button = QPushButton()
-        center_fovea_button.setText("Center Fovea")
-
-        # Add the image calibration button to its slot when pressed
-        self.image_cal_button.clicked.connect(self.onpresscal)
-        self.load_bg_image_button.clicked.connect(self.onpressload)
-
-        # Add all the widgets to the main layout and set priority
-        layout3.addRow(self.load_bg_image_button)
-        layout3.addRow(self.image_cal_button)
-        layout3.addRow(center_fovea_button)
-
-        self.setTabText(2, "Image Calibration Control")
-        self.tab3.setLayout(layout3)
-
+    """
+    Slots that are used in the UI for Tab 3
+    """
     def onpresscal(self):
         button = self.sender()
         txt = str(button.text())
@@ -254,99 +461,15 @@ class Tabs(QTabWidget):
 
     def onpressload(self):
         button = self.sender()
+        image_path = filedialog.askopenfilenames()
+        print(image_path)
+        image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        img_qt = QImage(image)
+        pixmap = QPixmap.fromImage(img_qt)
+        self.image_label.setPixmap(pixmap)
+        self.image_label.resize(pixmap.width(), pixmap.height())
+        self.image_label.show()
 
-    # Function for the UI of Tab 4 - Protocol Control
-    def tab4ui(self):
-        layout4 = QFormLayout()
-
-        # Generate buttons needed for protocol control
-        load_p_button = QPushButton()
-        load_p_button.setText("Load Protocol") # Need an advance button
-        save_p_button = QPushButton()
-        save_p_button.setText("Save Protocol")
-
-        # Add all the widgets to the main layout and set priority
-        layout4.addRow(load_p_button)  # Should mark locations with size of FOV on display screen
-        layout4.addRow(save_p_button)
-
-        self.setTabText(3, "Protocol Control")
-        self.tab4.setLayout(layout4)
-
-    # Function for the UI of Tab 5 - Help
-    def tab5ui(self):
-        layout5 = QFormLayout()
-        # Add all the widgets to the main layout and set priority
-        layout5.addRow("Help:", QLineEdit())
-        self.setTabText(4, "Help")
-        self.tab5.setLayout(layout5)
-
-    def drawcross(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('green'))
-        painter.setPen(pen)
-        painter.drawLine(10, 50, 90, 50)
-        painter.drawLine(50, 10, 50, 90)
-        painter.end()
-        self.cross.setIcon(canvas)
-        self.cross.setIconSize(QSize(100, 100))
-        self.cross.setStyleSheet("text-align: left;")
-
-    def drawsmallcross(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('red'))
-        painter.setPen(pen)
-        painter.drawLine(35, 50, 65, 50)
-        painter.drawLine(50, 35, 50,65)
-        painter.end()
-        self.s_cross.setIcon(canvas)
-        self.s_cross.setIconSize(QSize(100, 100))
-        self.s_cross.setStyleSheet("text-align: left;")
-
-    def drawsqaure(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('blue'))
-        painter.setPen(pen)
-        # painter.drawRect(10, 10, 80, 80)
-        painter.drawLine(20, 20, 20, 80)
-        painter.drawLine(30, 20, 30, 80)
-        painter.drawLine(40, 20, 40, 80)
-        painter.drawLine(50, 20, 50, 80)
-        painter.drawLine(60, 20, 60, 80)
-        painter.drawLine(70, 20, 70, 80)
-        painter.drawLine(80, 20, 80, 80)
-        painter.end()
-        self.square.setIcon(canvas)
-        self.square.setIconSize(QSize(100, 100))
-        self.square.setStyleSheet("text-align: left;")
-
-    def drawsquareoutline(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen()
-        pen.setWidth(10)
-        pen.setColor(QtGui.QColor('orange'))
-        painter.setPen(pen)
-        painter.drawLine(20, 20, 20, 80)
-        painter.drawLine(20, 20, 80, 20)
-        painter.drawLine(80, 20, 80, 80)
-        painter.drawLine(20, 80, 80, 80)
-        painter.end()
-        self.square_out.setIcon(canvas)
-        self.square_out.setIconSize(QSize(100, 100))
-        self.square_out.setStyleSheet("text-align: left;")
 
 
 if __name__ == "__main__":
