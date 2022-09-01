@@ -99,6 +99,12 @@ class Tabs(QTabWidget):
         self.circle.setFixedSize(QSize(100, 100))
         self.twinkle.setFixedSize(QSize(100, 100))
 
+        # Call the functions to draw the different targets
+        self.drawcross()
+        self.drawsmallcross()
+        self.drawsqaure()
+        self.drawsquareoutline()
+
         # Adding the radio buttons to the shape widget
         fix_shape.addWidget(self.cross)
         fix_shape.addWidget(self.s_cross)
@@ -140,7 +146,8 @@ class Tabs(QTabWidget):
         layout2.addRow(self.color_layout)
         layout2.addRow(color_shape)
         layout2.addRow(QLabel(""))
-        layout2.addRow(QLabel("Shape:"), fix_shape)  # Adds the radio buttons for the shape to the main layout
+        layout2.addRow(QLabel("Shape:"))
+        layout2.addRow(fix_shape)  # Adds the radio buttons for the shape to the main layout
         layout2.addRow(self.test_label)
         layout2.addRow(QLabel(""))
         layout2.addRow(QLabel("Size:"), fix_size)
@@ -273,10 +280,73 @@ class Tabs(QTabWidget):
         self.setTabText(4, "Help")
         self.tab5.setLayout(layout5)
 
-    def PaintEvent(self, event):
-            painter = QPainter(self)
-            painter.setPen(QPen(Qt.green, 8, Qt.DashLine))
-            painter.drawEllipse(40, 40, 400, 400)
+    def drawcross(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('green'))
+        painter.setPen(pen)
+        painter.drawLine(10, 50, 90, 50)
+        painter.drawLine(50, 10, 50, 90)
+        painter.end()
+        self.cross.setIcon(canvas)
+        self.cross.setIconSize(QSize(100, 100))
+        self.cross.setStyleSheet("text-align: left;")
+
+    def drawsmallcross(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('red'))
+        painter.setPen(pen)
+        painter.drawLine(35, 50, 65, 50)
+        painter.drawLine(50, 35, 50,65)
+        painter.end()
+        self.s_cross.setIcon(canvas)
+        self.s_cross.setIconSize(QSize(100, 100))
+        self.s_cross.setStyleSheet("text-align: left;")
+
+    def drawsqaure(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('blue'))
+        painter.setPen(pen)
+        # painter.drawRect(10, 10, 80, 80)
+        painter.drawLine(20, 20, 20, 80)
+        painter.drawLine(30, 20, 30, 80)
+        painter.drawLine(40, 20, 40, 80)
+        painter.drawLine(50, 20, 50, 80)
+        painter.drawLine(60, 20, 60, 80)
+        painter.drawLine(70, 20, 70, 80)
+        painter.drawLine(80, 20, 80, 80)
+        painter.end()
+        self.square.setIcon(canvas)
+        self.square.setIconSize(QSize(100, 100))
+        self.square.setStyleSheet("text-align: left;")
+
+    def drawsquareoutline(self):
+        canvas = QtGui.QPixmap(QSize(100, 100))
+        canvas.fill(Qt.black)
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(10)
+        pen.setColor(QtGui.QColor('orange'))
+        painter.setPen(pen)
+        painter.drawLine(20, 20, 20, 80)
+        painter.drawLine(20, 20, 80, 20)
+        painter.drawLine(80, 20, 80, 80)
+        painter.drawLine(20, 80, 80, 80)
+        painter.end()
+        self.square_out.setIcon(canvas)
+        self.square_out.setIconSize(QSize(100, 100))
+        self.square_out.setStyleSheet("text-align: left;")
 
 
 if __name__ == "__main__":
