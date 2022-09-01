@@ -6,7 +6,8 @@ import cv2
 from PySide6.QtGui import *
 from PySide6.QtCore import Qt, QSize, QPointF
 from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QTabWidget, QWidget, QFormLayout, QLineEdit, \
-    QHBoxLayout, QRadioButton, QSlider, QAbstractSlider, QPushButton, QColorDialog, QVBoxLayout, QGraphicsColorizeEffect
+    QHBoxLayout, QRadioButton, QSlider, QAbstractSlider, QPushButton, QColorDialog, QVBoxLayout, QComboBox, \
+    QGraphicsColorizeEffect
 
 print(PySide6.__version__)  # Prints the pyside6 version
 print(PySide6.QtCore.__version__)  # Prints Qt version used to compile Pyside6
@@ -20,6 +21,11 @@ class Tabs(QTabWidget):
         super(Tabs, self).__init__(parent)
 
         # Generate the Tabs for the window to hold the settings
+        self.stim_wavelengths = None
+        self.save_p_label = None
+        self.save_p_button = None
+        self.load_p_label = None
+        self.load_p_button = None
         self.custom_color = QtGui.QColor('green')
         self.image_label = None
         self.twinkle = None
@@ -76,10 +82,28 @@ class Tabs(QTabWidget):
 
         # Create the radio Buttons for the different stimulus options
         stim_opts = QHBoxLayout()
-        stim_opts.addWidget(QRadioButton("Animal"))
-        stim_opts.addWidget(QRadioButton("Human"))
+
+        # Make the dropdown to hold the stimulus wavelength options for AO2
+        self.stim_wavelengths = QComboBox()
+        self.stim_wavelengths.setEnabled(False)
+        self.stim_wavelengths.addItem("")
+        self.stim_wavelengths.addItem("550")
+        self.stim_wavelengths.addItem("450")
+        self.stim_wavelengths.addItem("560")
+        self.stim_wavelengths.addItem("530")
+        self.stim_wavelengths.addItem("440")
+
+        stim_button_1 = QRadioButton("AO2")
+        stim_button_2 = QRadioButton("Animal")
+        stim_opts.addWidget(stim_button_1)
+        stim_opts.addWidget(stim_button_2)
+
+        # Add the slots for the stimulus options
+        stim_button_1.toggled.connect(self.stim1)   # holds the parameters to be set for AO2 stimulus
+        stim_button_2.toggled.connect(self.stim2)   # holds the parameters to be set for animal stimulus
 
         layout1.addRow("Stimulus Options: ", stim_opts)
+        layout1.addRow(self.stim_wavelengths)
 
         self.setTabText(0, "Stimulus Control")
         self.tab1.setLayout(layout1)
@@ -211,14 +235,22 @@ class Tabs(QTabWidget):
         layout4 = QFormLayout()
 
         # Generate buttons needed for protocol control
-        load_p_button = QPushButton()
-        load_p_button.setText("Load Protocol")  # Need an advance button
-        save_p_button = QPushButton()
-        save_p_button.setText("Save Protocol")
+        self.load_p_button = QPushButton()
+        self.load_p_button.setText("Load Protocol")  # Need an advance button
+        self.load_p_label = QLabel()
+        self.save_p_button = QPushButton()
+        self.save_p_button.setText("Save Protocol")
+        self.save_p_label = QLabel()
+
+        # Add the protocol buttons to their slots
+        self.load_p_button.clicked.connect(self.onpressloadp)
+        self.save_p_button.clicked.connect(self.onpresssavep)
 
         # Add all the widgets to the main layout and set priority
-        layout4.addRow(load_p_button)  # Should mark locations with size of FOV on display screen
-        layout4.addRow(save_p_button)
+        layout4.addRow(self.load_p_button)  # Should mark locations with size of FOV on display screen
+        layout4.addRow(self.load_p_label)
+        layout4.addRow(self.save_p_button)
+        layout4.addRow(self.save_p_label)
 
         self.setTabText(3, "Protocol Control")
         self.tab4.setLayout(layout4)
@@ -362,6 +394,18 @@ class Tabs(QTabWidget):
         self.m_cross.setStyleSheet("text-align: left;")
 
     """
+    Slots that are used in the UI for Tab 1
+    """
+    def stim1(self):
+        button = self.sender()
+        self.stim_wavelengths.setEnabled(True)
+
+    def stim2(self):
+        button = self.sender()
+        self.stim_wavelengths.setEnabled(False)
+
+
+    """
     Slots that are used in the UI for Tab 2
     """
 
@@ -454,9 +498,33 @@ class Tabs(QTabWidget):
 
     def onpressload(self):
         button = self.sender()
-        image_path = filedialog.askopenfilenames()
+        image_path = filedialog.askopenfilenames(title='Select the background image', filetypes=[
+                    ("image", ".jpeg"),
+                    ("image", ".png"),
+                    ("image", ".jpg"),
+                    ("image", ".tif")])
         print(image_path)
         self.image_label.setText(str(image_path))
+
+    """
+    Slots that are used in the UI for Tab 4
+    """
+    def onpressloadp(self):
+        button = self.sender()
+        protocol_path = filedialog.askopenfilenames(title='Select the protocol to load', filetypes=[
+            ("protocol", ".csv")])
+        print(protocol_path)
+        self.load_p_label.setText(str(protocol_path))
+
+    def onpresssavep(self):
+        button = self.sender()
+        txt = self.save_p_label.text()
+        match txt:
+            case "Button has been clicked":
+                self.save_p_label.setText("")
+            case _:
+                self.save_p_label.setText("Button has been clicked")
+
 
 
 if __name__ == "__main__":
