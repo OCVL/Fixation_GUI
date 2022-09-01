@@ -3,6 +3,9 @@ import sys
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea)
 import configparser
+import pandas as pd
+from threading import Timer
+import threading
 
 class NuclearNotes(QtWidgets.QWidget):
     def __init__(self):
@@ -11,6 +14,8 @@ class NuclearNotes(QtWidgets.QWidget):
         # read in the config file
         config = configparser.ConfigParser()
         config.read('C:\\Users\\6794grieshj\\Documents\\GitHub\\Fixation_GUI_Qt\\test_settings.ini')
+        self.notes_fname = 'test_file.xlsx'
+        self.horizontal_table_headers = None
 
         self.layout = QtWidgets.QVBoxLayout(self)
 
@@ -28,10 +33,13 @@ class NuclearNotes(QtWidgets.QWidget):
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.layout.addWidget(self.table_widget, stretch=True)
 
+        # start notes saving
+        self.saveNotes()
+
     def constructTable(self, config):
         # https://stackoverflow.com/questions/4097139/reading-array-from-config-file-in-python
-        horizontal_table_headers = config.get("test", "horizontal_table_headers").split("/")
-        table_columns = len(horizontal_table_headers)
+        self.horizontal_table_headers = config.get("test", "horizontal_table_headers").split("/")
+        table_columns = len(self.horizontal_table_headers)
         table_rows = 0
 
         table = QTableWidget()
@@ -44,7 +52,7 @@ class NuclearNotes(QtWidgets.QWidget):
         # set up columns
         table.setColumnCount(table_columns)
         table.setHorizontalHeaderLabels(
-            horizontal_table_headers)  # should probably source these from init/preferences file
+            self.horizontal_table_headers)  # should probably source these from init/preferences file
 
         # delegate will be used to disable editing of columns
         delegate = ReadOnlyDelegate(self)
@@ -61,9 +69,28 @@ class NuclearNotes(QtWidgets.QWidget):
         # https: // stackoverflow.com / questions / 6957943 / how - to - add - new - row - to - existing - qtablewidget
         self.table_widget.insertRow(self.table_widget.rowCount())
 
+    @QtCore.Slot()
+    def saveNotes(self):
+
+        # create pandas dataframe
+        df = pd.DataFrame(columns=self.horizontal_table_headers)
+
+        # populate dataframe with the table information
+        for col in range(self.table_widget.columnCount()):
+            for row in range(self.table_widget.rowCount()):
+                try:
+                    df.at[row, self.horizontal_table_headers[col]] = str(self.table_widget.item(row, col).text())
+                except AttributeError:
+                    pass
+
+        # save the dataframe to an excel file
+        df.to_excel(self.notes_fname, index=False)
+        # start timer to automatically save notes every 5 seconds
+        threading.Timer(5.0, self.saveNotes).start()
+
 class ReadOnlyDelegate(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
-        print('createEditor event fired')
+        # print('createEditor event fired')
         return
 
 
