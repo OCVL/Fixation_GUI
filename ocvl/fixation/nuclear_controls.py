@@ -3,7 +3,7 @@ import PySide6.QtCore
 import sys
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QTabWidget, QWidget, QFormLayout, QLineEdit, \
-    QHBoxLayout, QRadioButton, QSlider, QAbstractSlider, QPushButton, QColorDialog, QVBoxLayout
+    QHBoxLayout, QRadioButton, QSlider, QAbstractSlider, QPushButton, QColorDialog, QVBoxLayout, QGraphicsColorizeEffect
 
 print(PySide6.__version__)  # Prints the pyside6 version
 print(PySide6.QtCore.__version__)  # Prints Qt version used to compile Pyside6
@@ -14,6 +14,7 @@ class Tabs(QTabWidget):
         super(Tabs, self).__init__(parent)
 
         # Generate the Tabs for the window to hold the settings
+        self.graphic = None
         self.color_label = None
         self.tab1 = QWidget()
         self.tab2 = QWidget()
@@ -69,14 +70,15 @@ class Tabs(QTabWidget):
 
         # Widget for the shape objects for the fixation target
         fix_shape = QHBoxLayout()
+        color_shape = QHBoxLayout()
 
         # Color wheel for selecting the color of the target
         self.color_layout = QHBoxLayout()
         color_button = QPushButton("Select Color")
         self.color_layout.addWidget(color_button)
-        self.color_label = QLabel("")
+        self.color_name_label = QLabel("")
+        self.color_display_label = QLabel()
         color_button.clicked.connect(self.onpresscolor)
-
 
         # Radio Buttons to be used for target shape
         cross = QRadioButton("Large Crosshair")
@@ -124,9 +126,10 @@ class Tabs(QTabWidget):
         fix_size.addWidget(self.size_bar)
 
         # Add all the other widgets to the main layout and set priority
-        # layout2.addRow("Color:", QLineEdit())
+        color_shape.addWidget(self.color_name_label)
+        color_shape.addWidget(self.color_display_label)
         layout2.addRow(self.color_layout)
-        layout2.addRow(self.color_label)
+        layout2.addRow(color_shape)
         layout2.addRow(QLabel(""))
         layout2.addRow(QLabel("Shape:"), fix_shape)  # Adds the radio buttons for the shape to the main layout
         layout2.addRow(self.test_label)
@@ -150,7 +153,19 @@ class Tabs(QTabWidget):
     def onpresscolor(self):
         color = QColorDialog.getColor()
         if color.isValid():
-            self.color_label.setText("Current Color selected: " + str(color.name()))
+            self.color_name_label.setText("Current Color selected: " + str(color.name()))
+            self.color_display_label.setGeometry(100, 100, 200, 60)
+            self.color_display_label.setStyleSheet("QLabel"
+                         "{"
+                         "border : 5px solid black;"
+                         "background-color: color;"
+                         "}")
+            # setting graphic effect to the label
+            self.graphic = QGraphicsColorizeEffect()
+            # setting color to the graphic
+            self.graphic.setColor(color)
+            # setting graphic to the label
+            self.color_display_label.setGraphicsEffect(self.graphic)
 
     # Function for the UI of Tab 3 - Image Calibration Control
     def tab3ui(self):
