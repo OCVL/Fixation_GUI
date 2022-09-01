@@ -42,6 +42,8 @@ class NuclearNotes(QtWidgets.QWidget):
         self.layout.addWidget(self.table_widget, stretch=True)
 
         # start notes saving
+        self.template_pdf = pdfrw.PdfReader(self.config.get("test", "notes_pdf_template"))
+        self.testPop = []
         self.saveNotes()
         self.test = 0
 
@@ -87,12 +89,12 @@ class NuclearNotes(QtWidgets.QWidget):
             self.table_widget.setItem(self.row_count, i, item)
             self.table_widget.item(self.row_count, i).setTextAlignment(5)
 
-        # populating columns --simulation for now. will need to get this info from savior later
-        testPop = ["0", "(1,1)", "2.0 x 2.0", "OD"]
-        for i in range(len(testPop)):
-            self.table_widget.item(self.row_count, i).setText(testPop[i])
+        # populating columns --simulation for now. will need to get this info from savior/grid later
+        self.testPop = ["0", "(1,1)", "2.0 x 2.0", "OD"]
+        for i in range(len(self.testPop)):
+            self.table_widget.item(self.row_count, i).setText(self.testPop[i])
 
-        # column memory
+        # column memory - currently needs to have all memory columns next to each other
         try:
             for i in range(int(self.memory[0]), int(self.memory[len(self.memory)-1])+1):
                 self.table_widget.item(self.row_count, i).setText(str(self.table_widget.item(self.row_count-1, i).text()))
@@ -101,15 +103,6 @@ class NuclearNotes(QtWidgets.QWidget):
 
     @QtCore.Slot()
     def saveNotes(self):
-
-        # template_pdf = pdfrw.PdfReader("AOSLO_Electronic_Notes_Template_v2.pdf")
-        # for page in template_pdf.pages:
-        #     annotations = page[ANNOT_KEY]
-        #     for annotation in annotations:
-        #         if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
-        #             if annotation[ANNOT_FIELD_KEY]:
-        #                 key = annotation[ANNOT_FIELD_KEY][1:-1]
-        #                 print(key)
 
         # create pandas dataframe
         df = pd.DataFrame(columns=self.horizontal_table_headers)
@@ -122,10 +115,55 @@ class NuclearNotes(QtWidgets.QWidget):
                 except AttributeError:
                     pass
 
-
-
         # save the dataframe to an excel file
         df.to_excel(self.notes_fname, index=False)
+
+        # don't try to start saving notes to pdf if no videos have been taken yet
+        if len(self.testPop) != 0:
+
+            # Names of the fields for Notes Pdf template. Should be at least partially sourced from the config file!!!!!!!!!!!!!!
+            eye = self.testPop[0]
+            FOV = 'FOV ' + self.testPop[0]
+            locNotes = 'Location  Notes' + self.testPop[0]
+            focus = 'Focus ' + self.testPop[0]
+            # print(focus)
+            conf = 'Conf' + self.testPop[0]
+            dir = 'Dir' + self.testPop[0]
+            ref = 'Ref' + self.testPop[0]
+            vis = 'Vis' + self.testPop[0]
+
+            # this is the dictionary that has all the values that will be put into the pdf. Need to get this on some kind of loop i believe
+            data_dict = {
+                eye: self.testPop[3],
+                FOV: self.testPop[2],
+                locNotes: self.testPop[1],
+                focus: self.table_widget.item(0, 5).text(),
+                conf: 'test',
+                dir: 'test',
+                ref: 'test',
+                vis: 'test'
+            }
+
+            # code that puts the data into the pdf and saves it
+            for page in self.template_pdf.pages:
+                annotations = page[ANNOT_KEY]
+                for annotation in annotations:
+                    if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
+                        if annotation[ANNOT_FIELD_KEY]:
+                            key = annotation[ANNOT_FIELD_KEY][1:-1]
+                            if key in data_dict.keys():
+                                if type(data_dict[key]) == bool:
+                                    if data_dict[key] == True:
+                                        annotation.update(pdfrw.PdfDict(
+                                            AS=pdfrw.PdfName('Yes')))
+                                else:
+                                    annotation.update(
+                                        pdfrw.PdfDict(V='{}'.format(data_dict[key]))
+                                    )
+                                    annotation.update(pdfrw.PdfDict(AP=''))
+            self.template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
+            pdfrw.PdfWriter().write('testNotesPdf.pdf', self.template_pdf)
+
         # start timer to automatically save notes every 5 seconds
         threading.Timer(5.0, self.saveNotes).start()
 
