@@ -463,12 +463,7 @@ class Tabs(QTabWidget):
         button = self.sender()
         image_path = filedialog.askopenfilenames()
         print(image_path)
-        image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-        img_qt = QImage(image)
-        pixmap = QPixmap.fromImage(img_qt)
-        self.image_label.setPixmap(pixmap)
-        self.image_label.resize(pixmap.width(), pixmap.height())
-        self.image_label.show()
+        self.image_label.setText(str(image_path))
 
 
 
