@@ -66,10 +66,10 @@ class NuclearNotes(QtWidgets.QWidget):
         # delegate will be used to disable editing of columns
         delegate = ReadOnlyDelegate(self)
         # these columns will not be editable -- could be pulled from config file
-        # table.setItemDelegateForColumn(0, delegate)
-        # table.setItemDelegateForColumn(1, delegate)
-        # table.setItemDelegateForColumn(2, delegate)
-        # table.setItemDelegateForColumn(3, delegate)
+        table.setItemDelegateForColumn(0, delegate)
+        table.setItemDelegateForColumn(1, delegate)
+        table.setItemDelegateForColumn(2, delegate)
+        table.setItemDelegateForColumn(3, delegate)
 
         return table
 
@@ -81,10 +81,20 @@ class NuclearNotes(QtWidgets.QWidget):
         self.memory = self.config.get("test", "memory_columns").split("/")
         length = len(self.memory)-1
 
+        # Creating items for each cell in the table as it is created & setting text alignment to center
+        for i in range(len(self.horizontal_table_headers)):
+            item = QTableWidgetItem()
+            self.table_widget.setItem(self.row_count, i, item)
+            self.table_widget.item(self.row_count, i).setTextAlignment(5)
+
+        # populating columns --simulation for now. will need to get this info from savior later
+        testPop = ["0", "(1,1)", "2.0 x 2.0", "OD"]
+        for i in range(len(testPop)):
+            self.table_widget.item(self.row_count, i).setText(testPop[i])
+
+        # column memory
         try:
             for i in range(int(self.memory[0]), int(self.memory[len(self.memory)-1])+1):
-                item = QTableWidgetItem()
-                self.table_widget.setItem(self.row_count, i, item)
                 self.table_widget.item(self.row_count, i).setText(str(self.table_widget.item(self.row_count-1, i).text()))
         except AttributeError:
             pass
