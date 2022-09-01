@@ -4,6 +4,8 @@ from PySide6 import QtCore, QtWidgets
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea)
 import configparser
 import pandas as pd
+from threading import Timer
+import threading
 
 class NuclearNotes(QtWidgets.QWidget):
     def __init__(self):
@@ -22,11 +24,6 @@ class NuclearNotes(QtWidgets.QWidget):
         self.layout.addWidget(self.button)
         self.button.clicked.connect(self.addRow)
 
-        # save button -- implemented for a test
-        self.button2 = QtWidgets.QPushButton("Save Notes")
-        self.layout.addWidget(self.button2)
-        self.button2.clicked.connect(self.savefile)
-
         # https: // stackoverflow.com / questions / 54612127 / how - to - i - set - the - size - hint -
         # for -a - qtablewidget - in -python
         # make the table and set it up to be formatted nicely
@@ -35,6 +32,9 @@ class NuclearNotes(QtWidgets.QWidget):
         self.table_widget.setAlternatingRowColors(True)
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.layout.addWidget(self.table_widget, stretch=True)
+
+        # start notes saving
+        self.saveNotes()
 
     def constructTable(self, config):
         # https://stackoverflow.com/questions/4097139/reading-array-from-config-file-in-python
@@ -70,7 +70,7 @@ class NuclearNotes(QtWidgets.QWidget):
         self.table_widget.insertRow(self.table_widget.rowCount())
 
     @QtCore.Slot()
-    def savefile(self):
+    def saveNotes(self):
 
         # create pandas dataframe
         df = pd.DataFrame(columns=self.horizontal_table_headers)
@@ -85,6 +85,8 @@ class NuclearNotes(QtWidgets.QWidget):
 
         # save the dataframe to an excel file
         df.to_excel(self.notes_fname, index=False)
+        # start timer to automatically save notes every 5 seconds
+        threading.Timer(5.0, self.saveNotes).start()
 
 class ReadOnlyDelegate(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
