@@ -1,19 +1,27 @@
 
 import sys
 from PySide6 import QtCore, QtWidgets
-from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea)
+from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea, QTableWidgetItem)
 import configparser
 import pandas as pd
 from threading import Timer
 import threading
+import pdfrw
+
+ANNOT_KEY = '/Annots'
+ANNOT_FIELD_KEY = '/T'
+ANNOT_VAL_KEY = '/V'
+ANNOT_RECT_KEY = '/Rect'
+SUBTYPE_KEY = '/Subtype'
+WIDGET_SUBTYPE_KEY = '/Widget'
 
 class NuclearNotes(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
         # read in the config file
-        config = configparser.ConfigParser()
-        config.read('C:\\Users\\6794grieshj\\Documents\\GitHub\\Fixation_GUI_Qt\\test_settings.ini')
+        self.config = configparser.ConfigParser()
+        self.config.read('C:\\Users\\6794grieshj\\Documents\\GitHub\\Fixation_GUI_Qt\\test_settings.ini')
         self.notes_fname = 'test_file.xlsx'
         self.horizontal_table_headers = None
 
@@ -27,7 +35,7 @@ class NuclearNotes(QtWidgets.QWidget):
         # https: // stackoverflow.com / questions / 54612127 / how - to - i - set - the - size - hint -
         # for -a - qtablewidget - in -python
         # make the table and set it up to be formatted nicely
-        self.table_widget = self.constructTable(config)
+        self.table_widget = self.constructTable()
         self.table_widget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.table_widget.setAlternatingRowColors(True)
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -35,10 +43,11 @@ class NuclearNotes(QtWidgets.QWidget):
 
         # start notes saving
         self.saveNotes()
+        self.test = 0
 
-    def constructTable(self, config):
+    def constructTable(self):
         # https://stackoverflow.com/questions/4097139/reading-array-from-config-file-in-python
-        self.horizontal_table_headers = config.get("test", "horizontal_table_headers").split("/")
+        self.horizontal_table_headers = self.config.get("test", "horizontal_table_headers").split("/")
         table_columns = len(self.horizontal_table_headers)
         table_rows = 0
 
@@ -52,25 +61,45 @@ class NuclearNotes(QtWidgets.QWidget):
         # set up columns
         table.setColumnCount(table_columns)
         table.setHorizontalHeaderLabels(
-            self.horizontal_table_headers)  # should probably source these from init/preferences file
+            self.horizontal_table_headers)
 
         # delegate will be used to disable editing of columns
         delegate = ReadOnlyDelegate(self)
         # these columns will not be editable -- could be pulled from config file
-        table.setItemDelegateForColumn(0, delegate)
-        table.setItemDelegateForColumn(1, delegate)
-        table.setItemDelegateForColumn(2, delegate)
-        table.setItemDelegateForColumn(3, delegate)
+        # table.setItemDelegateForColumn(0, delegate)
+        # table.setItemDelegateForColumn(1, delegate)
+        # table.setItemDelegateForColumn(2, delegate)
+        # table.setItemDelegateForColumn(3, delegate)
 
         return table
 
     @QtCore.Slot()
     def addRow(self):
         # https: // stackoverflow.com / questions / 6957943 / how - to - add - new - row - to - existing - qtablewidget
-        self.table_widget.insertRow(self.table_widget.rowCount())
+        self.row_count = self.table_widget.rowCount()
+        self.table_widget.insertRow(self.row_count)
+        self.memory = self.config.get("test", "memory_columns").split("/")
+        length = len(self.memory)-1
+
+        try:
+            for i in range(int(self.memory[0]), int(self.memory[len(self.memory)-1])+1):
+                item = QTableWidgetItem()
+                self.table_widget.setItem(self.row_count, i, item)
+                self.table_widget.item(self.row_count, i).setText(str(self.table_widget.item(self.row_count-1, i).text()))
+        except AttributeError:
+            pass
 
     @QtCore.Slot()
     def saveNotes(self):
+
+        # template_pdf = pdfrw.PdfReader("AOSLO_Electronic_Notes_Template_v2.pdf")
+        # for page in template_pdf.pages:
+        #     annotations = page[ANNOT_KEY]
+        #     for annotation in annotations:
+        #         if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
+        #             if annotation[ANNOT_FIELD_KEY]:
+        #                 key = annotation[ANNOT_FIELD_KEY][1:-1]
+        #                 print(key)
 
         # create pandas dataframe
         df = pd.DataFrame(columns=self.horizontal_table_headers)
@@ -83,10 +112,13 @@ class NuclearNotes(QtWidgets.QWidget):
                 except AttributeError:
                     pass
 
+
+
         # save the dataframe to an excel file
         df.to_excel(self.notes_fname, index=False)
         # start timer to automatically save notes every 5 seconds
         threading.Timer(5.0, self.saveNotes).start()
+
 
 class ReadOnlyDelegate(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
