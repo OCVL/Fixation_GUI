@@ -43,9 +43,11 @@ class NuclearNotes(QtWidgets.QWidget):
 
         # start notes saving
         self.template_pdf = pdfrw.PdfReader(self.config.get("test", "notes_pdf_template"))
+        self.notes_fields = self.config.get("test", "notes_fields").split("/")
         self.testPop = []
         self.saveNotes()
         self.test = 0
+        self.count = 0
 
     def constructTable(self):
         # https://stackoverflow.com/questions/4097139/reading-array-from-config-file-in-python
@@ -72,6 +74,7 @@ class NuclearNotes(QtWidgets.QWidget):
         table.setItemDelegateForColumn(1, delegate)
         table.setItemDelegateForColumn(2, delegate)
         table.setItemDelegateForColumn(3, delegate)
+        table.itemSelectionChanged.connect(self.saveNotes)
 
         return table
 
@@ -90,7 +93,7 @@ class NuclearNotes(QtWidgets.QWidget):
             self.table_widget.item(self.row_count, i).setTextAlignment(5)
 
         # populating columns --simulation for now. will need to get this info from savior/grid later
-        self.testPop = ["0", "(1,1)", "2.0 x 2.0", "OD"]
+        self.testPop = [str(self.count), "(1,1)", "2.0 x 2.0", "OD"]
         for i in range(len(self.testPop)):
             self.table_widget.item(self.row_count, i).setText(self.testPop[i])
 
@@ -100,6 +103,8 @@ class NuclearNotes(QtWidgets.QWidget):
                 self.table_widget.item(self.row_count, i).setText(str(self.table_widget.item(self.row_count-1, i).text()))
         except AttributeError:
             pass
+        self.saveNotes()
+        self.count = self.count+1
 
     @QtCore.Slot()
     def saveNotes(self):
@@ -123,26 +128,27 @@ class NuclearNotes(QtWidgets.QWidget):
 
             # Names of the fields for Notes Pdf template. Should be at least partially sourced from the config file!!!!!!!!!!!!!!
             eye = self.testPop[0]
-            FOV = 'FOV ' + self.testPop[0]
-            locNotes = 'Location  Notes' + self.testPop[0]
-            focus = 'Focus ' + self.testPop[0]
+            FOV =  self.notes_fields[0] + self.testPop[0]
+            locNotes = self.notes_fields[1] + self.testPop[0]
+            focus = self.notes_fields[2] + self.testPop[0]
             # print(focus)
-            conf = 'Conf' + self.testPop[0]
-            dir = 'Dir' + self.testPop[0]
-            ref = 'Ref' + self.testPop[0]
-            vis = 'Vis' + self.testPop[0]
+            conf = self.notes_fields[3] + self.testPop[0]
+            dir = self.notes_fields[4] + self.testPop[0]
+            ref = self.notes_fields[5] + self.testPop[0]
+            vis = self.notes_fields[6] + self.testPop[0]
 
-            # this is the dictionary that has all the values that will be put into the pdf. Need to get this on some kind of loop i believe
-            data_dict = {
-                eye: self.testPop[3],
-                FOV: self.testPop[2],
-                locNotes: self.testPop[1],
-                focus: self.table_widget.item(0, 5).text(),
-                conf: 'test',
-                dir: 'test',
-                ref: 'test',
-                vis: 'test'
-            }
+            # this is the dictionary that has all the values that will be put into the pdf. currently has problems bc video number isn't changing
+            for z in range(0, self.table_widget.rowCount()):
+                data_dict = {
+                    eye: self.testPop[3],
+                    FOV: self.testPop[2],
+                    locNotes: self.testPop[1] + '; ' + self.table_widget.item(z, 4).text(),
+                    focus: self.table_widget.item(z, 5).text(), # will need to find a way to have these in order of what it is agnostically!!!!!!!!!!!!!!!!!!!
+                    conf: self.table_widget.item(z, 6).text(),
+                    dir: self.table_widget.item(z, 7).text(),
+                    ref: self.table_widget.item(z, 8).text(),
+                    vis: self.table_widget.item(z, 9).text(),
+                }
 
             # code that puts the data into the pdf and saves it
             for page in self.template_pdf.pages:
@@ -161,11 +167,11 @@ class NuclearNotes(QtWidgets.QWidget):
                                         pdfrw.PdfDict(V='{}'.format(data_dict[key]))
                                     )
                                     annotation.update(pdfrw.PdfDict(AP=''))
-            self.template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
-            pdfrw.PdfWriter().write('testNotesPdf.pdf', self.template_pdf)
+        self.template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
+        pdfrw.PdfWriter().write('testNotesPdf.pdf', self.template_pdf)  # will need to have this not be hard coded later on!!!!!!!!!!!!!!!!!!
 
-        # start timer to automatically save notes every 5 seconds
-        threading.Timer(5.0, self.saveNotes).start()
+        # start timer to automatically save notes every 1 second
+        # threading.Timer(1.0, self.saveNotes).start()
 
 
 class ReadOnlyDelegate(QStyledItemDelegate):
