@@ -79,31 +79,12 @@ class Tabs(QTabWidget):
         """
         layout1 = QFormLayout()
         layout1.addRow("Port Number:", QLineEdit())
-
-        # Create the radio Buttons for the different stimulus options
-        stim_opts = QHBoxLayout()
-
-        # Make the dropdown to hold the stimulus wavelength options for AO2
-        self.stim_wavelengths = QComboBox()
-        self.stim_wavelengths.setEnabled(False)
-        self.stim_wavelengths.addItem("")
-        self.stim_wavelengths.addItem("550")
-        self.stim_wavelengths.addItem("450")
-        self.stim_wavelengths.addItem("560")
-        self.stim_wavelengths.addItem("530")
-        self.stim_wavelengths.addItem("440")
-
-        stim_button_1 = QRadioButton("AO2")
-        stim_button_2 = QRadioButton("Animal")
-        stim_opts.addWidget(stim_button_1)
-        stim_opts.addWidget(stim_button_2)
-
-        # Add the slots for the stimulus options
-        stim_button_1.toggled.connect(self.stim1)   # holds the parameters to be set for AO2 stimulus
-        stim_button_2.toggled.connect(self.stim2)   # holds the parameters to be set for animal stimulus
-
-        layout1.addRow("Stimulus Options: ", stim_opts)
-        layout1.addRow(self.stim_wavelengths)
+        layout1.addRow(QLabel(""))
+        layout1.addRow(QLabel("Stimulus Parameters:"))
+        layout1.addRow("Frequency: ", QLineEdit())
+        layout1.addRow("Duration", QLineEdit())
+        layout1.addRow("Start Time", QLineEdit())
+        layout1.addRow("Frames After", QLineEdit())
 
         self.setTabText(0, "Stimulus Control")
         self.tab1.setLayout(layout1)
@@ -261,7 +242,8 @@ class Tabs(QTabWidget):
         """
         layout5 = QFormLayout()
         # Add all the widgets to the main layout and set priority
-        layout5.addRow("Help:", QLineEdit())
+        layout5.addRow(QLabel("Help:"))
+        layout5.addRow(QLabel("F4 - Record a Video"))
         self.setTabText(4, "Help")
         self.tab5.setLayout(layout5)
 
@@ -394,21 +376,8 @@ class Tabs(QTabWidget):
         self.m_cross.setStyleSheet("text-align: left;")
 
     """
-    Slots that are used in the UI for Tab 1
-    """
-    def stim1(self):
-        button = self.sender()
-        self.stim_wavelengths.setEnabled(True)
-
-    def stim2(self):
-        button = self.sender()
-        self.stim_wavelengths.setEnabled(False)
-
-
-    """
     Slots that are used in the UI for Tab 2
     """
-
     def onclick(self):
         """
         Slot for the shape of the fixation target to be selected
