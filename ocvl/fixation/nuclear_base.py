@@ -17,7 +17,6 @@ class NuclearBase(QWidget):
         self.layout.addWidget(NuclearDisplay())
 
 
-
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 

@@ -2,9 +2,10 @@ import configparser
 import math
 
 from PySide6 import QtWidgets, QtCore
-from PySide6.QtCore import QPoint
+from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import QPainter, Qt, QPen, QColor
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QDialog, QDialogButtonBox, QVBoxLayout, QLabel, QFormLayout, QLineEdit, \
+    QPushButton, QHBoxLayout, QRadioButton, QComboBox
 import numpy as np
 from tkinter import filedialog
 
@@ -13,7 +14,10 @@ class NuclearDisplay(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.target_area = TargetArea()
+        dlg = CustomDialog()
+        dlg.exec()
+        c_name = dlg.config_name
+        self.target_area = TargetArea(c_name)
         self.lefty = TargetLefty()
         self.righty = TargetRighty()
 
@@ -30,18 +34,59 @@ class NuclearDisplay(QWidget):
     def gridSizeInDeg(self):
         pass
 
-class TargetArea(QWidget):
+class CustomDialog(QDialog):
     def __init__(self):
         super().__init__()
 
+        self.setWindowTitle("Setup")
         self.config = configparser.ConfigParser()
         self.config_name = filedialog.askopenfilenames(title='Select the configuration file', filetypes=[
             ("configuration file", ".ini")])
         self.config.read(self.config_name)
+        self.device_list = self.config.get("ALL", "device_list").split("/")
+
+        QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+
+        self.buttonBox = QDialogButtonBox(QBtn)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+
+        layout1 = QFormLayout()
+        eye_butt_layout = QHBoxLayout()
+        save_loc_butt_layout = QHBoxLayout()
+
+        self.save_location_butt = QPushButton("Save Location")
+        self.left_eye = QRadioButton("OS")
+        self.right_eye = QRadioButton("OD")
+
+        self.device_menu = QComboBox()
+        for x in self.device_list:
+            self.device_menu.addItem(x)
+
+        save_loc_butt_layout.addWidget(self.save_location_butt)
+        eye_butt_layout.addWidget(self.left_eye)
+        eye_butt_layout.addWidget(self.right_eye)
+
+        layout1.addRow("Select Eye", eye_butt_layout)
+        layout1.addRow("Subject ID:", QLineEdit())
+        layout1.addRow("Select Save Location", save_loc_butt_layout)
+        layout1.addRow(QLabel(""))
+        layout1.addRow("Device", self.device_menu)
+        layout1.addWidget(self.buttonBox)
+
+        self.setLayout(layout1)
+
+    def eye_slot(self):
+        
+
+class TargetArea(QWidget):
+    def __init__(self, config_name):
+        super().__init__()
+
+        self.config = configparser.ConfigParser()
+        self.config.read(config_name)
         self.grid_size = self.config.get("test", "grid_size")
         self.circle_vis = self.config.get("test", "fixation_circle_visible")
-
-
 
     def paintEvent(self, arg__0):
 
