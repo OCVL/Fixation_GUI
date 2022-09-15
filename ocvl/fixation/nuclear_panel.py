@@ -37,14 +37,15 @@ class NuclearDisplay(QWidget):
 class CustomDialog(QDialog):
     def __init__(self):
         super().__init__()
-
         self.setWindowTitle("Setup")
         self.config = configparser.ConfigParser()
         self.config_name = filedialog.askopenfilenames(title='Select the configuration file', filetypes=[
             ("configuration file", ".ini")])
         self.config.read(self.config_name)
         self.device_list = self.config.get("ALL", "device_list").split("/")
+        self.setup()
 
+    def setup(self):
         QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
 
         self.buttonBox = QDialogButtonBox(QBtn)
@@ -56,19 +57,25 @@ class CustomDialog(QDialog):
         save_loc_butt_layout = QHBoxLayout()
 
         self.save_location_butt = QPushButton("Save Location")
-        self.left_eye = QRadioButton("OS")
-        self.right_eye = QRadioButton("OD")
+        left_eye = QRadioButton("OS")
+        right_eye = QRadioButton("OD")
+
+        left_eye.toggled.connect(self.eye_slot)
+        right_eye.toggled.connect(self.eye_slot)
+
+        self.sub_id = QLineEdit()
+        self.sub_id.textChanged.connect(self.onTextEnter)
 
         self.device_menu = QComboBox()
         for x in self.device_list:
             self.device_menu.addItem(x)
 
         save_loc_butt_layout.addWidget(self.save_location_butt)
-        eye_butt_layout.addWidget(self.left_eye)
-        eye_butt_layout.addWidget(self.right_eye)
+        eye_butt_layout.addWidget(left_eye)
+        eye_butt_layout.addWidget(right_eye)
 
         layout1.addRow("Select Eye", eye_butt_layout)
-        layout1.addRow("Subject ID:", QLineEdit())
+        layout1.addRow("Subject ID:", self.sub_id)
         layout1.addRow("Select Save Location", save_loc_butt_layout)
         layout1.addRow(QLabel(""))
         layout1.addRow("Device", self.device_menu)
@@ -77,7 +84,13 @@ class CustomDialog(QDialog):
         self.setLayout(layout1)
 
     def eye_slot(self):
-        
+        button = self.sender()
+        if button.isChecked():
+            print("Pressed the button called: " + button.text())
+
+    def onTextEnter(self):
+        print(self.sub_id.text())
+
 
 class TargetArea(QWidget):
     def __init__(self, config_name):
