@@ -8,33 +8,43 @@ import numpy as np
 from ocvl.fixation.initial_window import InitialDialog
 from ocvl.fixation.nuclear_controls import Tabs
 from ocvl.fixation.nuclear_notes import NuclearNotes
+from ocvl.fixation.nuclear_info import NuclearInfo
 
 
 class NuclearDisplay(QWidget):
     def __init__(self):
         super().__init__()
 
-        dlg = InitialDialog()
-        dlg.exec()
-        config_name = dlg.config_name  # config file name
-        dev_name = dlg.device_selected  # device name
-        save_loc_dir = dlg.save_location_dir  # save location directory path
-        selected_eye = dlg.eye_selected
-        sub_id = dlg.subject_id
-        self.target_area = TargetArea(config_name)
-        self.lefty = TargetLefty()
+        self.sub_id = None
+        self.selected_eye = None
+        self.save_loc_dir = None
+        self.dev_name = None
+        self.config_name = None
+
+        self.LaunchInitialDialog()
+
+        self.target_area = TargetArea(self.config_name)
+        self.lefty = TargetLefty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name)
         self.righty = TargetRighty()
         self.bottom = TargetBottom()
 
         self.layout1 = QtWidgets.QVBoxLayout(self)
         self.layout2 = QtWidgets.QHBoxLayout(self)
-        self.layout2.addWidget(self.lefty, 2.5)
-        self.layout2.addWidget(self.target_area, 5)
-        self.layout2.addWidget(self.righty, 2.5)
+        self.layout2.addWidget(self.lefty)
+        self.layout2.addWidget(self.target_area, 20)
+        self.layout2.addWidget(self.righty)
         self.layout1.addLayout(self.layout2)
         self.layout1.addWidget(self.bottom)
 
+    def LaunchInitialDialog(self):
+        dlg = InitialDialog()
+        dlg.exec()
 
+        self.config_name = dlg.config_name  # config file name
+        self.dev_name = dlg.device_selected  # device name
+        self.save_loc_dir = dlg.save_location_dir  # save location directory path
+        self.selected_eye = dlg.eye_selected
+        self.sub_id = dlg.subject_id
 
     @QtCore.Slot()
     def updateTarget(self):
@@ -119,10 +129,11 @@ class TargetArea(QWidget):
 
 
 class TargetLefty(QWidget):
-    def __init__(self):
+    def __init__(self, eye, sub_id, save_loc, device):
         super().__init__()
 
-        self.target = QtWidgets.QLabel("Sup beaches", alignment=QtCore.Qt.AlignCenter)
+        # self.target = QtWidgets.QLabel("Sup beaches", alignment=QtCore.Qt.AlignCenter)
+        self.target = NuclearInfo(eye, sub_id, save_loc, device)
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)

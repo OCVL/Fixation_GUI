@@ -1,0 +1,28 @@
+from PySide6 import QtWidgets
+from PySide6.QtWidgets import QLabel, QFormLayout, QWidget, QGroupBox
+
+
+class NuclearInfo(QtWidgets.QWidget):
+    def __init__(self, eye, sub_id, save_loc, device):
+        super().__init__()
+
+        layout = QFormLayout(self)
+
+        self.eye_disp = QtWidgets.QLabel(eye)
+        self.id_disp = QtWidgets.QLabel(sub_id)
+        self.save_disp = QtWidgets.QLabel(save_loc)
+        self.device_disp = QtWidgets.QLabel(device)
+
+        layout.addRow(QLabel("Session Information:"))
+        layout.addRow(QLabel(""))
+        layout.addRow("Eye:", self.eye_disp)
+        layout.addRow("Subject ID:", self.id_disp)
+        layout.addRow("Device:", self.device_disp)
+        layout.addRow(QLabel(""))
+        layout.addRow(QLabel("Document Save Location:"))
+        layout.addRow(self.save_disp)
+
+
+
+
+
