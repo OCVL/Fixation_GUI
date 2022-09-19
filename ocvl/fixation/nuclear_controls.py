@@ -118,13 +118,13 @@ class Tabs(QTabWidget):
         self.test_label = QLabel("")
 
         # Change the shape of the buttons to be squares
-        self.cross.setFixedSize(QSize(100, 100))
-        self.s_cross.setFixedSize(QSize(100, 100))
-        self.m_cross.setFixedSize(QSize(100, 100))
-        self.square_out.setFixedSize(QSize(100, 100))
-        self.square.setFixedSize(QSize(100, 100))
-        self.circle.setFixedSize(QSize(100, 100))
-        self.twinkle.setFixedSize(QSize(100, 100))
+        self.cross.setFixedSize(QSize(25, 25))
+        self.s_cross.setFixedSize(QSize(25, 25))
+        self.m_cross.setFixedSize(QSize(25, 25))
+        self.square_out.setFixedSize(QSize(25, 25))
+        self.square.setFixedSize(QSize(25, 25))
+        self.circle.setFixedSize(QSize(25, 25))
+        self.twinkle.setFixedSize(QSize(25, 25))
 
         # Call the functions to draw the different targets
         self.drawtargets()

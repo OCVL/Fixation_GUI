@@ -6,6 +6,8 @@ from PySide6.QtGui import QPainter, Qt, QPen, QColor
 from PySide6.QtWidgets import QWidget
 import numpy as np
 from ocvl.fixation.initial_window import InitialDialog
+from ocvl.fixation.nuclear_controls import Tabs
+from ocvl.fixation.nuclear_notes import NuclearNotes
 
 
 class NuclearDisplay(QWidget):
@@ -22,11 +24,17 @@ class NuclearDisplay(QWidget):
         self.target_area = TargetArea(config_name)
         self.lefty = TargetLefty()
         self.righty = TargetRighty()
+        self.bottom = TargetBottom()
 
-        self.layout = QtWidgets.QHBoxLayout(self)
-        self.layout.addWidget(self.lefty, 2.5)
-        self.layout.addWidget(self.target_area, 5)
-        self.layout.addWidget(self.righty, 2.5)
+        self.layout1 = QtWidgets.QVBoxLayout(self)
+        self.layout2 = QtWidgets.QHBoxLayout(self)
+        self.layout2.addWidget(self.lefty, 2.5)
+        self.layout2.addWidget(self.target_area, 5)
+        self.layout2.addWidget(self.righty, 2.5)
+        self.layout1.addLayout(self.layout2)
+        self.layout1.addWidget(self.bottom)
+
+
 
     @QtCore.Slot()
     def updateTarget(self):
@@ -137,7 +145,8 @@ class TargetRighty(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.target = QtWidgets.QLabel("Sup beaches", alignment=QtCore.Qt.AlignCenter)
+        # self.target = QtWidgets.QLabel("Sup beaches", alignment=QtCore.Qt.AlignCenter)
+        self.target = Tabs()
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)
@@ -154,3 +163,27 @@ class TargetRighty(QWidget):
         # cent = QPoint(rect.width()/2, rect.height()/2)
         #
         # painter.drawEllipse(cent, radii, radii)
+
+class TargetBottom(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        # self.target = QtWidgets.QLabel("Sup beaches", alignment=QtCore.Qt.AlignCenter)
+        self.target = NuclearNotes()
+
+        self.layout = QtWidgets.QHBoxLayout(self)
+        self.layout.addWidget(self.target)
+
+    def paintEvent(self, arg__0):
+        pass
+        # painter = QPainter(self)
+        # painter.setBrush(Qt.cyan)
+        # painter.setRenderHint(QPainter.Antialiasing, True)
+        #
+        # rect = painter.window()
+        #
+        # radii = np.minimum(rect.width(), rect.height())/2
+        # cent = QPoint(rect.width()/2, rect.height()/2)
+        #
+        # painter.drawEllipse(cent, radii, radii)
+

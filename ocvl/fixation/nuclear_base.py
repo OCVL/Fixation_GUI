@@ -21,7 +21,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
     base = NuclearBase()
-    base.resize(800,500)
+    base.resize(1000,500)
     base.show()
 
     sys.exit(app.exec())

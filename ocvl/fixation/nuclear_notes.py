@@ -36,7 +36,7 @@ class NuclearNotes(QtWidgets.QWidget):
         # for -a - qtablewidget - in -python
         # make the table and set it up to be formatted nicely
         self.table_widget = self.constructTable()
-        self.table_widget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.table_widget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustIgnored)
         self.table_widget.setAlternatingRowColors(True)
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.layout.addWidget(self.table_widget, stretch=True)
