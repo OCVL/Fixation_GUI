@@ -30,9 +30,9 @@ class NuclearDisplay(QWidget):
 
         self.layout1 = QtWidgets.QVBoxLayout(self)
         self.layout2 = QtWidgets.QHBoxLayout(self)
-        self.layout2.addWidget(self.lefty)
-        self.layout2.addWidget(self.target_area, 20)
-        self.layout2.addWidget(self.righty)
+        self.layout2.addWidget(self.lefty, 2.5)
+        self.layout2.addWidget(self.target_area, 5)
+        self.layout2.addWidget(self.righty, 2.5)
         self.layout1.addLayout(self.layout2)
         self.layout1.addWidget(self.bottom)
 
