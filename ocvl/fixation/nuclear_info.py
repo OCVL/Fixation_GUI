@@ -12,12 +12,15 @@ class NuclearInfo(QtWidgets.QWidget):
         self.id_disp = QtWidgets.QLabel(sub_id)
         self.save_disp = QtWidgets.QLabel(save_loc)
         self.device_disp = QtWidgets.QLabel(device)
+        self.FOV_disp = QtWidgets.QLabel("2.0 x 2.0")  # will need to populate with actual fov
 
         layout.addRow(QLabel("Session Information:"))
         layout.addRow(QLabel(""))
         layout.addRow("Eye:", self.eye_disp)
         layout.addRow("Subject ID:", self.id_disp)
         layout.addRow("Device:", self.device_disp)
+        layout.addRow(QLabel(""))
+        layout.addRow("FOV:", self.FOV_disp)
         layout.addRow(QLabel(""))
         layout.addRow(QLabel("Document Save Location:"))
         layout.addRow(self.save_disp)

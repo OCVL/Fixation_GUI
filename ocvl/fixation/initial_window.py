@@ -89,8 +89,8 @@ class InitialDialog(QDialog):
         self.device_selected = self.device_menu.currentText()
 
     def okay(self):
-        # if (self.eye_selected is not None) and (self.subject_id is not None) and (self.subject_id != "") and (self.save_location_dir is not None) and (self.device_selected is not None):
-        self.accept()
+        if (self.eye_selected is not None) and (self.subject_id is not None) and (self.subject_id != "") and (self.save_location_dir is not None) and (self.device_selected is not None):
+            self.accept()
     def cancel(self):
         sys.exit()
 
