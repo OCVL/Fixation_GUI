@@ -1,4 +1,5 @@
 import configparser
+import sys
 from tkinter import filedialog
 
 from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QLineEdit, QComboBox, QDialogButtonBox, QFormLayout, \
@@ -8,8 +9,10 @@ from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QLineEdit, QComboBox
 class InitialDialog(QDialog):
     def __init__(self):
         super().__init__()
+        self.subject_id = None
         self.temp_loc_name = QLabel("")
         self.save_location_butt = QPushButton("Save Location")
+        self.eye_selected = None
         self.sub_id = QLineEdit()
         self.device_menu = QComboBox()
         self.save_location_dir = None
@@ -27,8 +30,8 @@ class InitialDialog(QDialog):
         # Button and connection code to exit pop up when done
         QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.buttonBox = QDialogButtonBox(QBtn)
-        self.buttonBox.accepted.connect(self.accept)
-        self.buttonBox.rejected.connect(self.reject)
+        self.buttonBox.accepted.connect(self.okay)
+        self.buttonBox.rejected.connect(self.cancel)
 
         # Sets up the layout for the pop up window
         layout1 = QFormLayout()
@@ -47,7 +50,7 @@ class InitialDialog(QDialog):
         # Linking the button used to get the save direction and the variable to store this for later use
         self.save_location_butt.clicked.connect(self.on_save_click)
 
-        # Generating and linking the drop down menu to the signal/slot to save device selected
+        # Generating and linking the drop-down menu to the signal/slot to save device selected
         self.device_menu.addItem("Select Device")
         for x in self.device_list:
             self.device_menu.addItem(x)
@@ -73,9 +76,10 @@ class InitialDialog(QDialog):
         button = self.sender()
         if button.isChecked():
             print("Pressed the button called: " + button.text())
+            self.eye_selected = button.text()
 
     def onTextEnter(self):
-        print(self.sub_id.text())
+        self.subject_id = self.sub_id.text()
 
     def on_save_click(self):
         self.save_location_dir = filedialog.askdirectory(title='Select the save location for generated files.')
@@ -83,4 +87,10 @@ class InitialDialog(QDialog):
 
     def on_combobox_changed(self):
         self.device_selected = self.device_menu.currentText()
-        print(self.device_selected)
+
+    def okay(self):
+        if (self.eye_selected is not None) and (self.subject_id is not None) and (self.subject_id != "") and (self.save_location_dir is not None) and (self.device_selected is not None):
+            self.accept()
+    def cancel(self):
+        sys.exit()
+

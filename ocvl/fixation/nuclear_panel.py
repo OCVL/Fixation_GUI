@@ -17,6 +17,8 @@ class NuclearDisplay(QWidget):
         config_name = dlg.config_name  # config file name
         dev_name = dlg.device_selected  # device name
         save_loc_dir = dlg.save_location_dir  # save location directory path
+        selected_eye = dlg.eye_selected
+        sub_id = dlg.subject_id
         self.target_area = TargetArea(config_name)
         self.lefty = TargetLefty()
         self.righty = TargetRighty()
