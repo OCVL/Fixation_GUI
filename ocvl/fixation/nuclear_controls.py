@@ -24,6 +24,15 @@ class Tabs(QTabWidget):
         super(Tabs, self).__init__(parent)
 
         # All the self class variables to be used in the various tabs
+        self.grid_size_default_3 = None
+        self.grid_size_default_2 = None
+        self.grid_size_default_1 = None
+        self.grid_defaults = None
+        self.grid_display_save = None
+        self.vert_dim_select = None
+        self.savior_FOVs = None
+        self.horz_dim_select = None
+        self.FOV_menu = None
         self.info = None
         self.stim_wavelengths = None
         self.save_p_label = None
@@ -89,6 +98,7 @@ class Tabs(QTabWidget):
         self.helpTab()
         self.infoTab()
         self.saviorControlTab()
+        self.gridConfigurationTab()
 
         # Set the Title of the Window
         self.setWindowTitle("Control Settings")
@@ -286,7 +296,6 @@ class Tabs(QTabWidget):
         # get the FOVs from the config file
         self.savior_FOVs = self.config.get("test", "savior_FOVs").split("/")
 
-
         # adds all the FOVs in the list
         for x in self.savior_FOVs:
             self.FOV_menu.addItem(x)
@@ -297,6 +306,80 @@ class Tabs(QTabWidget):
         layout.addRow("Current FOV:", self.FOV_menu)
         self.tab2.setLayout(layout)
 
+    def gridConfigurationTab(self):
+        layout = QFormLayout()
+        button_layout = QHBoxLayout()
+
+        # Drop downs for the 2 dims
+        self.horz_dim_select = QComboBox()
+        self.vert_dim_select = QComboBox()
+
+        # Defualt button size creation
+        self.grid_defaults = self.config.get("test", "grid_size_defaults").split("/")
+        self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
+        self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
+        self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
+
+        # Connect the buttons to the slot
+        self.grid_size_default_1.toggled.connect(self.gridSizeChange)
+        self.grid_size_default_2.toggled.connect(self.gridSizeChange)
+        self.grid_size_default_3.toggled.connect(self.gridSizeChange)
+
+        # Add the Radio Buttons to the button layout
+        button_layout.addWidget(self.grid_size_default_1)
+        button_layout.addWidget(self.grid_size_default_2)
+        button_layout.addWidget(self.grid_size_default_3)
+
+        # Add all the different possible dims to each the vert and horz spacing for grid
+        for x in range(5, 31):
+            self.horz_dim_select.addItem(str(x))
+            self.vert_dim_select.addItem(str(x))
+
+        # Connect the drop down menues (grid dims) to their slots
+        self.horz_dim_select.currentTextChanged.connect(self.horzGridSizeChange)
+        self.vert_dim_select.currentTextChanged.connect(self.vertGridSizeChange)
+
+        layout.addRow("Quick Sizes (degrees):", button_layout)
+        layout.addRow("Horizontal Grid Dim:", self.horz_dim_select)
+        layout.addRow('Vertical Grid Dim:', self.vert_dim_select)
+
+        # Reference Point / reset button
+        self.ref_pt_button = QPushButton()
+        self.ref_pt_button.setText("Set Reference Point")
+        self.ref_pt_label = QLabel("")
+
+        # Connect the reference point button to its slot
+        self.ref_pt_button.clicked.connect(self.referencePointBttnClicked)
+
+        # Add the Reference button and label to the main layout
+        layout.addRow(QLabel(""))
+        layout.addRow(self.ref_pt_button)
+        layout.addRow(self.ref_pt_label)
+
+        # Swap the view of T/N labels
+        view_layout = QHBoxLayout()
+        self.anatomical_view = QRadioButton("Anatomical View")
+        self.subject_view = QRadioButton("Subject View")
+
+        # Connect the View Radio buttons to the slot
+        self.anatomical_view.toggled.connect(self.viewChange)
+        self.subject_view.toggled.connect(self.viewChange)
+
+        # Add view buttons to their layout and the main
+        view_layout.addWidget(self.anatomical_view)
+        view_layout.addWidget(self.subject_view)
+        layout.addRow(view_layout)
+
+        # Save current grid push button
+        self.grid_display_save = QPushButton()
+        self.grid_display_save.setText("Save Current Grid Display")
+
+        # Connect to the slot and add to main layout
+        self.grid_display_save.clicked.connect(self.saveGrid)
+        layout.addRow(QLabel(""))
+        layout.addRow(self.grid_display_save)
+
+        self.tab3.setLayout(layout)
 
 
     """
@@ -547,6 +630,87 @@ class Tabs(QTabWidget):
                 self.save_p_label.setText("")
             case _:
                 self.save_p_label.setText("Button has been clicked")
+
+    """
+    slots for the Grid Configuration Tab
+    """
+    def gridSizeChange(self):
+        """
+        Slot for the grid default quick sizes to be changed
+        :return:
+        """
+        button = self.sender()
+        txt = button.text()
+        if button.isChecked():
+            print("Pressed the button called: " + txt)
+            v1 = str(self.grid_defaults[0])
+            v2 = str(self.grid_defaults[1])
+            v3 = str(self.grid_defaults[2])
+            if txt == v1:
+                [horz, vert] = self.grid_defaults[0].split("x")
+                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(horz))
+                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(vert))
+            elif txt == v2:
+                [horz, vert] = self.grid_defaults[1].split("x")
+                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(horz))
+                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(vert))
+            elif txt == v3:
+                [horz, vert] = self.grid_defaults[2].split("x")
+                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(horz))
+                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(vert))
+            else:
+                print("Something went wrong!")
+
+    def horzGridSizeChange(self):
+        """
+        Slot for the horizontal drop down menu for the grid sizes
+        :return:
+        """
+        self.horz_dim = self.horz_dim_select.currentText()
+        print(self.horz_dim)
+
+    def vertGridSizeChange(self):
+        """
+        Slot for the horizontal drop down menu for the grid sizes
+        :return:
+        """
+        self.vert_dim = self.vert_dim_select.currentText()
+        print(self.vert_dim)
+
+    def referencePointBttnClicked(self):
+        """
+        Slot for the reference button to change based off the when it was last clicked
+        :return:
+        """
+        button = self.sender()
+        txt = str(button.text())
+        match txt:
+            case "Set Reference Point":
+                # Add a label to display what was selected as the current reference point
+                self.ref_pt_label.setText("Reference Point (x,y)")
+                self.ref_pt_button.setText("Clear Reference Point")
+            case "Clear Reference Point":
+                self.ref_pt_button.setText("Set Reference Point")
+            case _:
+                print("Something went wrong!")
+
+    def viewChange(self):
+        """
+        Slot for the view of the labels on the grid to be swaped Temp/Nas
+        :return:
+        """
+        button = self.sender()
+        txt = button.text()
+        if button.isChecked():
+            print("Pressed the button called: " + txt)
+
+    def saveGrid(self):
+        """
+        Slot for the save grid display button
+        :return:
+        """
+        button = self.sender()
+        print(button.text())
 
 
 if __name__ == "__main__":

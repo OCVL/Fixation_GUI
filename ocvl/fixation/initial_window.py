@@ -1,6 +1,7 @@
 import configparser
 import sys
 from tkinter import filedialog
+import os
 
 from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QLineEdit, QComboBox, QDialogButtonBox, QFormLayout, \
     QHBoxLayout, QRadioButton
@@ -24,8 +25,9 @@ class InitialDialog(QDialog):
         self.setWindowTitle("Setup")
         # configuration file set up
         self.config = configparser.ConfigParser()
-        self.config_name = filedialog.askopenfilenames(title='Select the configuration file', filetypes=[
-            ("configuration file", ".ini")])
+        self.config_name = os.getcwd() + "\\test_settings.ini"
+        # self.config_name = filedialog.askopenfilenames(title='Select the configuration file', filetypes=[
+        #     ("configuration file", ".ini")])
         self.config.read(self.config_name)
         self.device_list = self.config.get("ALL", "device_list").split("/")
         self.setup()
