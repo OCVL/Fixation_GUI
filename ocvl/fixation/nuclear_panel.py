@@ -24,10 +24,14 @@ class NuclearDisplay(QWidget):
         self.LaunchInitialDialog()
 
         # setting up GUI panels
-        self.target_area = TargetArea(self.config_name)
         # self.lefty = TargetLefty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name)
         self.righty = TargetRighty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name, self.config_name)
         self.bottom = TargetBottom(self.config_name)
+
+        # Get the dims from the Configruation tabs
+        h_lines = int(self.righty.target.horz_dim)
+        v_lines = int(self.righty.target.vert_dim)
+        self.target_area = TargetArea(self.config_name, h_lines, v_lines)
 
         # setting up layout
         self.grid_layout = QtWidgets.QGridLayout(self)
@@ -67,13 +71,15 @@ class TargetArea(QWidget):
     """
     Class for the grid display
     """
-    def __init__(self, config_name):
+    def __init__(self, config_name, horz_lines, vert_lines):
         super().__init__()
 
         self.config = configparser.ConfigParser()
         self.config.read(config_name)
         self.grid_size = self.config.get("test", "grid_size")
         self.circle_vis = self.config.get("test", "fixation_circle_visible")
+        self.horz_lines = horz_lines
+        self.vert_lines = vert_lines
 
     def paintEvent(self, arg__0):
         """
@@ -89,52 +95,65 @@ class TargetArea(QWidget):
         rect = painter.window()
 
         # sets up the size of the circle based on the window size
-        radii = np.minimum(rect.width(), rect.height())/2
+        radii = np.maximum(rect.width(), rect.height()) / 2
+        win_h = rect.height() / 2
+        win_w = rect.width() / 2
         cent = QPoint(rect.width()/2, rect.height()/2)
         # sets up the size of the grid lines (will need to be changed to be custom size)
-        if(self.grid_size == 'small'):
+        if self.grid_size == 'small':
             num_of_lines = 31
-        elif(self.grid_size == 'medium'):
+        elif self.grid_size == 'medium':
             num_of_lines = 41
-        elif(self.grid_size == 'large'):
+        elif self.grid_size == 'large':
             num_of_lines = 61
         else:
             num_of_lines = 0
 
+        if self.horz_lines % 2 == 0:
+            self.horz_lines += 1
+
+        if self.vert_lines % 2 == 0:
+            self.vert_lines += 1
+
         # spacing of lines
         spacing = (radii*2)/num_of_lines
-        painter.drawRect(rect.width() / 2 - radii, rect.height() / 2 - radii, radii * 2, radii * 2)
+        spacing_h = (win_h*2)/ self.horz_lines
+        spacing_v = (win_w*2)/ self.vert_lines
+        painter.drawRect(rect.width() / 2 - win_w, rect.height() / 2 - win_h, win_w * 2, win_h * 2)
 
-        horz_steps = np.linspace(rect.width()/2-radii, rect.width()/2+radii, num_of_lines)
-        vert_steps = np.linspace(rect.height()/2-radii, rect.height()/2+radii, num_of_lines)
+        # Generating the steps for painting the lines in different colors
+        horz_steps = np.linspace(rect.width()/2-win_w, rect.width()/2+win_w, self.horz_lines)
+        vert_steps = np.linspace(rect.height()/2-win_h, rect.height()/2+win_h, self.vert_lines)
 
-        center_line = (num_of_lines-1)/2
+        center_line = (num_of_lines-1) / 2
+        center_h = (self.horz_lines - 1) / 2
+        center_v = (self.vert_lines - 1) / 2
 
         # paints the lines with different colors depending on what step they are
         counter = 0
         for y in vert_steps:
             if counter % 5 == 0:
-                if counter == center_line:
+                if counter == center_v:
                     painter.setPen(QPen(QColor(255, 79, 0), 2.5))
                 else:
                     painter.setPen(QPen(QColor(255, 79, 0)))
-                painter.drawLine(rect.width() / 2 - radii, y, rect.width() / 2 + radii, y)
+                painter.drawLine(rect.width() / 2 - win_w, y, rect.width() / 2 + win_w, y)
             else:
                 painter.setPen(Qt.black)
-                painter.drawLine(rect.width() / 2 - radii, y, rect.width() / 2 + radii, y)
+                painter.drawLine(rect.width() / 2 - win_w, y, rect.width() / 2 + win_w, y)
             counter += 1
 
         counter = 0
         for x in horz_steps:
             if counter % 5 == 0:
-                if counter == center_line:
+                if counter == center_h:
                     painter.setPen(QPen(QColor(255, 79, 0), 2.5))
                 else:
                     painter.setPen(QPen(QColor(255, 79, 0)))
-                painter.drawLine(x, rect.height() / 2 - radii, x, rect.height() / 2 + radii)
+                painter.drawLine(x, rect.height() / 2 - win_h, x, rect.height() / 2 + win_h)
             else:
                 painter.setPen(Qt.black)
-                painter.drawLine(x, rect.height() / 2 - radii, x, rect.height() / 2 + radii)
+                painter.drawLine(x, rect.height() / 2 - win_h, x, rect.height() / 2 + win_h)
             counter += 1
 
         painter.setPen(Qt.black)
@@ -142,9 +161,7 @@ class TargetArea(QWidget):
         # used to set circle visible on  screen (from config file)
         if self.circle_vis == "1":
             painter.setPen(QPen(QColor(3, 175, 224), 2.5))
-            # painter.drawEllipse(cent, spacing * 15.5, spacing * 15.5)
-            painter.drawArc((rect.width()/2)-(spacing * 15.25), (rect.height()/2)-(spacing * 15.25), spacing * 30.5, spacing * 30.5, 0, 16*360)
-            print('')
+            painter.drawArc((rect.width()/2)-(spacing_v * 7.625), (rect.height()/2)-(spacing_h * 7.625), spacing_v * 15.25, spacing_h * 15.25, 0, 16*360)
         else:
             pass
         painter.setPen(Qt.black)

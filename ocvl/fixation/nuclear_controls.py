@@ -344,13 +344,18 @@ class Tabs(QTabWidget):
         button_layout.addWidget(self.grid_size_default_3)
 
         # Add all the different possible dims to each the vert and horz spacing for grid
-        for x in range(5, 31):
+        for x in range(10, 61, 5):
             self.horz_dim_select.addItem(str(x))
             self.vert_dim_select.addItem(str(x))
 
         # Connect the drop down menues (grid dims) to their slots
         self.horz_dim_select.currentTextChanged.connect(self.horzGridSizeChange)
         self.vert_dim_select.currentTextChanged.connect(self.vertGridSizeChange)
+
+        # Default from config file
+        [self.horz_dim, self.vert_dim] = self.config.get("test", "grid_size_start_default").split("x")
+        self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(self.horz_dim))
+        self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(self.vert_dim))
 
         layout.addRow("Quick Sizes (degrees):", button_layout)
         layout.addRow("Horizontal Grid Dim:", self.horz_dim_select)
@@ -660,17 +665,17 @@ class Tabs(QTabWidget):
             v2 = str(self.grid_defaults[1])
             v3 = str(self.grid_defaults[2])
             if txt == v1:
-                [horz, vert] = self.grid_defaults[0].split("x")
-                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(horz))
-                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(vert))
+                [self.horz_dim, self.vert_dim] = self.grid_defaults[0].split("x")
+                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(self.horz_dim))
+                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(self.vert_dim))
             elif txt == v2:
-                [horz, vert] = self.grid_defaults[1].split("x")
-                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(horz))
-                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(vert))
+                [self.horz_dim, self.vert_dim] = self.grid_defaults[1].split("x")
+                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(self.horz_dim))
+                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(self.vert_dim))
             elif txt == v3:
-                [horz, vert] = self.grid_defaults[2].split("x")
-                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(horz))
-                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(vert))
+                [self.horz_dim, self.vert_dim] = self.grid_defaults[2].split("x")
+                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(self.horz_dim))
+                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(self.vert_dim))
             else:
                 print("Something went wrong!")
 
