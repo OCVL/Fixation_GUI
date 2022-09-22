@@ -1,3 +1,4 @@
+import configparser
 from tkinter import filedialog
 from PySide6 import QtCore, QtWidgets, QtGui
 import PySide6.QtCore
@@ -8,19 +9,22 @@ from PySide6.QtCore import Qt, QSize, QPointF
 from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QTabWidget, QWidget, QFormLayout, QLineEdit, \
     QHBoxLayout, QRadioButton, QSlider, QAbstractSlider, QPushButton, QColorDialog, QVBoxLayout, QComboBox, \
     QGraphicsColorizeEffect
-
-# print(PySide6.__version__)  # Prints the pyside6 version
-# print(PySide6.QtCore.__version__)  # Prints Qt version used to compile Pyside6
+from ocvl.fixation.nuclear_info import NuclearInfo
 
 
 class Tabs(QTabWidget):
-    def __init__(self, parent=None):
+    """
+    Main class for the control panel that contains various tabs, each with different functionality
+    """
+
+    def __init__(self, eye, sub_id, save_loc, device, config_name, parent=None):
         """
         Initialization of the class variables
         """
         super(Tabs, self).__init__(parent)
 
-        # Generate the Tabs for the window to hold the settings
+        # All the self class variables to be used in the various tabs
+        self.info = None
         self.stim_wavelengths = None
         self.save_p_label = None
         self.save_p_button = None
@@ -40,56 +44,74 @@ class Tabs(QTabWidget):
         self.color_layout = None
         self.graphic = None
         self.color_label = None
-        self.tab1 = QWidget()
-        self.tab2 = QWidget()
-        self.tab3 = QWidget()
-        self.tab4 = QWidget()
-        self.tab5 = QWidget()
-
-        # Generate class variables used in slots and signals
         self.label_size = None
         self.test_label = None
         self.size_bar = None
         self.image_cal_button = None
         self.load_bg_image_button = None
+        self.eye = eye
+        self.sub_id = sub_id
+        self.save_loc = save_loc
+        self.device = device
+
+        # Load the config file
+        self.config = configparser.ConfigParser()
+        self.config.read(config_name)
+
+        # Generate the Tabs for the window to hold the settings
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
+        self.tab3 = QWidget()
+        self.tab4 = QWidget()
+        self.tab5 = QWidget()
+        self.tab6 = QWidget()
+        self.tab7 = QWidget()
+        self.tab8 = QWidget()
 
         # Set the position of the tabs to be on the right
         self.setTabPosition(QTabWidget.East)
 
         # Add the tabs generated to the parent window
-        self.addTab(self.tab1, "Stimulus Control")
-        self.addTab(self.tab2, "Fixation Target Control")
-        self.addTab(self.tab3, "Image Calibration Control")
-        self.addTab(self.tab4, "Protocol Control")
-        self.addTab(self.tab5, "Help")
+        self.addTab(self.tab1, "Session Information")
+        self.addTab(self.tab2, "Savior Control")
+        self.addTab(self.tab3, "Grid Configuration")
+        self.addTab(self.tab4, "Target Control")
+        self.addTab(self.tab5, "Planed Protocol")
+        self.addTab(self.tab6, "Image Calibration")
+        self.addTab(self.tab7, "Stimulus Control")
+        self.addTab(self.tab8, "Help")
 
         # Make a UI function for each of the tabs
-        self.tab1ui()
-        self.tab2ui()
-        self.tab3ui()
-        self.tab4ui()
-        self.tab5ui()
+        self.stimControlTab()
+        self.fixationTargetControlTab()
+        self.imCalibrationControlTab()
+        self.protocolControlTab()
+        self.helpTab()
+        self.infoTab()
+        self.saviorControlTab()
 
         # Set the Title of the Window
         self.setWindowTitle("Control Settings")
 
-    def tab1ui(self):
+
+
+    def stimControlTab(self):  # Currently Complete
         """
         Function for the UI properties and functionality of Tab 1 - Stimulus control
         """
-        layout1 = QFormLayout()
-        layout1.addRow("Port Number:", QLineEdit())
-        layout1.addRow(QLabel(""))
-        layout1.addRow(QLabel("Stimulus Parameters:"))
-        layout1.addRow("Frequency: ", QLineEdit())
-        layout1.addRow("Duration", QLineEdit())
-        layout1.addRow("Start Time", QLineEdit())
-        layout1.addRow("Frames After", QLineEdit())
+        layout = QFormLayout()
+        layout.addRow("Port Number:", QLineEdit())
+        layout.addRow(QLabel(""))
+        layout.addRow(QLabel("Stimulus Parameters:"))
+        layout.addRow("Frequency: ", QLineEdit())
+        layout.addRow("Duration", QLineEdit())
+        layout.addRow("Start Time", QLineEdit())
+        layout.addRow("Frames After", QLineEdit())
 
-        self.setTabText(0, "Stimulus Control")
-        self.tab1.setLayout(layout1)
+        # self.setTabText(0, "Stimulus Control")
+        self.tab7.setLayout(layout)
 
-    def tab2ui(self):
+    def fixationTargetControlTab(self):
         """
         Function for the UI properties and functionality of Tab 2 - Fixation Target Control
         """
@@ -105,7 +127,7 @@ class Tabs(QTabWidget):
         self.color_layout.addWidget(color_button)
         self.color_name_label = QLabel("")
         self.color_display_label = QLabel()
-        color_button.clicked.connect(self.onpresscolor)
+        color_button.clicked.connect(self.onPressColor)
 
         # Radio Buttons to be used for target shape
         self.cross = QPushButton("Large Crosshair")
@@ -127,7 +149,7 @@ class Tabs(QTabWidget):
         self.twinkle.setFixedSize(QSize(25, 25))
 
         # Call the functions to draw the different targets
-        self.drawtargets()
+        self.drawTargets()
 
         # Adding the radio buttons to the shape widget
         fix_shape.addWidget(self.cross)
@@ -139,13 +161,13 @@ class Tabs(QTabWidget):
         fix_shape.addWidget(self.twinkle)
 
         # What will happen when a specific radio button is called
-        self.cross.clicked.connect(self.onclick)
-        self.s_cross.clicked.connect(self.onclick)
-        self.m_cross.clicked.connect(self.onclick)
-        self.square_out.clicked.connect(self.onclick)
-        self.square.clicked.connect(self.onclick)
-        self.circle.clicked.connect(self.onclick)
-        self.twinkle.clicked.connect(self.onclick)
+        self.cross.clicked.connect(self.onClick)
+        self.s_cross.clicked.connect(self.onClick)
+        self.m_cross.clicked.connect(self.onClick)
+        self.square_out.clicked.connect(self.onClick)
+        self.square.clicked.connect(self.onClick)
+        self.circle.clicked.connect(self.onClick)
+        self.twinkle.clicked.connect(self.onClick)
 
         # Generate the scroll bar for the size of the fixation target
         fix_size = QHBoxLayout()
@@ -157,7 +179,7 @@ class Tabs(QTabWidget):
         self.size_bar.setTickPosition(QSlider.TicksBelow)
         self.size_bar.setTickInterval(1)
         self.label_size.setText(str(self.size_bar.value()))
-        self.size_bar.valueChanged.connect(self.sizechange)
+        self.size_bar.valueChanged.connect(self.sizeChange)
 
         # Add scroll bar and label to the main widget
         fix_size.addWidget(self.label_size)
@@ -175,10 +197,11 @@ class Tabs(QTabWidget):
         layout2.addRow(self.test_label)
         layout2.addRow(QLabel(""))
         layout2.addRow(QLabel("Size:"), fix_size)
-        self.setTabText(1, "Fixation Target Control")
-        self.tab2.setLayout(layout2)
 
-    def tab3ui(self):
+        # self.setTabText(1, "Fixation Target Control")
+        self.tab4.setLayout(layout2)
+
+    def imCalibrationControlTab(self):
         """
         Function for the UI properties and functionality of Tab 3 - Image Calibration Control
         """
@@ -197,8 +220,8 @@ class Tabs(QTabWidget):
         center_fovea_button.setText("Center Fovea")
 
         # Add the image calibration button to its slot when pressed
-        self.image_cal_button.clicked.connect(self.onpresscal)
-        self.load_bg_image_button.clicked.connect(self.onpressload)
+        self.image_cal_button.clicked.connect(self.onPressCal)
+        self.load_bg_image_button.clicked.connect(self.onPressLoad)
 
         # Add all the widgets to the main layout and set priority
         layout3.addRow(self.load_bg_image_button)
@@ -206,10 +229,10 @@ class Tabs(QTabWidget):
         layout3.addRow(self.image_cal_button)
         layout3.addRow(center_fovea_button)
 
-        self.setTabText(2, "Image Calibration Control")
-        self.tab3.setLayout(layout3)
+        # self.setTabText(2, "Image Calibration Control")
+        self.tab6.setLayout(layout3)
 
-    def tab4ui(self):
+    def protocolControlTab(self):
         """
         Function for the UI properties and functionality of Tab 4 - Protocol Control
         """
@@ -220,12 +243,12 @@ class Tabs(QTabWidget):
         self.load_p_button.setText("Load Protocol")  # Need an advance button
         self.load_p_label = QLabel()
         self.save_p_button = QPushButton()
-        self.save_p_button.setText("Save Protocol")
+        self.save_p_button.setText("Advance")
         self.save_p_label = QLabel()
 
         # Add the protocol buttons to their slots
-        self.load_p_button.clicked.connect(self.onpressloadp)
-        self.save_p_button.clicked.connect(self.onpresssavep)
+        self.load_p_button.clicked.connect(self.onPressLoadP)
+        self.save_p_button.clicked.connect(self.onPressAdvanceP)
 
         # Add all the widgets to the main layout and set priority
         layout4.addRow(self.load_p_button)  # Should mark locations with size of FOV on display screen
@@ -233,10 +256,10 @@ class Tabs(QTabWidget):
         layout4.addRow(self.save_p_button)
         layout4.addRow(self.save_p_label)
 
-        self.setTabText(3, "Protocol Control")
-        self.tab4.setLayout(layout4)
+        # self.setTabText(3, "Protocol Control")
+        self.tab5.setLayout(layout4)
 
-    def tab5ui(self):
+    def helpTab(self):
         """
         Function for the UI properties and functionality of Tab 5 - Help and Hot Key Shortcuts
         """
@@ -244,27 +267,56 @@ class Tabs(QTabWidget):
         # Add all the widgets to the main layout and set priority
         layout5.addRow(QLabel("Help:"))
         layout5.addRow(QLabel("F4 - Record a Video"))
-        self.setTabText(4, "Help")
-        self.tab5.setLayout(layout5)
+
+        # self.setTabText(4, "Help")
+        self.tab8.setLayout(layout5)
+
+    def infoTab(self):
+        self.info = NuclearInfo(self.eye, self.sub_id, self.save_loc, self.device)
+        layout = QFormLayout()
+        layout.addWidget(self.info)
+        self.tab1.setLayout(layout)
+
+    def saviorControlTab(self):
+        layout = QFormLayout()
+        layout.addRow("Number of Frames:", QLineEdit())
+
+        self.FOV_menu = QComboBox()
+
+        # get the FOVs from the config file
+        self.savior_FOVs = self.config.get("test", "savior_FOVs").split("/")
+
+
+        # adds all the FOVs in the list
+        for x in self.savior_FOVs:
+            self.FOV_menu.addItem(x)
+
+        # sets the selection to the first one
+        self.FOV_menu.setCurrentIndex(0)
+
+        layout.addRow("Current FOV:", self.FOV_menu)
+        self.tab2.setLayout(layout)
+
+
 
     """
-    Functions below are used in the UI for Tab 2
+    Functions below are used in the UI for fixationTargetControlTab
     """
 
-    def drawtargets(self):
+    def drawTargets(self):
         """
         Function that calls each function in charge of drawing on the fixation target to be selected
         """
         # Call the functions to draw the different targets
-        self.drawcross()
-        self.drawsmallcross()
-        self.drawsqaure()
-        self.drawsquareoutline()
-        self.drawcircle()
-        self.drawtwinkle()
-        self.drawmaltcross()
+        self.drawCross()
+        self.drawSmallCross()
+        self.drawSqaure()
+        self.drawSquareOutline()
+        self.drawCircle()
+        self.drawTwinkle()
+        self.drawMaltcross()
 
-    def drawcross(self):
+    def drawCross(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
@@ -277,7 +329,7 @@ class Tabs(QTabWidget):
         self.cross.setIconSize(QSize(100, 100))
         self.cross.setStyleSheet("text-align: left;")
 
-    def drawsmallcross(self):
+    def drawSmallCross(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
@@ -290,7 +342,7 @@ class Tabs(QTabWidget):
         self.s_cross.setIconSize(QSize(100, 100))
         self.s_cross.setStyleSheet("text-align: left;")
 
-    def drawsqaure(self):
+    def drawSqaure(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
@@ -303,7 +355,7 @@ class Tabs(QTabWidget):
         self.square.setIconSize(QSize(100, 100))
         self.square.setStyleSheet("text-align: left;")
 
-    def drawsquareoutline(self):
+    def drawSquareOutline(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
@@ -319,7 +371,7 @@ class Tabs(QTabWidget):
         self.square_out.setIconSize(QSize(100, 100))
         self.square_out.setStyleSheet("text-align: left;")
 
-    def drawcircle(self):
+    def drawCircle(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
@@ -333,7 +385,7 @@ class Tabs(QTabWidget):
         self.circle.setIconSize(QSize(100, 100))
         self.circle.setStyleSheet("text-align: left;")
 
-    def drawtwinkle(self):
+    def drawTwinkle(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
@@ -352,7 +404,7 @@ class Tabs(QTabWidget):
         self.twinkle.setIconSize(QSize(100, 100))
         self.twinkle.setStyleSheet("text-align: left;")
 
-    def drawmaltcross(self):
+    def drawMaltcross(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
@@ -376,9 +428,10 @@ class Tabs(QTabWidget):
         self.m_cross.setStyleSheet("text-align: left;")
 
     """
-    Slots that are used in the UI for Tab 2
+    Slots that are used in the UI for fixationTargetControlTab
     """
-    def onclick(self):
+
+    def onClick(self):
         """
         Slot for the shape of the fixation target to be selected
         """
@@ -407,14 +460,14 @@ class Tabs(QTabWidget):
                 # Will be changed to what each shape will look like in the future
                 self.test_label.setText("You pressed the button called: " + txt)
 
-    def sizechange(self):
+    def sizeChange(self):
         """
         Slot for displaying the size of the fixation target as it moves
         """
         txt = str(self.size_bar.value())
         self.label_size.setText(txt)
 
-    def onpresscolor(self):
+    def onPressColor(self):
         """
         Slot used to select the color of the fixation target
         """
@@ -434,13 +487,13 @@ class Tabs(QTabWidget):
             # setting graphic to the label
             self.color_display_label.setGraphicsEffect(self.graphic)
 
-            self.drawtargets()
+            self.drawTargets()
 
     """
-    Slots that are used in the UI for Tab 3
+    Slots that are used in the UI for imCalibrationControlTab
     """
 
-    def onpresscal(self):
+    def onPressCal(self):
         button = self.sender()
         txt = str(button.text())
         match txt:
@@ -465,27 +518,28 @@ class Tabs(QTabWidget):
             case _:
                 self.image_cal_button.setText("Something went wrong!!!!")
 
-    def onpressload(self):
+    def onPressLoad(self):
         button = self.sender()
         image_path = filedialog.askopenfilenames(title='Select the background image', filetypes=[
-                    ("image", ".jpeg"),
-                    ("image", ".png"),
-                    ("image", ".jpg"),
-                    ("image", ".tif")])
+            ("image", ".jpeg"),
+            ("image", ".png"),
+            ("image", ".jpg"),
+            ("image", ".tif")])
         print(image_path)
         self.image_label.setText(str(image_path))
 
     """
-    Slots that are used in the UI for Tab 4
+    Slots that are used in the UI for protocolControlTab
     """
-    def onpressloadp(self):
+
+    def onPressLoadP(self):
         button = self.sender()
         protocol_path = filedialog.askopenfilenames(title='Select the protocol to load', filetypes=[
             ("protocol", ".csv")])
         print(protocol_path)
         self.load_p_label.setText(str(protocol_path))
 
-    def onpresssavep(self):
+    def onPressAdvanceP(self):
         button = self.sender()
         txt = self.save_p_label.text()
         match txt:
@@ -493,7 +547,6 @@ class Tabs(QTabWidget):
                 self.save_p_label.setText("")
             case _:
                 self.save_p_label.setText("Button has been clicked")
-
 
 
 if __name__ == "__main__":

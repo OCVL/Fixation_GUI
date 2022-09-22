@@ -25,8 +25,8 @@ class NuclearDisplay(QWidget):
 
         # setting up GUI panels
         self.target_area = TargetArea(self.config_name)
-        self.lefty = TargetLefty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name)
-        self.righty = TargetRighty()
+        # self.lefty = TargetLefty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name)
+        self.righty = TargetRighty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name, self.config_name)
         self.bottom = TargetBottom(self.config_name)
 
         # setting up layout
@@ -180,11 +180,11 @@ class TargetRighty(QWidget):
     """
     Class for the right panel of the window
     """
-    def __init__(self):
+    def __init__(self, eye, sub_id, save_loc, device, config_name):
         super().__init__()
 
         # calls the control panel
-        self.target = Tabs()
+        self.target = Tabs(eye, sub_id, save_loc, device, config_name)
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)
