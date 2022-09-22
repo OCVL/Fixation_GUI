@@ -103,8 +103,6 @@ class Tabs(QTabWidget):
         # Set the Title of the Window
         self.setWindowTitle("Control Settings")
 
-
-
     def stimControlTab(self):  # Currently Complete
         """
         Function for the UI properties and functionality of Tab 1 - Stimulus control
@@ -125,7 +123,7 @@ class Tabs(QTabWidget):
         """
         Function for the UI properties and functionality of Tab 2 - Fixation Target Control
         """
-        layout2 = QFormLayout()
+        layout = QFormLayout()
 
         # Widget for the shape objects for the fixation target
         fix_shape = QHBoxLayout()
@@ -139,7 +137,7 @@ class Tabs(QTabWidget):
         self.color_display_label = QLabel()
         color_button.clicked.connect(self.onPressColor)
 
-        # Radio Buttons to be used for target shape
+        # Push Buttons to be used for target shape
         self.cross = QPushButton("Large Crosshair")
         self.s_cross = QPushButton("Small Crosshair")
         self.m_cross = QPushButton("Maltese Cross")
@@ -196,20 +194,35 @@ class Tabs(QTabWidget):
         fix_size.addWidget(QLabel(""))
         fix_size.addWidget(self.size_bar)
 
-        # Add all the other widgets to the main layout and set priority
+        # Add all the Color related widgets to their layout
         color_shape.addWidget(self.color_name_label)
         color_shape.addWidget(self.color_display_label)
-        layout2.addRow(self.color_layout)
-        layout2.addRow(color_shape)
-        layout2.addRow(QLabel(""))
-        layout2.addRow(QLabel("Shape:"))
-        layout2.addRow(fix_shape)  # Adds the radio buttons for the shape to the main layout
-        layout2.addRow(self.test_label)
-        layout2.addRow(QLabel(""))
-        layout2.addRow(QLabel("Size:"), fix_size)
+
+        # Generate the Radio buttons for the target being on/off
+        target_display_bttns = QHBoxLayout()
+        self.target_on_bttn = QRadioButton("On")
+        self.target_off_bttn = QRadioButton("Off")
+
+        # Connect the radio button to their slot
+        self.target_on_bttn.toggled.connect(self.displayTarget)
+        self.target_off_bttn.toggled.connect(self.displayTarget)
+
+        # Add the radio buttons to their layout
+        target_display_bttns.addWidget(self.target_on_bttn)
+        target_display_bttns.addWidget(self.target_off_bttn)
+
+        layout.addRow(self.color_layout)
+        layout.addRow(color_shape)
+        layout.addRow(QLabel(""))
+        layout.addRow(QLabel("Shape:"))
+        layout.addRow(fix_shape)  # Adds the radio buttons for the shape to the main layout
+        layout.addRow(self.test_label)
+        layout.addRow(QLabel(""))
+        layout.addRow(QLabel("Size:"), fix_size)
+        layout.addRow("Fixation target Display:", target_display_bttns)
 
         # self.setTabText(1, "Fixation Target Control")
-        self.tab4.setLayout(layout2)
+        self.tab4.setLayout(layout)
 
     def imCalibrationControlTab(self):
         """
@@ -380,7 +393,6 @@ class Tabs(QTabWidget):
         layout.addRow(self.grid_display_save)
 
         self.tab3.setLayout(layout)
-
 
     """
     Functions below are used in the UI for fixationTargetControlTab
@@ -634,6 +646,7 @@ class Tabs(QTabWidget):
     """
     slots for the Grid Configuration Tab
     """
+
     def gridSizeChange(self):
         """
         Slot for the grid default quick sizes to be changed
@@ -711,6 +724,16 @@ class Tabs(QTabWidget):
         """
         button = self.sender()
         print(button.text())
+
+    def displayTarget(self):
+        """
+        Slot for if the fixation target is displayed to the subject
+        :return:
+        """
+        button = self.sender()
+        if button.isChecked():
+            txt = button.text()
+            print(txt)
 
 
 if __name__ == "__main__":
