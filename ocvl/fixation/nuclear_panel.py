@@ -23,26 +23,29 @@ class NuclearDisplay(QWidget):
 
         self.LaunchInitialDialog()
 
+        # setting up GUI panels
         self.target_area = TargetArea(self.config_name)
         self.lefty = TargetLefty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name)
         self.righty = TargetRighty()
-        self.bottom = TargetBottom()
+        self.bottom = TargetBottom(self.config_name)
 
+        # setting up layout
         self.grid_layout = QtWidgets.QGridLayout(self)
-
-        self.layout1 = QtWidgets.QVBoxLayout(self)
         self.layout2 = QtWidgets.QHBoxLayout(self)
+
         # self.layout2.addWidget(self.lefty, 2.5)
         self.layout2.addWidget(self.target_area, 5)
         self.layout2.addWidget(self.righty, 2.5)
-
+        # adding layouts to grid
         self.grid_layout.addLayout(self.layout2, 0, 0)
         self.grid_layout.addWidget(self.bottom, 2, 0, 2, 1)
 
-        # self.layout1.addLayout(self.layout2)
-        # self.layout1.addWidget(self.bottom)
-
     def LaunchInitialDialog(self):
+        """
+        Launches initial dialog in the initial window file
+        Then gets and saves all the info that user enters into the dialog
+        :return:
+        """
         dlg = InitialDialog()
         dlg.exec()
 
@@ -61,6 +64,9 @@ class NuclearDisplay(QWidget):
         pass
 
 class TargetArea(QWidget):
+    """
+    Class for the grid display
+    """
     def __init__(self, config_name):
         super().__init__()
 
@@ -70,6 +76,11 @@ class TargetArea(QWidget):
         self.circle_vis = self.config.get("test", "fixation_circle_visible")
 
     def paintEvent(self, arg__0):
+        """
+        This paints the grid with the lines and the size of it
+        :param arg__0:
+        :return:
+        """
 
         painter = QPainter(self)
         painter.setBrush(QColor(75, 75, 75))
@@ -77,8 +88,10 @@ class TargetArea(QWidget):
 
         rect = painter.window()
 
+        # sets up the size of the circle based on the window size
         radii = np.minimum(rect.width(), rect.height())/2
         cent = QPoint(rect.width()/2, rect.height()/2)
+        # sets up the size of the grid lines (will need to be changed to be custom size)
         if(self.grid_size == 'small'):
             num_of_lines = 31
         elif(self.grid_size == 'medium'):
@@ -88,6 +101,7 @@ class TargetArea(QWidget):
         else:
             num_of_lines = 0
 
+        # spacing of lines
         spacing = (radii*2)/num_of_lines
         painter.drawRect(rect.width() / 2 - radii, rect.height() / 2 - radii, radii * 2, radii * 2)
 
@@ -96,6 +110,7 @@ class TargetArea(QWidget):
 
         center_line = (num_of_lines-1)/2
 
+        # paints the lines with different colors depending on what step they are
         counter = 0
         for y in vert_steps:
             if counter % 5 == 0:
@@ -124,6 +139,7 @@ class TargetArea(QWidget):
 
         painter.setPen(Qt.black)
 
+        # used to set circle visible on  screen (from config file)
         if self.circle_vis == "1":
             painter.setPen(QPen(QColor(3, 175, 224), 2.5))
             # painter.drawEllipse(cent, spacing * 15.5, spacing * 15.5)
@@ -135,10 +151,12 @@ class TargetArea(QWidget):
 
 
 class TargetLefty(QWidget):
+    """
+    Class for the left panel of the window -- currently not being used
+    """
     def __init__(self, eye, sub_id, save_loc, device):
         super().__init__()
 
-        # self.target = QtWidgets.QLabel("Sup beaches", alignment=QtCore.Qt.AlignCenter)
         self.target = NuclearInfo(eye, sub_id, save_loc, device)
 
         self.layout = QtWidgets.QHBoxLayout(self)
@@ -159,10 +177,13 @@ class TargetLefty(QWidget):
 
 
 class TargetRighty(QWidget):
+    """
+    Class for the right panel of the window
+    """
     def __init__(self):
         super().__init__()
 
-        # self.target = QtWidgets.QLabel("Sup beaches", alignment=QtCore.Qt.AlignCenter)
+        # calls the control panel
         self.target = Tabs()
 
         self.layout = QtWidgets.QHBoxLayout(self)
@@ -182,11 +203,14 @@ class TargetRighty(QWidget):
         # painter.drawEllipse(cent, radii, radii)
 
 class TargetBottom(QWidget):
-    def __init__(self):
+    """
+    Class for the bottom panel of the window
+    """
+    def __init__(self, config_name):
         super().__init__()
 
-        # self.target = QtWidgets.QLabel("Sup beaches", alignment=QtCore.Qt.AlignCenter)
-        self.target = NuclearNotes()
+        # calls the notes panel
+        self.target = NuclearNotes(config_name)
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)

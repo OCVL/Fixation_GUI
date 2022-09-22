@@ -16,12 +16,15 @@ SUBTYPE_KEY = '/Subtype'
 WIDGET_SUBTYPE_KEY = '/Widget'
 
 class NuclearNotes(QtWidgets.QWidget):
-    def __init__(self):
+    """
+    Class for the notes panel
+    """
+    def __init__(self, config_name):
         super().__init__()
 
         # read in the config file
         self.config = configparser.ConfigParser()
-        self.config.read('C:\\Users\\6794grieshj\\Documents\\GitHub\\Fixation_GUI_Qt\\test_settings.ini')
+        self.config.read(config_name)
         self.notes_fname = 'test_file.xlsx'
         self.horizontal_table_headers = None
 
@@ -50,6 +53,10 @@ class NuclearNotes(QtWidgets.QWidget):
         self.count = 0
 
     def constructTable(self):
+        """
+        Constucts table
+        :return:
+        """
         # https://stackoverflow.com/questions/4097139/reading-array-from-config-file-in-python
         self.horizontal_table_headers = self.config.get("test", "horizontal_table_headers").split("/")
         table_columns = len(self.horizontal_table_headers)
@@ -80,6 +87,10 @@ class NuclearNotes(QtWidgets.QWidget):
 
     @QtCore.Slot()
     def addRow(self):
+        """
+        Adds a row to the notes table
+        :return:
+        """
         # https: // stackoverflow.com / questions / 6957943 / how - to - add - new - row - to - existing - qtablewidget
         self.row_count = self.table_widget.rowCount()
         self.table_widget.insertRow(self.row_count)
@@ -108,6 +119,10 @@ class NuclearNotes(QtWidgets.QWidget):
 
     @QtCore.Slot()
     def saveNotes(self):
+        """
+        Saves the notes table
+        :return:
+        """
 
         # create pandas dataframe
         df = pd.DataFrame(columns=self.horizontal_table_headers)
@@ -175,6 +190,9 @@ class NuclearNotes(QtWidgets.QWidget):
 
 
 class ReadOnlyDelegate(QStyledItemDelegate):
+    """
+    Class to make things read only
+    """
     def createEditor(self, parent, option, index):
         # print('createEditor event fired')
         return
@@ -183,6 +201,7 @@ class ReadOnlyDelegate(QStyledItemDelegate):
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
+    # can't run on its own unless you hard code the config file path as an argument below
     widget = NuclearNotes()
     widget.show()
     widget.resize(800, 600)

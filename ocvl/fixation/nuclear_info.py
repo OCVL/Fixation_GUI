@@ -4,6 +4,13 @@ from PySide6.QtWidgets import QLabel, QFormLayout, QWidget, QGroupBox
 
 class NuclearInfo(QtWidgets.QWidget):
     def __init__(self, eye, sub_id, save_loc, device):
+        """
+        sets up information labels based off of user input from initial dialog
+        :param eye:
+        :param sub_id:
+        :param save_loc:
+        :param device:
+        """
         super().__init__()
 
         layout = QFormLayout(self)

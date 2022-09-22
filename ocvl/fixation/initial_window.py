@@ -7,6 +7,9 @@ from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QLineEdit, QComboBox
 
 
 class InitialDialog(QDialog):
+    """
+    Class for the initial dialog box for user inputs
+    """
     def __init__(self):
         super().__init__()
         self.subject_id = None
@@ -19,6 +22,7 @@ class InitialDialog(QDialog):
         self.device_selected = None
         self.buttonBox = None
         self.setWindowTitle("Setup")
+        # configuration file set up
         self.config = configparser.ConfigParser()
         self.config_name = filedialog.askopenfilenames(title='Select the configuration file', filetypes=[
             ("configuration file", ".ini")])
@@ -27,13 +31,17 @@ class InitialDialog(QDialog):
         self.setup()
 
     def setup(self):
+        """
+        Set up layouts for the dialog box
+        :return:
+        """
         # Button and connection code to exit pop up when done
         QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.buttonBox = QDialogButtonBox(QBtn)
         self.buttonBox.accepted.connect(self.okay)
         self.buttonBox.rejected.connect(self.cancel)
 
-        # Sets up the layout for the pop up window
+        # Sets up the layout for the pop-up window
         layout1 = QFormLayout()
         eye_butt_layout = QHBoxLayout()
         save_loc_butt_layout = QHBoxLayout()
@@ -73,24 +81,49 @@ class InitialDialog(QDialog):
         self.setLayout(layout1)
 
     def eye_slot(self):
+        """
+        Slot for the eye selection
+        :return:
+        """
         button = self.sender()
         if button.isChecked():
             print("Pressed the button called: " + button.text())
             self.eye_selected = button.text()
 
     def onTextEnter(self):
+        """
+        Slot for the subject ID
+        :return:
+        """
         self.subject_id = self.sub_id.text()
 
     def on_save_click(self):
+        """
+        Slot for the save location button
+        :return:
+        """
         self.save_location_dir = filedialog.askdirectory(title='Select the save location for generated files.')
         self.temp_loc_name.setText(self.save_location_dir)
 
     def on_combobox_changed(self):
+        """
+        Slot for the device selection drop down
+        :return:
+        """
         self.device_selected = self.device_menu.currentText()
 
     def okay(self):
+        """
+        Slot for the okay button. Checks that everything is filled out before continue
+        :return:
+        """
         if (self.eye_selected is not None) and (self.subject_id is not None) and (self.subject_id != "") and (self.save_location_dir is not None) and (self.device_selected is not None):
             self.accept()
+
     def cancel(self):
+        """
+        Slot for cancel button. Quits application.
+        :return:
+        """
         sys.exit()
 
