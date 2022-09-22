@@ -9,8 +9,8 @@ from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QTabWidget, QWi
     QHBoxLayout, QRadioButton, QSlider, QAbstractSlider, QPushButton, QColorDialog, QVBoxLayout, QComboBox, \
     QGraphicsColorizeEffect
 
-print(PySide6.__version__)  # Prints the pyside6 version
-print(PySide6.QtCore.__version__)  # Prints Qt version used to compile Pyside6
+# print(PySide6.__version__)  # Prints the pyside6 version
+# print(PySide6.QtCore.__version__)  # Prints Qt version used to compile Pyside6
 
 
 class Tabs(QTabWidget):

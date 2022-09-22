@@ -28,13 +28,19 @@ class NuclearDisplay(QWidget):
         self.righty = TargetRighty()
         self.bottom = TargetBottom()
 
+        self.grid_layout = QtWidgets.QGridLayout(self)
+
         self.layout1 = QtWidgets.QVBoxLayout(self)
         self.layout2 = QtWidgets.QHBoxLayout(self)
-        self.layout2.addWidget(self.lefty, 2.5)
+        # self.layout2.addWidget(self.lefty, 2.5)
         self.layout2.addWidget(self.target_area, 5)
         self.layout2.addWidget(self.righty, 2.5)
-        self.layout1.addLayout(self.layout2)
-        self.layout1.addWidget(self.bottom)
+
+        self.grid_layout.addLayout(self.layout2, 0, 0)
+        self.grid_layout.addWidget(self.bottom, 2, 0, 2, 1)
+
+        # self.layout1.addLayout(self.layout2)
+        # self.layout1.addWidget(self.bottom)
 
     def LaunchInitialDialog(self):
         dlg = InitialDialog()
