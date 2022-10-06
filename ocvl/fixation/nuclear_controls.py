@@ -77,6 +77,9 @@ class Tabs(QTabWidget):
 
         # Set the position of the tabs to be on the right
         self.setTabPosition(QTabWidget.East)
+        self.setTabShape(QTabWidget.Triangular)
+        self.setMaximumWidth(300)
+        self.setMaximumHeight(600)
 
         # Add the tabs generated to the parent window
         self.addTab(self.tab1, "GUI Configuration")
