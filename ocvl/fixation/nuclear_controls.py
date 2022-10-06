@@ -22,6 +22,8 @@ class Tabs(QTabWidget):
         super(Tabs, self).__init__(parent)
 
         # All the self class variables to be used in the various tabs
+        self.target_off_bttn = None
+        self.target_on_bttn = None
         self.subject_view = None
         self.anatomical_view = None
         self.dim = None
@@ -82,7 +84,7 @@ class Tabs(QTabWidget):
 
         # Add the tabs generated to the parent window
         self.addTab(self.tab1, "GUI Configuration")
-        self.addTab(self.tab2, "Savior Control")
+        self.addTab(self.tab2, "Imaging")
         self.addTab(self.tab3, "Grid Configuration")
         self.addTab(self.tab4, "Target Control")
         self.addTab(self.tab5, "Planed Protocol")
@@ -100,7 +102,7 @@ class Tabs(QTabWidget):
 
         # UI functions for the new tab layout
         self.guiSetUp()
-        # self.imagingTab()
+        self.imagingTab()
         # self.sessionReview()
 
         # Set the Title of the Window
@@ -302,6 +304,92 @@ class Tabs(QTabWidget):
 
         self.tab1.setLayout(layout)
 
+    def imagingTab(self):
+        layout = QFormLayout()
+
+        # Protocol Advance group
+        protocol_group = QGroupBox("Protocol")
+        protocol_adv_layout = QVBoxLayout()
+
+        self.save_p_button = QPushButton()
+        self.save_p_button.setText("Advance")
+        self.save_p_label = QLabel()
+
+        # Add the protocol buttons to their slots
+        # self.load_p_button.clicked.connect(self.onPressLoadP)
+        self.save_p_button.clicked.connect(self.onPressAdvanceP)
+
+        # Add all the widgets to the main layout and set priority
+        protocol_adv_layout.addWidget(self.save_p_button)
+        protocol_adv_layout.addWidget(self.save_p_label)
+
+        # Add the protocol group to the main layout
+        protocol_group.setLayout(protocol_adv_layout)
+        layout.addRow(protocol_group)
+
+        # Group for the target location and movement
+        target_control_group = QGroupBox("Target Control")
+        target_control_layout = QVBoxLayout()
+
+        # User input target control
+        loc_layout = QHBoxLayout()
+
+        # Animation of target
+        animate_layout = QHBoxLayout()
+
+        # Target display on/off
+        target_display_bttns = QHBoxLayout()
+        self.target_on_bttn = QRadioButton("On")
+        self.target_off_bttn = QRadioButton("Off")
+
+        # Connect the radio button to their slot
+        self.target_on_bttn.toggled.connect(self.displayTarget)
+        self.target_off_bttn.toggled.connect(self.displayTarget)
+
+        # Add the radio buttons to their layout
+        target_display_bttns.addWidget(self.target_on_bttn)
+        target_display_bttns.addWidget(self.target_off_bttn)
+
+        target_control_layout.addLayout(target_display_bttns)
+
+        # Quick Location buttons
+        quick_bttn_layout = QGridLayout()
+
+        target_control_group.setLayout(target_control_layout)
+        layout.addRow(target_control_group)
+
+        # Group for the Grid visibility
+        grid_vis_group = QGroupBox("Grid Visibility")
+        grid_vis_layout = QHBoxLayout()
+
+        grid_vis_group.setLayout(grid_vis_layout)
+        layout.addRow(grid_vis_group)
+
+        # Group for Savior Controls
+        savior_group = QGroupBox("Savior Control")
+        savior_layout = QFormLayout()
+
+        savior_layout.addRow("Number of Frames:", QLineEdit())
+
+        self.FOV_menu = QComboBox()
+
+        # get the FOVs from the config file
+        self.savior_FOVs = self.config.get("test", "savior_FOVs").split("/")
+
+        # adds all the FOVs in the list
+        for x in self.savior_FOVs:
+            self.FOV_menu.addItem(x)
+
+        # sets the selection to the first one
+        self.FOV_menu.setCurrentIndex(0)
+
+        savior_layout.addRow("Current FOV:", self.FOV_menu)
+
+        savior_group.setLayout(savior_layout)
+        layout.addRow(savior_group)
+
+        self.tab2.setLayout(layout)
+
     def stimControlTab(self):  # Currently Complete
         """
         Function for the UI properties and functionality of Tab 1 - Stimulus control
@@ -397,18 +485,18 @@ class Tabs(QTabWidget):
         # color_shape.addWidget(self.color_name_label)
         # color_shape.addWidget(self.color_display_label)
 
-        # Generate the Radio buttons for the target being on/off
-        target_display_bttns = QHBoxLayout()
-        self.target_on_bttn = QRadioButton("On")
-        self.target_off_bttn = QRadioButton("Off")
-
-        # Connect the radio button to their slot
-        self.target_on_bttn.toggled.connect(self.displayTarget)
-        self.target_off_bttn.toggled.connect(self.displayTarget)
-
-        # Add the radio buttons to their layout
-        target_display_bttns.addWidget(self.target_on_bttn)
-        target_display_bttns.addWidget(self.target_off_bttn)
+        # # Generate the Radio buttons for the target being on/off
+        # target_display_bttns = QHBoxLayout()
+        # self.target_on_bttn = QRadioButton("On")
+        # self.target_off_bttn = QRadioButton("Off")
+        #
+        # # Connect the radio button to their slot
+        # self.target_on_bttn.toggled.connect(self.displayTarget)
+        # self.target_off_bttn.toggled.connect(self.displayTarget)
+        #
+        # # Add the radio buttons to their layout
+        # target_display_bttns.addWidget(self.target_on_bttn)
+        # target_display_bttns.addWidget(self.target_off_bttn)
 
         # layout.addRow(self.color_layout)
         # layout.addRow(color_shape)
@@ -418,7 +506,7 @@ class Tabs(QTabWidget):
         # layout.addRow(self.test_label)
         layout.addRow(QLabel(""))
         # layout.addRow(QLabel("Size:"), fix_size)
-        layout.addRow("Fixation target Display:", target_display_bttns)
+        # layout.addRow("Fixation target Display:", target_display_bttns)
 
         # self.setTabText(1, "Fixation Target Control")
         self.tab4.setLayout(layout)
@@ -433,19 +521,19 @@ class Tabs(QTabWidget):
         # self.load_p_button = QPushButton()
         # self.load_p_button.setText("Load Protocol")  # Need an advance button
         # self.load_p_label = QLabel()
-        self.save_p_button = QPushButton()
-        self.save_p_button.setText("Advance")
-        self.save_p_label = QLabel()
+        # self.save_p_button = QPushButton()
+        # self.save_p_button.setText("Advance")
+        # self.save_p_label = QLabel()
 
         # Add the protocol buttons to their slots
-        # self.load_p_button.clicked.connect(self.onPressLoadP)
-        self.save_p_button.clicked.connect(self.onPressAdvanceP)
-
-        # Add all the widgets to the main layout and set priority
-        # layout4.addRow(self.load_p_button)  # Should mark locations with size of FOV on display screen
-        # layout4.addRow(self.load_p_label)
-        layout4.addRow(self.save_p_button)
-        layout4.addRow(self.save_p_label)
+        # # self.load_p_button.clicked.connect(self.onPressLoadP)
+        # self.save_p_button.clicked.connect(self.onPressAdvanceP)
+        #
+        # # Add all the widgets to the main layout and set priority
+        # # layout4.addRow(self.load_p_button)  # Should mark locations with size of FOV on display screen
+        # # layout4.addRow(self.load_p_label)
+        # layout4.addRow(self.save_p_button)
+        # layout4.addRow(self.save_p_label)
 
         # self.setTabText(3, "Protocol Control")
         self.tab5.setLayout(layout4)
@@ -470,22 +558,22 @@ class Tabs(QTabWidget):
 
     def saviorControlTab(self):
         layout = QFormLayout()
-        layout.addRow("Number of Frames:", QLineEdit())
-
-        self.FOV_menu = QComboBox()
-
-        # get the FOVs from the config file
-        self.savior_FOVs = self.config.get("test", "savior_FOVs").split("/")
-
-        # adds all the FOVs in the list
-        for x in self.savior_FOVs:
-            self.FOV_menu.addItem(x)
-
-        # sets the selection to the first one
-        self.FOV_menu.setCurrentIndex(0)
-
-        layout.addRow("Current FOV:", self.FOV_menu)
-        self.tab2.setLayout(layout)
+        # layout.addRow("Number of Frames:", QLineEdit())
+        #
+        # self.FOV_menu = QComboBox()
+        #
+        # # get the FOVs from the config file
+        # self.savior_FOVs = self.config.get("test", "savior_FOVs").split("/")
+        #
+        # # adds all the FOVs in the list
+        # for x in self.savior_FOVs:
+        #     self.FOV_menu.addItem(x)
+        #
+        # # sets the selection to the first one
+        # self.FOV_menu.setCurrentIndex(0)
+        #
+        # layout.addRow("Current FOV:", self.FOV_menu)
+        self.tab5.setLayout(layout)
 
     def gridConfigurationTab(self):
         layout = QFormLayout()
@@ -811,10 +899,10 @@ class Tabs(QTabWidget):
         button = self.sender()
         txt = self.save_p_label.text()
         match txt:
-            case "Button has been clicked":
+            case "Advance in Protocol":
                 self.save_p_label.setText("")
             case _:
-                self.save_p_label.setText("Button has been clicked")
+                self.save_p_label.setText("Advance in Protocol")
 
     """
     slots for the Grid Configuration Tab
