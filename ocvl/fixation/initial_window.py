@@ -119,8 +119,8 @@ class InitialDialog(QDialog):
         Slot for the okay button. Checks that everything is filled out before continue
         :return:
         """
-        if (self.eye_selected is not None) and (self.subject_id is not None) and (self.subject_id != "") and (self.save_location_dir is not None) and (self.device_selected is not None):
-            self.accept()
+        # if (self.eye_selected is not None) and (self.subject_id is not None) and (self.subject_id != "") and (self.save_location_dir is not None) and (self.device_selected is not None):
+        self.accept()
 
     def cancel(self):
         """

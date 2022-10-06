@@ -78,8 +78,9 @@ class Tabs(QTabWidget):
         # Set the position of the tabs to be on the right
         self.setTabPosition(QTabWidget.East)
         self.setTabShape(QTabWidget.Triangular)
-        self.setMaximumWidth(300)
-        self.setMaximumHeight(600)
+        # need to figure out how to resize these appropriately when size of window changes
+        self.setMaximumWidth(350)
+        self.setMaximumHeight(700)
 
         # Add the tabs generated to the parent window
         self.addTab(self.tab1, "GUI Configuration")
@@ -100,6 +101,7 @@ class Tabs(QTabWidget):
         layout = QFormLayout()
         grid_config_group = QGroupBox("Grid Configuration")
         grid_setup_layout = QVBoxLayout()
+        quick_size_layout = QHBoxLayout()
 
         # Labels for each Grid section
         quick_size_label = QLabel("Quick Sizes:")
@@ -118,9 +120,11 @@ class Tabs(QTabWidget):
 
         # Add the buttons to the layout
         grid_setup_layout.addWidget(quick_size_label)
-        grid_setup_layout.addWidget(self.grid_size_default_1)
-        grid_setup_layout.addWidget(self.grid_size_default_2)
-        grid_setup_layout.addWidget(self.grid_size_default_3)
+        quick_size_layout.addWidget(self.grid_size_default_1)
+        quick_size_layout.addWidget(self.grid_size_default_2)
+        quick_size_layout.addWidget(self.grid_size_default_3)
+
+        grid_setup_layout.addLayout(quick_size_layout)
 
         # Set up the other sizes in the dropdown menu
         self.dim_select = QComboBox()
@@ -335,14 +339,35 @@ class Tabs(QTabWidget):
 
         # User input target control
         loc_layout = QHBoxLayout()
+        self.horz = QLineEdit()
+        self.vert = QLineEdit()
+
+        loc_layout.addWidget(QLabel("X"))
+        loc_layout.addWidget(self.horz)
+        loc_layout.addWidget(QLabel("Y"))
+        loc_layout.addWidget(self.vert)
+        target_control_layout.addLayout(loc_layout)
 
         # Animation of target
         animate_layout = QHBoxLayout()
+        self.animation = QCheckBox("Target Animation")  #will need to figure out slot for this to have it work correctly
+        self.animation_speed = QLineEdit()
 
-        # Target display on/off
+        animate_layout.addWidget(self.animation)
+        animate_layout.addWidget(QLabel("Deg/s:"))
+        animate_layout.addWidget(self.animation_speed)
+
+        target_control_layout.addLayout(animate_layout)
+
+
+        # Target display on/off # might want to consider changing to a check box and set default to checked
         target_display_bttns = QHBoxLayout()
+        target_control_layout.addWidget(QLabel("Target Visible?"))
+        # self.animation = QCheckBox("Target Visible?")
         self.target_on_bttn = QRadioButton("On")
         self.target_off_bttn = QRadioButton("Off")
+
+        self.animation.toggled.connect(self.displayTarget)
 
         # Connect the radio button to their slot
         self.target_on_bttn.toggled.connect(self.displayTarget)
@@ -351,11 +376,52 @@ class Tabs(QTabWidget):
         # Add the radio buttons to their layout
         target_display_bttns.addWidget(self.target_on_bttn)
         target_display_bttns.addWidget(self.target_off_bttn)
+        # target_display_bttns.addWidget(self.animation)
 
         target_control_layout.addLayout(target_display_bttns)
 
         # Quick Location buttons
+
+        target_control_layout.addWidget(QLabel("Quick Locations:"))
+
         quick_bttn_layout = QGridLayout()
+        # Push Buttons to be used for Quick Locations
+        self.TRC = QPushButton("TRC")
+        self.MTE = QPushButton("MTE")
+        self.TLC = QPushButton("TLC")
+        self.MLE = QPushButton("MLE")
+        self.BLC = QPushButton("BLC")
+        self.MBE = QPushButton("MBE")
+        self.BRC = QPushButton("BRC")
+        self.MRE = QPushButton("MRE")
+        self.CTR = QPushButton("CTR")
+
+        size = 30
+        # Change the shape of the buttons to be squares
+        self.TRC.setFixedSize(QSize(size, size))
+        self.MTE.setFixedSize(QSize(size, size))
+        self.TLC.setFixedSize(QSize(size, size))
+        self.MLE.setFixedSize(QSize(size, size))
+        self.BLC.setFixedSize(QSize(size, size))
+        self.MBE.setFixedSize(QSize(size, size))
+        self.BRC.setFixedSize(QSize(size, size))
+        self.MRE.setFixedSize(QSize(size, size))
+        self.CTR.setFixedSize(QSize(size, size))
+
+        quick_bttn_layout.addWidget(self.TRC, 0, 2)
+        quick_bttn_layout.addWidget(self.MTE, 0, 1)
+        quick_bttn_layout.addWidget(self.TLC, 0, 0)
+        quick_bttn_layout.addWidget(self.MLE, 1, 0)
+        quick_bttn_layout.addWidget(self.BLC, 2, 0)
+        quick_bttn_layout.addWidget(self.MBE, 2, 1)
+        quick_bttn_layout.addWidget(self.BRC, 2, 2)
+        quick_bttn_layout.addWidget(self.MRE, 1, 2)
+        quick_bttn_layout.addWidget(self.CTR, 1, 1)
+
+        # quick_bttn_layout.setSpacing(0)
+        # quick_bttn_layout.setContentsMargins(0, 0, 0, 0)
+
+        target_control_layout.addLayout(quick_bttn_layout)
 
         target_control_group.setLayout(target_control_layout)
         layout.addRow(target_control_group)
@@ -363,6 +429,9 @@ class Tabs(QTabWidget):
         # Group for the Grid visibility
         grid_vis_group = QGroupBox("Grid Visibility")
         grid_vis_layout = QHBoxLayout()
+
+        self.grid_vis = QCheckBox("Grid Visibile")  # will need to add slot to get checkbox to work also need to set defualt to be checked
+        grid_vis_layout.addWidget(self.grid_vis)
 
         grid_vis_group.setLayout(grid_vis_layout)
         layout.addRow(grid_vis_group)
