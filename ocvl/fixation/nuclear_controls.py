@@ -1,9 +1,7 @@
 import configparser
 from tkinter import filedialog
-from PySide6 import QtCore, QtWidgets, QtGui
-import PySide6.QtCore
+from PySide6 import QtWidgets, QtGui
 import sys
-import cv2
 from PySide6.QtGui import *
 from PySide6.QtCore import Qt, QSize, QPointF
 from PySide6.QtWidgets import *
@@ -22,6 +20,22 @@ class Tabs(QTabWidget):
         super(Tabs, self).__init__(parent)
 
         # All the self class variables to be used in the various tabs
+        self.ref_pt_label = None
+        self.ref_pt_button = None
+        self.MTE = None
+        self.TRC = None
+        self.TLC = None
+        self.MLE = None
+        self.BLC = None
+        self.MBE = None
+        self.BRC = None
+        self.MRE = None
+        self.CTR = None
+        self.grid_vis = None
+        self.animation_speed = None
+        self.animation = None
+        self.vert = None
+        self.horz = None
         self.target_off_bttn = None
         self.target_on_bttn = None
         self.subject_view = None
@@ -97,8 +111,34 @@ class Tabs(QTabWidget):
         # Set the Title of the Window
         self.setWindowTitle("Control Settings")
 
+    # Currently Complete with all components
     def guiSetUp(self):
+        """
+        Function for the UI properties and functionality for the GUI set up tab
+        Components:
+            - Grid Configuration
+                * Quick sizes
+                * Grid dimension drop down
+                * Set Reference Point
+                * Label (T/N) view
+            - Protocol
+                * Load Protocol button
+                * Label with file path with protocol
+            - image Calibration
+                * Load background image button
+                * Calibrate Image button
+                * Center Fovea Button
+            - Target Setup
+                * Color select Button
+                * Label with color name and then displays selected color
+                * Target Size Label and scroll bar
+                * Target Shapes (6 currently)
+        :return:
+        """
+        # Main tab layout
         layout = QFormLayout()
+
+        # Grid Group and needed layouts
         grid_config_group = QGroupBox("Grid Configuration")
         grid_setup_layout = QVBoxLayout()
         quick_size_layout = QHBoxLayout()
@@ -124,6 +164,7 @@ class Tabs(QTabWidget):
         quick_size_layout.addWidget(self.grid_size_default_2)
         quick_size_layout.addWidget(self.grid_size_default_3)
 
+        # Add the quick sizes to the grid set up layout
         grid_setup_layout.addLayout(quick_size_layout)
 
         # Set up the other sizes in the dropdown menu
@@ -140,12 +181,11 @@ class Tabs(QTabWidget):
         self.dim = self.config.get("test", "grid_size_start_default")
         self.dim_select.setCurrentIndex(self.dim_select.findText(self.dim))
 
-        # Add the dropdown and its label to the layout
+        # Add the dropdown and its label to the grid set up layout
         grid_setup_layout.addWidget(dim_menu_label)
         grid_setup_layout.addWidget(self.dim_select)
 
-        # Selected Reference point/ reset Tab
-        # Reference Point / reset button
+        # Selected Reference point/ reset button
         self.ref_pt_button = QPushButton()
         self.ref_pt_button.setText("Set Reference Point")
         self.ref_pt_label = QLabel("")
@@ -171,12 +211,11 @@ class Tabs(QTabWidget):
         view_layout.addWidget(self.anatomical_view)
         view_layout.addWidget(self.subject_view)
 
-        # Add view buttons to the layout
+        # Add view buttons to the grid set up layout
         grid_setup_layout.addLayout(view_layout)
 
-        # Add the grid layout to the Group layout
+        # Add the grid set up layout to the grid Group layout and then add the group to the main layout as another row
         grid_config_group.setLayout(grid_setup_layout)
-
         layout.addRow(grid_config_group)
 
         # Load Protocol Set up stuff
@@ -193,17 +232,17 @@ class Tabs(QTabWidget):
         protocol_layout.addWidget(self.load_p_button)  # Should mark locations with size of FOV on display screen
         protocol_layout.addWidget(self.load_p_label)
 
-        # Add the protocol layout to the group layout
+        # Add the protocol layout to the group layout and then add the group to the main layout as another row
         protocol_config_group.setLayout(protocol_layout)
         layout.addRow(protocol_config_group)
 
         # Image Calibration Group
         image_config_group = QGroupBox("Image Calibration")
-        image_cal_layout = QHBoxLayout()
+        image_cal_layout = QVBoxLayout()
 
         # Attributes needed to display an image
         self.image_label = QLabel("")
-        self.image_label.resize(500, 500)
+        # self.image_label.resize(500, 500)
 
         # Generate buttons needed for image calibration control
         self.load_bg_image_button = QPushButton()
@@ -219,31 +258,32 @@ class Tabs(QTabWidget):
 
         # Add all the widgets to the main layout and set priority
         image_cal_layout.addWidget(self.load_bg_image_button)
+        image_cal_layout.addWidget(self.image_label)
         image_cal_layout.addWidget(self.image_cal_button)
         image_cal_layout.addWidget(center_fovea_button)
-        image_cal_layout.addWidget(self.image_label)
 
-        # Add the protocol layout to the group layout
+        # Add the protocol layout to the group layout and then add the group to the main layout as another row
         image_config_group.setLayout(image_cal_layout)
         layout.addRow(image_config_group)
 
-        # Target set up section
+        # Target set up group and its layout
         target_config_group = QGroupBox("Target Set Up")
         target_cal_layout = QVBoxLayout()
 
         # Color wheel for selecting the color of the target
         color_button = QPushButton("Select Color")
         target_cal_layout.addWidget(color_button)
+        color_display = QHBoxLayout()
         self.color_name_label = QLabel("")
         self.color_display_label = QLabel()
         color_button.clicked.connect(self.onPressColor)
 
         # Add all the Color related widgets to their layout
-        target_cal_layout.addWidget(self.color_name_label)
-        target_cal_layout.addWidget(self.color_display_label)
+        color_display.addWidget(self.color_name_label)
+        color_display.addWidget(self.color_display_label)
+        target_cal_layout.addLayout(color_display)
 
         # Generate the scroll bar for the size of the fixation target
-        # fix_size = QHBoxLayout()
         self.size_bar = QSlider(Qt.Horizontal)
         self.label_size = QLabel()
         self.size_bar.setMinimum(1)
@@ -256,7 +296,6 @@ class Tabs(QTabWidget):
 
         # Add scroll bar and label to the main widget
         target_cal_layout.addWidget(self.label_size)
-        target_cal_layout.addWidget(QLabel(""))
         target_cal_layout.addWidget(self.size_bar)
 
         # Push Buttons to be used for target shape
@@ -281,55 +320,77 @@ class Tabs(QTabWidget):
         # Call the functions to draw the different targets
         self.drawTargets()
 
-        # Adding the radio buttons to the shape widget
-        fix_shape = QGridLayout()
-        fix_shape.addWidget(self.cross, 0, 0)
-        fix_shape.addWidget(self.s_cross, 0, 1)
-        fix_shape.addWidget(self.m_cross, 0, 2)
-        # fix_shape.addWidget(self.square_out)
-        fix_shape.addWidget(self.square, 1, 0)
-        fix_shape.addWidget(self.circle, 1, 1)
-        fix_shape.addWidget(self.twinkle, 1, 2)
+        # Adding the radio buttons to the shape layouts
+        fix_shape_main = QVBoxLayout()
+        fix_shape1 = QHBoxLayout()
+        fix_shape1.addWidget(self.cross)
+        fix_shape1.addWidget(self.s_cross)
+        fix_shape1.addWidget(self.m_cross)
+        fix_shape1.addWidget(self.square)
+        fix_shape1.addWidget(self.circle)
+        fix_shape1.addWidget(self.twinkle)
+        fix_shape_main.addLayout(fix_shape1)
 
         # What will happen when a specific radio button is called
         self.cross.clicked.connect(self.onClick)
         self.s_cross.clicked.connect(self.onClick)
         self.m_cross.clicked.connect(self.onClick)
-        # self.square_out.clicked.connect(self.onClick)
         self.square.clicked.connect(self.onClick)
         self.circle.clicked.connect(self.onClick)
         self.twinkle.clicked.connect(self.onClick)
 
+        # Add the components to the target cl layout
         target_cal_layout.addWidget(QLabel(""))
-        target_cal_layout.addLayout(fix_shape)
+        # target_cal_layout.addLayout(fix_shape)
+        target_cal_layout.addLayout(fix_shape_main)
         target_cal_layout.addWidget(self.test_label)
 
-        # Add the fixation target stuff to the main layout
+        # Add the fixation target stuff to the main layout and then add the group to the main layout as another row
         target_config_group.setLayout(target_cal_layout)
         layout.addRow(target_config_group)
 
+        # Set the main layout for the tab
         self.tab1.setLayout(layout)
 
+    # will need to add slot to get checkbox to work also need to set default to be checked (grid visibility)
     def imagingTab(self):
+        """
+        Function for the UI properties and functionality for the imaging tab
+        Components:
+            - Protocol
+                * Advance protocol Button
+            - Target Control
+                * user entered X/Y locations
+                * Target animation (yes/no) and speed of animation
+                * Target visible (yes/no)
+                * Quick locations
+            - Grid Visibility
+                * Grid visible (yes/no - default yes)
+            - Savior Control
+                * Number of frames
+                * Current FOV
+        :return:
+        """
+        # Main tab layout
         layout = QFormLayout()
 
         # Protocol Advance group
         protocol_group = QGroupBox("Protocol")
         protocol_adv_layout = QVBoxLayout()
 
+        # Make and set up the advance protocol push button
         self.save_p_button = QPushButton()
         self.save_p_button.setText("Advance")
         self.save_p_label = QLabel()
 
-        # Add the protocol buttons to their slots
-        # self.load_p_button.clicked.connect(self.onPressLoadP)
+        # Add the protocol buttons to its slots
         self.save_p_button.clicked.connect(self.onPressAdvanceP)
 
-        # Add all the widgets to the main layout and set priority
+        # Add all the widgets to the group's layout
         protocol_adv_layout.addWidget(self.save_p_button)
         protocol_adv_layout.addWidget(self.save_p_label)
 
-        # Add the protocol group to the main layout
+        # Add the protocol layout to the group and then the group to the main layout as another row
         protocol_group.setLayout(protocol_adv_layout)
         layout.addRow(protocol_group)
 
@@ -342,10 +403,13 @@ class Tabs(QTabWidget):
         self.horz = QLineEdit()
         self.vert = QLineEdit()
 
+        # Add the Components to the location control layout
         loc_layout.addWidget(QLabel("X"))
         loc_layout.addWidget(self.horz)
         loc_layout.addWidget(QLabel("Y"))
         loc_layout.addWidget(self.vert)
+
+        # Add the location layout to the target control layout
         target_control_layout.addLayout(loc_layout)
 
         # Animation of target
@@ -353,37 +417,38 @@ class Tabs(QTabWidget):
         self.animation = QCheckBox("Target Animation")  #will need to figure out slot for this to have it work correctly
         self.animation_speed = QLineEdit()
 
+        # Slot for the checkbox asking if target animation is on
+        self.animation.toggled.connect(self.displayTarget)
+
+        # Add the components to the animate layout
         animate_layout.addWidget(self.animation)
         animate_layout.addWidget(QLabel("Deg/s:"))
         animate_layout.addWidget(self.animation_speed)
 
+        # Add the animate layout to the target control layout
         target_control_layout.addLayout(animate_layout)
 
-
-        # Target display on/off # might want to consider changing to a check box and set default to checked
+        # Target display on/off layout and checkboxes
         target_display_bttns = QHBoxLayout()
         target_control_layout.addWidget(QLabel("Target Visible?"))
-        # self.animation = QCheckBox("Target Visible?")
-        self.target_on_bttn = QRadioButton("On")
-        self.target_off_bttn = QRadioButton("Off")
-
-        self.animation.toggled.connect(self.displayTarget)
+        self.target_on_bttn = QCheckBox("On")
+        self.target_off_bttn = QCheckBox("Off")
 
         # Connect the radio button to their slot
         self.target_on_bttn.toggled.connect(self.displayTarget)
         self.target_off_bttn.toggled.connect(self.displayTarget)
 
-        # Add the radio buttons to their layout
+        # Add the checkboxes to the target button layout
         target_display_bttns.addWidget(self.target_on_bttn)
         target_display_bttns.addWidget(self.target_off_bttn)
-        # target_display_bttns.addWidget(self.animation)
 
+        # Add the target button layout to the target control layout
         target_control_layout.addLayout(target_display_bttns)
 
-        # Quick Location buttons
-
+        # Add label for quick location to the target control layout
         target_control_layout.addWidget(QLabel("Quick Locations:"))
 
+        # Quick Location Push buttons generated along with gridlayout for the buttons
         quick_bttn_layout = QGridLayout()
         # Push Buttons to be used for Quick Locations
         self.TRC = QPushButton("TRC")
@@ -396,8 +461,8 @@ class Tabs(QTabWidget):
         self.MRE = QPushButton("MRE")
         self.CTR = QPushButton("CTR")
 
-        size = 30
         # Change the shape of the buttons to be squares
+        size = 30
         self.TRC.setFixedSize(QSize(size, size))
         self.MTE.setFixedSize(QSize(size, size))
         self.TLC.setFixedSize(QSize(size, size))
@@ -408,6 +473,18 @@ class Tabs(QTabWidget):
         self.MRE.setFixedSize(QSize(size, size))
         self.CTR.setFixedSize(QSize(size, size))
 
+        # Set these quick location buttons to their needed slot
+        self.TRC.clicked.connect(self.onPressQuickLocs)
+        self.MTE.clicked.connect(self.onPressQuickLocs)
+        self.TLC.clicked.connect(self.onPressQuickLocs)
+        self.MLE.clicked.connect(self.onPressQuickLocs)
+        self.CTR.clicked.connect(self.onPressQuickLocs)
+        self.MRE.clicked.connect(self.onPressQuickLocs)
+        self.BLC.clicked.connect(self.onPressQuickLocs)
+        self.MBE.clicked.connect(self.onPressQuickLocs)
+        self.BRC.clicked.connect(self.onPressQuickLocs)
+
+        # Add all the quick loc buttons to their grid layout
         quick_bttn_layout.addWidget(self.TRC, 0, 2)
         quick_bttn_layout.addWidget(self.MTE, 0, 1)
         quick_bttn_layout.addWidget(self.TLC, 0, 0)
@@ -418,11 +495,10 @@ class Tabs(QTabWidget):
         quick_bttn_layout.addWidget(self.MRE, 1, 2)
         quick_bttn_layout.addWidget(self.CTR, 1, 1)
 
-        # quick_bttn_layout.setSpacing(0)
-        # quick_bttn_layout.setContentsMargins(0, 0, 0, 0)
-
+        # Add the quick buttons to the main target control layout
         target_control_layout.addLayout(quick_bttn_layout)
 
+        # Add all the target control elements to the group layout and then add it to the main layout as another row
         target_control_group.setLayout(target_control_layout)
         layout.addRow(target_control_group)
 
@@ -430,7 +506,9 @@ class Tabs(QTabWidget):
         grid_vis_group = QGroupBox("Grid Visibility")
         grid_vis_layout = QHBoxLayout()
 
-        self.grid_vis = QCheckBox("Grid Visibile")  # will need to add slot to get checkbox to work also need to set defualt to be checked
+        self.grid_vis = QCheckBox("Grid Visible")
+        # will need to add slot to get checkbox to work also need to set default to be checked
+
         grid_vis_layout.addWidget(self.grid_vis)
 
         grid_vis_group.setLayout(grid_vis_layout)
@@ -440,11 +518,8 @@ class Tabs(QTabWidget):
         savior_group = QGroupBox("Savior Control")
         savior_layout = QFormLayout()
 
-        savior_layout.addRow("Number of Frames:", QLineEdit())
-
+        # get the FOVs from the config file to be added to the dropdown menu
         self.FOV_menu = QComboBox()
-
-        # get the FOVs from the config file
         self.savior_FOVs = self.config.get("test", "savior_FOVs").split("/")
 
         # adds all the FOVs in the list
@@ -454,22 +529,30 @@ class Tabs(QTabWidget):
         # sets the selection to the first one
         self.FOV_menu.setCurrentIndex(0)
 
+        # Add the components to the savior layout
+        savior_layout.addRow("Number of Frames:", QLineEdit())
         savior_layout.addRow("Current FOV:", self.FOV_menu)
 
+        # Add the savior layout to the savior group and then add the group to the main layout as another row
         savior_group.setLayout(savior_layout)
         layout.addRow(savior_group)
 
+        # Sets the main layout of the tab
         self.tab2.setLayout(layout)
 
-    def stimControlTab(self):  # Currently Complete
+    # Currently Complete with all components
+    def stimControlTab(self):
         """
-        Function for the UI properties and functionality of Tab 1 - Stimulus control
+        Function for the UI properties and functionality of the Stimulus control tab
         """
+        # Sets up the main layout of the tab
         layout = QFormLayout()
 
+        # Set up the group and its layout for stimulus control
         stim_group = QGroupBox("Stimulus Control")
         stim_layout = QFormLayout()
 
+        # Add the components to the group layout
         stim_layout.addRow("Port Number:", QLineEdit())
         stim_layout.addRow(QLabel(""))
         stim_layout.addRow(QLabel("Stimulus Parameters:"))
@@ -478,15 +561,23 @@ class Tabs(QTabWidget):
         stim_layout.addRow("Start Time", QLineEdit())
         stim_layout.addRow("Frames After", QLineEdit())
 
+        # Add the stimulus layout to the group and then add the group to the main layout as another row
         stim_group.setLayout(stim_layout)
         layout.addRow(stim_group)
 
+        # Sets the tab's layout to the main layout
         self.tab3.setLayout(layout)
 
+    # Currently complete with all needed components
     def sessionReview(self):
+        """
+        Function for the UI properties and functionality for the session review tab
+        :return:
+        """
+        # Set up the main layout for the tab
         layout = QFormLayout()
 
-        # Protocol Advance group
+        # Protocol Advance group and its layout
         save_grid_group = QGroupBox("Save Grid Display")
         save_grid_layout = QVBoxLayout()
 
@@ -498,6 +589,7 @@ class Tabs(QTabWidget):
         self.grid_display_save.clicked.connect(self.saveGrid)
         save_grid_layout.addWidget(self.grid_display_save)
 
+        # Add the save grid layout to its group and then add the group to the main layout as another row
         save_grid_group.setLayout(save_grid_layout)
         layout.addRow(save_grid_group)
 
@@ -507,9 +599,11 @@ class Tabs(QTabWidget):
         info_layout = QFormLayout()
         info_layout.addWidget(self.info)
 
+        # Add the info layout to its group and then add the group to the main layout as another row
         info_group.setLayout(info_layout)
         layout.addRow(info_group)
 
+        # Set the tab's layout to the main one
         self.tab4.setLayout(layout)
 
     """
@@ -761,6 +855,32 @@ class Tabs(QTabWidget):
             case _:
                 self.save_p_label.setText("Advance in Protocol")
 
+    def onPressQuickLocs(self):
+        button = self.sender()
+        txt = str(button.text())
+        match txt:
+            case "TLC":
+                print(txt)
+            case "MTE":
+                print(txt)
+            case "TRC":
+                print(txt)
+            case "MLE":
+                print(txt)
+            case "CTR":
+                print(txt)
+            case "MRE":
+                print(txt)
+            case "BLC":
+                print(txt)
+            case "MBE":
+                print(txt)
+            case "BRC":
+                print(txt)
+            case _:
+                print("Something went wrong!")
+
+
     """
     slots for the Grid Configuration Tab
     """
@@ -841,6 +961,7 @@ class Tabs(QTabWidget):
         if button.isChecked():
             txt = button.text()
             print(txt)
+
 
 
 if __name__ == "__main__":

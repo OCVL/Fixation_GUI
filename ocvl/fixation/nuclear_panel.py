@@ -66,10 +66,12 @@ class NuclearDisplay(QWidget):
     def gridSizeInDeg(self):
         pass
 
+
 class TargetArea(QWidget):
     """
     Class for the grid display
     """
+
     def __init__(self, config_name, lines):
         super().__init__()
 
@@ -97,7 +99,7 @@ class TargetArea(QWidget):
         radii = np.minimum(rect.width(), rect.height()) / 2
         # win_h = rect.height() / 2
         # win_w = rect.width() / 2
-        cent = QPoint(rect.width()/2, rect.height()/2)
+        cent = QPoint(rect.width() / 2, rect.height() / 2)
         # sets up the size of the grid lines (will need to be changed to be custom size)
         if self.grid_size == 'small':
             num_of_lines = 31
@@ -115,17 +117,17 @@ class TargetArea(QWidget):
             self.vert_lines += 1
 
         # spacing of lines
-        spacing = (radii*2)/num_of_lines
+        spacing = (radii * 2) / num_of_lines
         # spacing_h = (win_h*2)/ self.horz_lines
         # spacing_v = (win_w*2)/ self.vert_lines
         # painter.drawRect(rect.width() / 2 - win_w, rect.height() / 2 - win_h, win_w * 2, win_h * 2)
         painter.drawRect(rect.width() / 2 - radii, rect.height() / 2 - radii, radii * 2, radii * 2)
 
         # Generating the steps for painting the lines in different colors
-        horz_steps = np.linspace(rect.width()/2-radii, rect.width()/2+radii, self.horz_lines)
-        vert_steps = np.linspace(rect.height()/2-radii, rect.height()/2+radii, self.vert_lines)
+        horz_steps = np.linspace(rect.width() / 2 - radii, rect.width() / 2 + radii, self.horz_lines)
+        vert_steps = np.linspace(rect.height() / 2 - radii, rect.height() / 2 + radii, self.vert_lines)
 
-        center_line = (num_of_lines-1) / 2
+        center_line = (num_of_lines - 1) / 2
         # center_h = (self.horz_lines - 1) / 2
         # center_v = (self.vert_lines - 1) / 2
 
@@ -161,7 +163,8 @@ class TargetArea(QWidget):
         # used to set circle visible on  screen (from config file)
         if self.circle_vis == "1":
             painter.setPen(QPen(QColor(3, 175, 224), 2.5))
-            painter.drawArc((rect.width()/2)-(spacing * 15.25), (rect.height()/2)-(spacing * 15.25), spacing * 30.5, spacing * 30.5, 0, 16*360)
+            painter.drawArc((rect.width() / 2) - (spacing * 15.25), (rect.height() / 2) - (spacing * 15.25),
+                            spacing * 30.5, spacing * 30.5, 0, 16 * 360)
         else:
             pass
         painter.setPen(Qt.black)
@@ -171,6 +174,7 @@ class TargetLefty(QWidget):
     """
     Class for the left panel of the window -- currently not being used
     """
+
     def __init__(self, eye, sub_id, save_loc, device):
         super().__init__()
 
@@ -197,6 +201,7 @@ class TargetRighty(QWidget):
     """
     Class for the right panel of the window
     """
+
     def __init__(self, eye, sub_id, save_loc, device, config_name):
         super().__init__()
 
@@ -219,10 +224,12 @@ class TargetRighty(QWidget):
         #
         # painter.drawEllipse(cent, radii, radii)
 
+
 class TargetBottom(QWidget):
     """
     Class for the bottom panel of the window
     """
+
     def __init__(self, config_name):
         super().__init__()
 
@@ -244,4 +251,3 @@ class TargetBottom(QWidget):
         # cent = QPoint(rect.width()/2, rect.height()/2)
         #
         # painter.drawEllipse(cent, radii, radii)
-
