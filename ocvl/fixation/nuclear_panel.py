@@ -1,5 +1,4 @@
 import configparser
-
 from PySide6 import QtWidgets, QtCore
 from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import QPainter, Qt, QPen, QColor

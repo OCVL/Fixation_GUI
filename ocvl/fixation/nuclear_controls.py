@@ -6,9 +6,7 @@ import sys
 import cv2
 from PySide6.QtGui import *
 from PySide6.QtCore import Qt, QSize, QPointF
-from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QTabWidget, QWidget, QFormLayout, QLineEdit, \
-    QHBoxLayout, QRadioButton, QSlider, QAbstractSlider, QPushButton, QColorDialog, QVBoxLayout, QComboBox, \
-    QGraphicsColorizeEffect
+from PySide6.QtWidgets import *
 from ocvl.fixation.nuclear_info import NuclearInfo
 
 
@@ -17,21 +15,23 @@ class Tabs(QTabWidget):
     Main class for the control panel that contains various tabs, each with different functionality
     """
 
-    def __init__(self, eye, sub_id, save_loc, device, config_name, parent=None):
+    def __init__(self,  eye=None, sub_id=None, save_loc=None, device=None, config_name="C:\\Users\\6262BrennaB\\Desktop\\FixationGUI\\ocvl\\fixation\\test_settings.ini", parent=None):
         """
         Initialization of the class variables
         """
         super(Tabs, self).__init__(parent)
 
         # All the self class variables to be used in the various tabs
+        self.subject_view = None
+        self.anatomical_view = None
+        self.dim = None
         self.grid_size_default_3 = None
         self.grid_size_default_2 = None
         self.grid_size_default_1 = None
         self.grid_defaults = None
         self.grid_display_save = None
-        self.vert_dim_select = None
         self.savior_FOVs = None
-        self.horz_dim_select = None
+        self.dim_select = None
         self.FOV_menu = None
         self.info = None
         self.stim_wavelengths = None
@@ -81,7 +81,7 @@ class Tabs(QTabWidget):
         self.setTabPosition(QTabWidget.East)
 
         # Add the tabs generated to the parent window
-        self.addTab(self.tab1, "Session Information")
+        self.addTab(self.tab1, "GUI Configuration")
         self.addTab(self.tab2, "Savior Control")
         self.addTab(self.tab3, "Grid Configuration")
         self.addTab(self.tab4, "Target Control")
@@ -100,8 +100,128 @@ class Tabs(QTabWidget):
         self.saviorControlTab()
         self.gridConfigurationTab()
 
+        # UI functions for the new tab layout
+        self.guiSetUp()
+        # self.imagingTab()
+        # self.sessionReview()
+
         # Set the Title of the Window
         self.setWindowTitle("Control Settings")
+
+    def guiSetUp(self):
+        layout = QFormLayout()
+        grid_config_group = QGroupBox("Grid Configuration")
+        grid_setup_layout = QVBoxLayout()
+
+        # Labels for each Grid section
+        quick_size_label = QLabel("Quick Sizes:")
+        dim_menu_label = QLabel("Grid Dimension:")
+
+        # Default button size creation
+        self.grid_defaults = self.config.get("test", "grid_size_defaults").split("/")
+        self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
+        self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
+        self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
+
+        # Connect the buttons to the slots
+        self.grid_size_default_1.toggled.connect(self.gridSizeChange)
+        self.grid_size_default_2.toggled.connect(self.gridSizeChange)
+        self.grid_size_default_3.toggled.connect(self.gridSizeChange)
+
+        # Add the buttons to the layout
+        grid_setup_layout.addWidget(quick_size_label)
+        grid_setup_layout.addWidget(self.grid_size_default_1)
+        grid_setup_layout.addWidget(self.grid_size_default_2)
+        grid_setup_layout.addWidget(self.grid_size_default_3)
+
+        # Set up the other sizes in the dropdown menu
+        self.dim_select = QComboBox()
+
+        # Add all the different possible dims for grid
+        for x in range(10, 61, 5):
+            self.dim_select.addItem(str(x) + "x" + str(x))
+
+        # Connect the dropdown menus (grid dims) to their slots
+        self.dim_select.currentTextChanged.connect(self.GridSizeChange)
+
+        # Default from config file
+        self.dim = self.config.get("test", "grid_size_start_default")
+        self.dim_select.setCurrentIndex(self.dim_select.findText(self.dim))
+
+        # Add the dropdown and its label to the layout
+        grid_setup_layout.addWidget(dim_menu_label)
+        grid_setup_layout.addWidget(self.dim_select)
+
+        # Swap the view of T/N labels
+        view_layout = QHBoxLayout()
+        self.anatomical_view = QRadioButton("Anatomical View")
+        self.subject_view = QRadioButton("Subject View")
+
+        # Connect the View Radio buttons to the slot
+        self.anatomical_view.toggled.connect(self.viewChange)
+        self.subject_view.toggled.connect(self.viewChange)
+
+        # Add view buttons to their layout and the main
+        view_layout.addWidget(self.anatomical_view)
+        view_layout.addWidget(self.subject_view)
+
+        # Add view buttons to the layout
+        grid_setup_layout.addLayout(view_layout)
+
+        # Add the grid layout to the Group layout
+        grid_config_group.setLayout(grid_setup_layout)
+
+        layout.addRow(grid_config_group)
+
+        # Load Protocol Set up stuff
+        protocol_config_group = QGroupBox("Protocol")
+        protocol_layout = QVBoxLayout()
+
+        # Make the load Protocol button and its corresponding label
+        self.load_p_button = QPushButton()
+        self.load_p_button.setText("Load Protocol")  # Need an advance button
+        self.load_p_label = QLabel()
+
+        # Add the slot to the button and add the button and the layout to the group layout
+        self.load_p_button.clicked.connect(self.onPressLoadP)
+        protocol_layout.addWidget(self.load_p_button)  # Should mark locations with size of FOV on display screen
+        protocol_layout.addWidget(self.load_p_label)
+
+        # Add the protocol layout to the group layout
+        protocol_config_group.setLayout(protocol_layout)
+        layout.addRow(protocol_config_group)
+
+        # Image Calibration Group
+        image_config_group = QGroupBox("Image Calibration")
+        image_cal_layout = QHBoxLayout()
+
+        # Attributes needed to display an image
+        self.image_label = QLabel("")
+        self.image_label.resize(500, 500)
+
+        # Generate buttons needed for image calibration control
+        self.load_bg_image_button = QPushButton()
+        self.load_bg_image_button.setText("Load Background Image")  # Open file explore and select image
+        self.image_cal_button = QPushButton()
+        self.image_cal_button.setText("Start Image Calibration")
+        center_fovea_button = QPushButton()
+        center_fovea_button.setText("Center Fovea")
+
+        # Add the image calibration button to its slot when pressed
+        self.image_cal_button.clicked.connect(self.onPressCal)
+        self.load_bg_image_button.clicked.connect(self.onPressLoad)
+
+        # Add all the widgets to the main layout and set priority
+        image_cal_layout.addWidget(self.load_bg_image_button)
+        image_cal_layout.addWidget(self.image_cal_button)
+        image_cal_layout.addWidget(center_fovea_button)
+        image_cal_layout.addRow(self.image_label)
+
+        # Add the protocol layout to the group layout
+        image_config_group.setLayout(image_cal_layout)
+        layout.addRow(image_config_group)
+
+        self.tab1.setLayout(layout)
 
     def stimControlTab(self):  # Currently Complete
         """
@@ -230,27 +350,27 @@ class Tabs(QTabWidget):
         """
         layout3 = QFormLayout()
 
-        # Attributes needed to display an image
-        self.image_label = QLabel("")
-        self.image_label.resize(500, 500)
-
-        # Generate buttons needed for image calibration control
-        self.load_bg_image_button = QPushButton()
-        self.load_bg_image_button.setText("Load Background Image")  # Open file explore and select image
-        self.image_cal_button = QPushButton()
-        self.image_cal_button.setText("Start Image Calibration")
-        center_fovea_button = QPushButton()
-        center_fovea_button.setText("Center Fovea")
-
-        # Add the image calibration button to its slot when pressed
-        self.image_cal_button.clicked.connect(self.onPressCal)
-        self.load_bg_image_button.clicked.connect(self.onPressLoad)
-
-        # Add all the widgets to the main layout and set priority
-        layout3.addRow(self.load_bg_image_button)
-        layout3.addRow(self.image_label)
-        layout3.addRow(self.image_cal_button)
-        layout3.addRow(center_fovea_button)
+        # # Attributes needed to display an image
+        # self.image_label = QLabel("")
+        # self.image_label.resize(500, 500)
+        #
+        # # Generate buttons needed for image calibration control
+        # self.load_bg_image_button = QPushButton()
+        # self.load_bg_image_button.setText("Load Background Image")  # Open file explore and select image
+        # self.image_cal_button = QPushButton()
+        # self.image_cal_button.setText("Start Image Calibration")
+        # center_fovea_button = QPushButton()
+        # center_fovea_button.setText("Center Fovea")
+        #
+        # # Add the image calibration button to its slot when pressed
+        # self.image_cal_button.clicked.connect(self.onPressCal)
+        # self.load_bg_image_button.clicked.connect(self.onPressLoad)
+        #
+        # # Add all the widgets to the main layout and set priority
+        # layout3.addRow(self.load_bg_image_button)
+        # layout3.addRow(self.image_label)
+        # layout3.addRow(self.image_cal_button)
+        # layout3.addRow(center_fovea_button)
 
         # self.setTabText(2, "Image Calibration Control")
         self.tab6.setLayout(layout3)
@@ -262,20 +382,20 @@ class Tabs(QTabWidget):
         layout4 = QFormLayout()
 
         # Generate buttons needed for protocol control
-        self.load_p_button = QPushButton()
-        self.load_p_button.setText("Load Protocol")  # Need an advance button
-        self.load_p_label = QLabel()
+        # self.load_p_button = QPushButton()
+        # self.load_p_button.setText("Load Protocol")  # Need an advance button
+        # self.load_p_label = QLabel()
         self.save_p_button = QPushButton()
         self.save_p_button.setText("Advance")
         self.save_p_label = QLabel()
 
         # Add the protocol buttons to their slots
-        self.load_p_button.clicked.connect(self.onPressLoadP)
+        # self.load_p_button.clicked.connect(self.onPressLoadP)
         self.save_p_button.clicked.connect(self.onPressAdvanceP)
 
         # Add all the widgets to the main layout and set priority
-        layout4.addRow(self.load_p_button)  # Should mark locations with size of FOV on display screen
-        layout4.addRow(self.load_p_label)
+        # layout4.addRow(self.load_p_button)  # Should mark locations with size of FOV on display screen
+        # layout4.addRow(self.load_p_label)
         layout4.addRow(self.save_p_button)
         layout4.addRow(self.save_p_label)
 
@@ -298,7 +418,7 @@ class Tabs(QTabWidget):
         self.info = NuclearInfo(self.eye, self.sub_id, self.save_loc, self.device)
         layout = QFormLayout()
         layout.addWidget(self.info)
-        self.tab1.setLayout(layout)
+        # self.tab1.setLayout(layout)
 
     def saviorControlTab(self):
         layout = QFormLayout()
@@ -321,45 +441,45 @@ class Tabs(QTabWidget):
 
     def gridConfigurationTab(self):
         layout = QFormLayout()
-        button_layout = QHBoxLayout()
+        # button_layout = QHBoxLayout()
 
-        # Drop downs for the 2 dims
-        self.horz_dim_select = QComboBox()
-        self.vert_dim_select = QComboBox()
+        # # Drop downs for the 2 dims
+        # self.horz_dim_select = QComboBox()
+        # self.vert_dim_select = QComboBox()
 
-        # Defualt button size creation
-        self.grid_defaults = self.config.get("test", "grid_size_defaults").split("/")
-        self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
-        self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
-        self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
+        # # Defualt button size creation
+        # self.grid_defaults = self.config.get("test", "grid_size_defaults").split("/")
+        # self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
+        # self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
+        # self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
 
-        # Connect the buttons to the slot
-        self.grid_size_default_1.toggled.connect(self.gridSizeChange)
-        self.grid_size_default_2.toggled.connect(self.gridSizeChange)
-        self.grid_size_default_3.toggled.connect(self.gridSizeChange)
+        # # Connect the buttons to the slot
+        # self.grid_size_default_1.toggled.connect(self.gridSizeChange)
+        # self.grid_size_default_2.toggled.connect(self.gridSizeChange)
+        # self.grid_size_default_3.toggled.connect(self.gridSizeChange)
 
-        # Add the Radio Buttons to the button layout
-        button_layout.addWidget(self.grid_size_default_1)
-        button_layout.addWidget(self.grid_size_default_2)
-        button_layout.addWidget(self.grid_size_default_3)
+        # # Add the Radio Buttons to the button layout
+        # button_layout.addWidget(self.grid_size_default_1)
+        # button_layout.addWidget(self.grid_size_default_2)
+        # button_layout.addWidget(self.grid_size_default_3)
 
-        # Add all the different possible dims to each the vert and horz spacing for grid
-        for x in range(10, 61, 5):
-            self.horz_dim_select.addItem(str(x))
-            self.vert_dim_select.addItem(str(x))
+        # # Add all the different possible dims to each the vert and horz spacing for grid
+        # for x in range(10, 61, 5):
+        #     self.horz_dim_select.addItem(str(x))
+        #     self.vert_dim_select.addItem(str(x))
+        #
+        # # Connect the drop down menues (grid dims) to their slots
+        # self.horz_dim_select.currentTextChanged.connect(self.horzGridSizeChange)
+        # self.vert_dim_select.currentTextChanged.connect(self.vertGridSizeChange)
+        #
+        # # Default from config file
+        # [self.horz_dim, self.vert_dim] = self.config.get("test", "grid_size_start_default").split("x")
+        # self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(self.horz_dim))
+        # self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(self.vert_dim))
 
-        # Connect the drop down menues (grid dims) to their slots
-        self.horz_dim_select.currentTextChanged.connect(self.horzGridSizeChange)
-        self.vert_dim_select.currentTextChanged.connect(self.vertGridSizeChange)
-
-        # Default from config file
-        [self.horz_dim, self.vert_dim] = self.config.get("test", "grid_size_start_default").split("x")
-        self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(self.horz_dim))
-        self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(self.vert_dim))
-
-        layout.addRow("Quick Sizes (degrees):", button_layout)
-        layout.addRow("Horizontal Grid Dim:", self.horz_dim_select)
-        layout.addRow('Vertical Grid Dim:', self.vert_dim_select)
+        # layout.addRow("Quick Sizes (degrees):", button_layout)
+        # layout.addRow("Horizontal Grid Dim:", self.horz_dim_select)
+        # layout.addRow('Vertical Grid Dim:', self.vert_dim_select)
 
         # Reference Point / reset button
         self.ref_pt_button = QPushButton()
@@ -374,19 +494,19 @@ class Tabs(QTabWidget):
         layout.addRow(self.ref_pt_button)
         layout.addRow(self.ref_pt_label)
 
-        # Swap the view of T/N labels
-        view_layout = QHBoxLayout()
-        self.anatomical_view = QRadioButton("Anatomical View")
-        self.subject_view = QRadioButton("Subject View")
-
-        # Connect the View Radio buttons to the slot
-        self.anatomical_view.toggled.connect(self.viewChange)
-        self.subject_view.toggled.connect(self.viewChange)
-
-        # Add view buttons to their layout and the main
-        view_layout.addWidget(self.anatomical_view)
-        view_layout.addWidget(self.subject_view)
-        layout.addRow(view_layout)
+        # # Swap the view of T/N labels
+        # view_layout = QHBoxLayout()
+        # self.anatomical_view = QRadioButton("Anatomical View")
+        # self.subject_view = QRadioButton("Subject View")
+        #
+        # # Connect the View Radio buttons to the slot
+        # self.anatomical_view.toggled.connect(self.viewChange)
+        # self.subject_view.toggled.connect(self.viewChange)
+        #
+        # # Add view buttons to their layout and the main
+        # view_layout.addWidget(self.anatomical_view)
+        # view_layout.addWidget(self.subject_view)
+        # layout.addRow(view_layout)
 
         # Save current grid push button
         self.grid_display_save = QPushButton()
@@ -665,35 +785,32 @@ class Tabs(QTabWidget):
             v2 = str(self.grid_defaults[1])
             v3 = str(self.grid_defaults[2])
             if txt == v1:
-                [self.horz_dim, self.vert_dim] = self.grid_defaults[0].split("x")
-                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(self.horz_dim))
-                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(self.vert_dim))
+                self.dim = self.grid_defaults[0]
+                self.dim_select.setCurrentIndex(self.dim_select.findText(self.dim))
             elif txt == v2:
-                [self.horz_dim, self.vert_dim] = self.grid_defaults[1].split("x")
-                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(self.horz_dim))
-                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(self.vert_dim))
+                self.dim = self.grid_defaults[0]
+                self.dim_select.setCurrentIndex(self.dim_select.findText(self.dim))
             elif txt == v3:
-                [self.horz_dim, self.vert_dim] = self.grid_defaults[2].split("x")
-                self.horz_dim_select.setCurrentIndex(self.horz_dim_select.findText(self.horz_dim))
-                self.vert_dim_select.setCurrentIndex(self.vert_dim_select.findText(self.vert_dim))
+                self.dim = self.grid_defaults[0]
+                self.dim_select.setCurrentIndex(self.dim_select.findText(self.dim))
             else:
                 print("Something went wrong!")
 
-    def horzGridSizeChange(self):
+    def GridSizeChange(self):
         """
         Slot for the horizontal drop down menu for the grid sizes
         :return:
         """
-        self.horz_dim = self.horz_dim_select.currentText()
-        print(self.horz_dim)
+        self.dim = self.dim_select.currentText()
+        print(self.dim)
 
-    def vertGridSizeChange(self):
-        """
-        Slot for the horizontal drop down menu for the grid sizes
-        :return:
-        """
-        self.vert_dim = self.vert_dim_select.currentText()
-        print(self.vert_dim)
+    # def vertGridSizeChange(self):
+    #     """
+    #     Slot for the horizontal drop down menu for the grid sizes
+    #     :return:
+    #     """
+    #     self.vert_dim = self.vert_dim_select.currentText()
+    #     print(self.vert_dim)
 
     def referencePointBttnClicked(self):
         """
