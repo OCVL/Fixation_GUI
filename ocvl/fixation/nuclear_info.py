@@ -21,8 +21,6 @@ class NuclearInfo(QtWidgets.QWidget):
         self.device_disp = QtWidgets.QLabel(device)
         self.FOV_disp = QtWidgets.QLabel("2.0 x 2.0")  # will need to populate with actual fov
 
-        layout.addRow(QLabel("Session Information:"))
-        layout.addRow(QLabel(""))
         layout.addRow("Eye:", self.eye_disp)
         layout.addRow("Subject ID:", self.id_disp)
         layout.addRow("Device:", self.device_disp)
