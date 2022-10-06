@@ -86,14 +86,12 @@ class Tabs(QTabWidget):
         self.addTab(self.tab3, "Grid Configuration")
         self.addTab(self.tab4, "Target Control")
         self.addTab(self.tab5, "Planed Protocol")
-        self.addTab(self.tab6, "Image Calibration")
         self.addTab(self.tab7, "Stimulus Control")
         self.addTab(self.tab8, "Help")
 
         # Make a UI function for each of the tabs
         self.stimControlTab()
         self.fixationTargetControlTab()
-        self.imCalibrationControlTab()
         self.protocolControlTab()
         self.helpTab()
         self.infoTab()
@@ -215,11 +213,92 @@ class Tabs(QTabWidget):
         image_cal_layout.addWidget(self.load_bg_image_button)
         image_cal_layout.addWidget(self.image_cal_button)
         image_cal_layout.addWidget(center_fovea_button)
-        image_cal_layout.addRow(self.image_label)
+        image_cal_layout.addWidget(self.image_label)
 
         # Add the protocol layout to the group layout
         image_config_group.setLayout(image_cal_layout)
         layout.addRow(image_config_group)
+
+        # Target set up section
+        target_config_group = QGroupBox("Target Set Up")
+        target_cal_layout = QVBoxLayout()
+
+        # Color wheel for selecting the color of the target
+        color_button = QPushButton("Select Color")
+        target_cal_layout.addWidget(color_button)
+        self.color_name_label = QLabel("")
+        self.color_display_label = QLabel()
+        color_button.clicked.connect(self.onPressColor)
+
+        # Add all the Color related widgets to their layout
+        target_cal_layout.addWidget(self.color_name_label)
+        target_cal_layout.addWidget(self.color_display_label)
+
+        # Generate the scroll bar for the size of the fixation target
+        # fix_size = QHBoxLayout()
+        self.size_bar = QSlider(Qt.Horizontal)
+        self.label_size = QLabel()
+        self.size_bar.setMinimum(1)
+        self.size_bar.setMaximum(20)
+        self.size_bar.setValue(5)
+        self.size_bar.setTickPosition(QSlider.TicksBelow)
+        self.size_bar.setTickInterval(1)
+        self.label_size.setText("Target Size: " + str(self.size_bar.value()))
+        self.size_bar.valueChanged.connect(self.sizeChange)
+
+        # Add scroll bar and label to the main widget
+        target_cal_layout.addWidget(self.label_size)
+        target_cal_layout.addWidget(QLabel(""))
+        target_cal_layout.addWidget(self.size_bar)
+
+        # Push Buttons to be used for target shape
+        self.cross = QPushButton("Large Crosshair")
+        self.s_cross = QPushButton("Small Crosshair")
+        self.m_cross = QPushButton("Maltese Cross")
+        self.square_out = QPushButton("Square Outline")
+        self.square = QPushButton("Square")
+        self.circle = QPushButton("Circle")
+        self.twinkle = QPushButton("Twinkle")
+        self.test_label = QLabel("")
+
+        # Change the shape of the buttons to be squares
+        self.cross.setFixedSize(QSize(25, 25))
+        self.s_cross.setFixedSize(QSize(25, 25))
+        self.m_cross.setFixedSize(QSize(25, 25))
+        self.square_out.setFixedSize(QSize(25, 25))
+        self.square.setFixedSize(QSize(25, 25))
+        self.circle.setFixedSize(QSize(25, 25))
+        self.twinkle.setFixedSize(QSize(25, 25))
+
+        # Call the functions to draw the different targets
+        self.drawTargets()
+
+        # Adding the radio buttons to the shape widget
+        fix_shape = QGridLayout()
+        fix_shape.addWidget(self.cross, 0, 0)
+        fix_shape.addWidget(self.s_cross, 0, 1)
+        fix_shape.addWidget(self.m_cross, 0, 2)
+        # fix_shape.addWidget(self.square_out)
+        fix_shape.addWidget(self.square, 1, 0)
+        fix_shape.addWidget(self.circle, 1, 1)
+        fix_shape.addWidget(self.twinkle, 1, 2)
+
+        # What will happen when a specific radio button is called
+        self.cross.clicked.connect(self.onClick)
+        self.s_cross.clicked.connect(self.onClick)
+        self.m_cross.clicked.connect(self.onClick)
+        # self.square_out.clicked.connect(self.onClick)
+        self.square.clicked.connect(self.onClick)
+        self.circle.clicked.connect(self.onClick)
+        self.twinkle.clicked.connect(self.onClick)
+
+        target_cal_layout.addWidget(QLabel(""))
+        target_cal_layout.addLayout(fix_shape)
+        target_cal_layout.addWidget(self.test_label)
+
+        # Add the fixation target stuff to the main layout
+        target_config_group.setLayout(target_cal_layout)
+        layout.addRow(target_config_group)
 
         self.tab1.setLayout(layout)
 
@@ -247,76 +326,76 @@ class Tabs(QTabWidget):
 
         # Widget for the shape objects for the fixation target
         fix_shape = QHBoxLayout()
-        color_shape = QHBoxLayout()
+        # color_shape = QHBoxLayout()
+        #
+        # # Color wheel for selecting the color of the target
+        # self.color_layout = QHBoxLayout()
+        # color_button = QPushButton("Select Color")
+        # self.color_layout.addWidget(color_button)
+        # self.color_name_label = QLabel("")
+        # self.color_display_label = QLabel()
+        # color_button.clicked.connect(self.onPressColor)
 
-        # Color wheel for selecting the color of the target
-        self.color_layout = QHBoxLayout()
-        color_button = QPushButton("Select Color")
-        self.color_layout.addWidget(color_button)
-        self.color_name_label = QLabel("")
-        self.color_display_label = QLabel()
-        color_button.clicked.connect(self.onPressColor)
+        # # Push Buttons to be used for target shape
+        # self.cross = QPushButton("Large Crosshair")
+        # self.s_cross = QPushButton("Small Crosshair")
+        # self.m_cross = QPushButton("Maltese Cross")
+        # self.square_out = QPushButton("Square Outline")
+        # self.square = QPushButton("Square")
+        # self.circle = QPushButton("Circle")
+        # self.twinkle = QPushButton("Twinkle")
+        # self.test_label = QLabel("")
+        #
+        # # Change the shape of the buttons to be squares
+        # self.cross.setFixedSize(QSize(25, 25))
+        # self.s_cross.setFixedSize(QSize(25, 25))
+        # self.m_cross.setFixedSize(QSize(25, 25))
+        # self.square_out.setFixedSize(QSize(25, 25))
+        # self.square.setFixedSize(QSize(25, 25))
+        # self.circle.setFixedSize(QSize(25, 25))
+        # self.twinkle.setFixedSize(QSize(25, 25))
+        #
+        # # Call the functions to draw the different targets
+        # self.drawTargets()
+        #
+        # # Adding the radio buttons to the shape widget
+        # fix_shape.addWidget(self.cross)
+        # fix_shape.addWidget(self.s_cross)
+        # fix_shape.addWidget(self.m_cross)
+        # fix_shape.addWidget(self.square_out)
+        # fix_shape.addWidget(self.square)
+        # fix_shape.addWidget(self.circle)
+        # fix_shape.addWidget(self.twinkle)
+        #
+        # # What will happen when a specific radio button is called
+        # self.cross.clicked.connect(self.onClick)
+        # self.s_cross.clicked.connect(self.onClick)
+        # self.m_cross.clicked.connect(self.onClick)
+        # self.square_out.clicked.connect(self.onClick)
+        # self.square.clicked.connect(self.onClick)
+        # self.circle.clicked.connect(self.onClick)
+        # self.twinkle.clicked.connect(self.onClick)
 
-        # Push Buttons to be used for target shape
-        self.cross = QPushButton("Large Crosshair")
-        self.s_cross = QPushButton("Small Crosshair")
-        self.m_cross = QPushButton("Maltese Cross")
-        self.square_out = QPushButton("Square Outline")
-        self.square = QPushButton("Square")
-        self.circle = QPushButton("Circle")
-        self.twinkle = QPushButton("Twinkle")
-        self.test_label = QLabel("")
+        # # Generate the scroll bar for the size of the fixation target
+        # fix_size = QHBoxLayout()
+        # self.size_bar = QSlider(Qt.Horizontal)
+        # self.label_size = QLabel()
+        # self.size_bar.setMinimum(1)
+        # self.size_bar.setMaximum(20)
+        # self.size_bar.setValue(5)
+        # self.size_bar.setTickPosition(QSlider.TicksBelow)
+        # self.size_bar.setTickInterval(1)
+        # self.label_size.setText(str(self.size_bar.value()))
+        # self.size_bar.valueChanged.connect(self.sizeChange)
+        #
+        # # Add scroll bar and label to the main widget
+        # fix_size.addWidget(self.label_size)
+        # fix_size.addWidget(QLabel(""))
+        # fix_size.addWidget(self.size_bar)
 
-        # Change the shape of the buttons to be squares
-        self.cross.setFixedSize(QSize(25, 25))
-        self.s_cross.setFixedSize(QSize(25, 25))
-        self.m_cross.setFixedSize(QSize(25, 25))
-        self.square_out.setFixedSize(QSize(25, 25))
-        self.square.setFixedSize(QSize(25, 25))
-        self.circle.setFixedSize(QSize(25, 25))
-        self.twinkle.setFixedSize(QSize(25, 25))
-
-        # Call the functions to draw the different targets
-        self.drawTargets()
-
-        # Adding the radio buttons to the shape widget
-        fix_shape.addWidget(self.cross)
-        fix_shape.addWidget(self.s_cross)
-        fix_shape.addWidget(self.m_cross)
-        fix_shape.addWidget(self.square_out)
-        fix_shape.addWidget(self.square)
-        fix_shape.addWidget(self.circle)
-        fix_shape.addWidget(self.twinkle)
-
-        # What will happen when a specific radio button is called
-        self.cross.clicked.connect(self.onClick)
-        self.s_cross.clicked.connect(self.onClick)
-        self.m_cross.clicked.connect(self.onClick)
-        self.square_out.clicked.connect(self.onClick)
-        self.square.clicked.connect(self.onClick)
-        self.circle.clicked.connect(self.onClick)
-        self.twinkle.clicked.connect(self.onClick)
-
-        # Generate the scroll bar for the size of the fixation target
-        fix_size = QHBoxLayout()
-        self.size_bar = QSlider(Qt.Horizontal)
-        self.label_size = QLabel()
-        self.size_bar.setMinimum(1)
-        self.size_bar.setMaximum(20)
-        self.size_bar.setValue(5)
-        self.size_bar.setTickPosition(QSlider.TicksBelow)
-        self.size_bar.setTickInterval(1)
-        self.label_size.setText(str(self.size_bar.value()))
-        self.size_bar.valueChanged.connect(self.sizeChange)
-
-        # Add scroll bar and label to the main widget
-        fix_size.addWidget(self.label_size)
-        fix_size.addWidget(QLabel(""))
-        fix_size.addWidget(self.size_bar)
-
-        # Add all the Color related widgets to their layout
-        color_shape.addWidget(self.color_name_label)
-        color_shape.addWidget(self.color_display_label)
+        # # Add all the Color related widgets to their layout
+        # color_shape.addWidget(self.color_name_label)
+        # color_shape.addWidget(self.color_display_label)
 
         # Generate the Radio buttons for the target being on/off
         target_display_bttns = QHBoxLayout()
@@ -331,49 +410,18 @@ class Tabs(QTabWidget):
         target_display_bttns.addWidget(self.target_on_bttn)
         target_display_bttns.addWidget(self.target_off_bttn)
 
-        layout.addRow(self.color_layout)
-        layout.addRow(color_shape)
+        # layout.addRow(self.color_layout)
+        # layout.addRow(color_shape)
         layout.addRow(QLabel(""))
-        layout.addRow(QLabel("Shape:"))
-        layout.addRow(fix_shape)  # Adds the radio buttons for the shape to the main layout
-        layout.addRow(self.test_label)
+        # layout.addRow(QLabel("Shape:"))
+        # layout.addRow(fix_shape)  # Adds the radio buttons for the shape to the main layout
+        # layout.addRow(self.test_label)
         layout.addRow(QLabel(""))
-        layout.addRow(QLabel("Size:"), fix_size)
+        # layout.addRow(QLabel("Size:"), fix_size)
         layout.addRow("Fixation target Display:", target_display_bttns)
 
         # self.setTabText(1, "Fixation Target Control")
         self.tab4.setLayout(layout)
-
-    def imCalibrationControlTab(self):
-        """
-        Function for the UI properties and functionality of Tab 3 - Image Calibration Control
-        """
-        layout3 = QFormLayout()
-
-        # # Attributes needed to display an image
-        # self.image_label = QLabel("")
-        # self.image_label.resize(500, 500)
-        #
-        # # Generate buttons needed for image calibration control
-        # self.load_bg_image_button = QPushButton()
-        # self.load_bg_image_button.setText("Load Background Image")  # Open file explore and select image
-        # self.image_cal_button = QPushButton()
-        # self.image_cal_button.setText("Start Image Calibration")
-        # center_fovea_button = QPushButton()
-        # center_fovea_button.setText("Center Fovea")
-        #
-        # # Add the image calibration button to its slot when pressed
-        # self.image_cal_button.clicked.connect(self.onPressCal)
-        # self.load_bg_image_button.clicked.connect(self.onPressLoad)
-        #
-        # # Add all the widgets to the main layout and set priority
-        # layout3.addRow(self.load_bg_image_button)
-        # layout3.addRow(self.image_label)
-        # layout3.addRow(self.image_cal_button)
-        # layout3.addRow(center_fovea_button)
-
-        # self.setTabText(2, "Image Calibration Control")
-        self.tab6.setLayout(layout3)
 
     def protocolControlTab(self):
         """
@@ -684,7 +732,7 @@ class Tabs(QTabWidget):
         """
         Slot for displaying the size of the fixation target as it moves
         """
-        txt = str(self.size_bar.value())
+        txt = "Target Size: " + str(self.size_bar.value())
         self.label_size.setText(txt)
 
     def onPressColor(self):

@@ -28,9 +28,8 @@ class NuclearDisplay(QWidget):
         self.bottom = TargetBottom(self.config_name)
 
         # Get the dims from the Configuration tabs
-        h_lines = int(self.righty.target.horz_dim)
-        v_lines = int(self.righty.target.vert_dim)
-        self.target_area = TargetArea(self.config_name, h_lines, v_lines)
+        dim = self.righty.target.dim.split("x")
+        self.target_area = TargetArea(self.config_name, dim)
 
         # setting up layout
         self.grid_layout = QtWidgets.QGridLayout(self)
@@ -71,15 +70,15 @@ class TargetArea(QWidget):
     """
     Class for the grid display
     """
-    def __init__(self, config_name, horz_lines, vert_lines):
+    def __init__(self, config_name, lines):
         super().__init__()
 
         self.config = configparser.ConfigParser()
         self.config.read(config_name)
         self.grid_size = self.config.get("test", "grid_size")
         self.circle_vis = self.config.get("test", "fixation_circle_visible")
-        self.horz_lines = horz_lines
-        self.vert_lines = vert_lines
+        self.horz_lines = int(lines[0])
+        self.vert_lines = int(lines[1])
 
     def paintEvent(self, arg__0):
         """
