@@ -7,6 +7,7 @@ from PySide6.QtWidgets import QWidget
 
 from ocvl.fixation.nuclear_panel import NuclearDisplay
 from ocvl.fixation.initial_window import InitialDialog
+import test_properties
 
 
 class NuclearBase(QWidget):
@@ -19,7 +20,9 @@ class NuclearBase(QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
-
+    var = test_properties.Variables()
+    var.horz = 35.8
+    print(var.horz)
     base = NuclearBase()
     base.resize(1000,500)
     base.show()
