@@ -11,7 +11,7 @@ class InitialDialog(QDialog):
     """
     Class for the initial dialog box for user inputs
     """
-    def __init__(self):
+    def __init__(self, var):
         super().__init__()
         self.subject_id = None
         self.temp_loc_name = QLabel("")

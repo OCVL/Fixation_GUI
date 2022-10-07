@@ -11,9 +11,10 @@ from ocvl.fixation.nuclear_info import NuclearInfo
 
 
 class NuclearDisplay(QWidget):
-    def __init__(self):
+    def __init__(self, var):
         super().__init__()
 
+        self.var = var
         self.sub_id = None
         self.selected_eye = None
         self.save_loc_dir = None
@@ -24,12 +25,12 @@ class NuclearDisplay(QWidget):
 
         # setting up GUI panels
         # self.lefty = TargetLefty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name)
-        self.righty = TargetRighty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name, self.config_name)
-        self.bottom = TargetBottom(self.config_name)
+        self.righty = TargetRighty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name, self.config_name, self.var)
+        self.bottom = TargetBottom(self.config_name, self.var)
 
         # Get the dims from the Configuration tabs
         dim = self.righty.target.dim.split("x")
-        self.target_area = TargetArea(self.config_name, dim)
+        self.target_area = TargetArea(self.config_name, dim, self.var)
 
         # setting up layout
         self.grid_layout = QtWidgets.QGridLayout(self)
@@ -49,7 +50,8 @@ class NuclearDisplay(QWidget):
         Then gets and saves all the info that user enters into the dialog
         :return:
         """
-        dlg = InitialDialog()
+
+        dlg = InitialDialog(self.var)
         dlg.exec()
 
         self.config_name = dlg.config_name  # config file name
@@ -72,9 +74,10 @@ class TargetArea(QWidget):
     Class for the grid display
     """
 
-    def __init__(self, config_name, lines):
+    def __init__(self, config_name, lines, var):
         super().__init__()
 
+        self.var = var
         self.config = configparser.ConfigParser()
         self.config.read(config_name)
         self.grid_size = self.config.get("test", "grid_size")
@@ -170,31 +173,31 @@ class TargetArea(QWidget):
         painter.setPen(Qt.black)
 
 
-class TargetLefty(QWidget):
-    """
-    Class for the left panel of the window -- currently not being used
-    """
-
-    def __init__(self, eye, sub_id, save_loc, device):
-        super().__init__()
-
-        self.target = NuclearInfo(eye, sub_id, save_loc, device)
-
-        self.layout = QtWidgets.QHBoxLayout(self)
-        self.layout.addWidget(self.target)
-
-    def paintEvent(self, arg__0):
-        pass
-        # painter = QPainter(self)
-        # painter.setBrush(Qt.cyan)
-        # painter.setRenderHint(QPainter.Antialiasing, True)
-        #
-        # rect = painter.window()
-        #
-        # radii = np.minimum(rect.width(), rect.height())/2
-        # cent = QPoint(rect.width()/2, rect.height()/2)
-        #
-        # painter.drawEllipse(cent, radii, radii)
+# class TargetLefty(QWidget):
+#     """
+#     Class for the left panel of the window -- currently not being used
+#     """
+#
+#     def __init__(self, eye, sub_id, save_loc, device, var):
+#         super().__init__()
+#
+#         self.target = NuclearInfo(eye, sub_id, save_loc, device)
+#
+#         self.layout = QtWidgets.QHBoxLayout(self)
+#         self.layout.addWidget(self.target)
+#
+#     def paintEvent(self, arg__0):
+#         pass
+#         # painter = QPainter(self)
+#         # painter.setBrush(Qt.cyan)
+#         # painter.setRenderHint(QPainter.Antialiasing, True)
+#         #
+#         # rect = painter.window()
+#         #
+#         # radii = np.minimum(rect.width(), rect.height())/2
+#         # cent = QPoint(rect.width()/2, rect.height()/2)
+#         #
+#         # painter.drawEllipse(cent, radii, radii)
 
 
 class TargetRighty(QWidget):
@@ -202,11 +205,12 @@ class TargetRighty(QWidget):
     Class for the right panel of the window
     """
 
-    def __init__(self, eye, sub_id, save_loc, device, config_name):
+    def __init__(self, eye, sub_id, save_loc, device, config_name, var):
         super().__init__()
 
+        self.var = var
         # calls the control panel
-        self.target = Tabs(eye, sub_id, save_loc, device, config_name)
+        self.target = Tabs(self.var, eye, sub_id, save_loc, device, config_name)
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)
@@ -230,11 +234,12 @@ class TargetBottom(QWidget):
     Class for the bottom panel of the window
     """
 
-    def __init__(self, config_name):
+    def __init__(self, config_name, var):
         super().__init__()
 
+        self.var = var
         # calls the notes panel
-        self.target = NuclearNotes(config_name)
+        self.target = NuclearNotes(self.var, config_name)
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)

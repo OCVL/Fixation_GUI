@@ -19,9 +19,10 @@ class NuclearNotes(QtWidgets.QWidget):
     """
     Class for the notes panel
     """
-    def __init__(self, config_name):
+    def __init__(self, var, config_name):
         super().__init__()
 
+        self.var = var
         # read in the config file
         self.config = configparser.ConfigParser()
         self.config.read(config_name)

@@ -13,12 +13,12 @@ class Tabs(QTabWidget):
     Main class for the control panel that contains various tabs, each with different functionality
     """
 
-    def __init__(self,  eye=None, sub_id=None, save_loc=None, device=None, config_name="C:\\Users\\6262BrennaB\\Desktop\\FixationGUI\\ocvl\\fixation\\test_settings.ini", parent=None):
+    def __init__(self, var, eye=None, sub_id=None, save_loc=None, device=None, config_name="C:\\Users\\6262BrennaB\\Desktop\\FixationGUI\\ocvl\\fixation\\test_settings.ini",  parent=None):
         """
         Initialization of the class variables
         """
         super(Tabs, self).__init__(parent)
-
+        self.var = var
         # All the self class variables to be used in the various tabs
         self.ref_pt_label = None
         self.ref_pt_button = None
