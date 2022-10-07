@@ -418,7 +418,7 @@ class Tabs(QTabWidget):
         self.animation_speed = QLineEdit()
 
         # Slot for the checkbox asking if target animation is on
-        self.animation.toggled.connect(self.displayTarget)
+        self.animation.stateChanged.connect(self.checkBoxResponse)
 
         # Add the components to the animate layout
         animate_layout.addWidget(self.animation)
@@ -430,17 +430,17 @@ class Tabs(QTabWidget):
 
         # Target display on/off layout and checkboxes
         target_display_bttns = QHBoxLayout()
-        target_control_layout.addWidget(QLabel("Target Visible?"))
-        self.target_on_bttn = QCheckBox("On")
-        self.target_off_bttn = QCheckBox("Off")
+        # target_control_layout.addWidget(QLabel("Target Visible?"))
+        self.target_vis_bttn = QCheckBox("Target Visible")
+        # self.target_off_bttn = QCheckBox("Off")
 
-        # Connect the radio button to their slot
-        self.target_on_bttn.toggled.connect(self.displayTarget)
-        self.target_off_bttn.toggled.connect(self.displayTarget)
+        # Connect the checkbox to their slot
+        self.target_vis_bttn.stateChanged.connect(self.checkBoxResponse)
+        # self.target_off_bttn.toggled.connect(self.displayTarget)
 
         # Add the checkboxes to the target button layout
-        target_display_bttns.addWidget(self.target_on_bttn)
-        target_display_bttns.addWidget(self.target_off_bttn)
+        target_display_bttns.addWidget(self.target_vis_bttn)
+        # target_display_bttns.addWidget(self.target_off_bttn)
 
         # Add the target button layout to the target control layout
         target_control_layout.addLayout(target_display_bttns)
@@ -507,7 +507,8 @@ class Tabs(QTabWidget):
         grid_vis_layout = QHBoxLayout()
 
         self.grid_vis = QCheckBox("Grid Visible")
-        # will need to add slot to get checkbox to work also need to set default to be checked
+        self.grid_vis.stateChanged.connect(self.checkBoxResponse)
+
 
         grid_vis_layout.addWidget(self.grid_vis)
 
@@ -952,15 +953,23 @@ class Tabs(QTabWidget):
         button = self.sender()
         print(button.text())
 
-    def displayTarget(self):
+    def checkBoxResponse(self):
         """
         Slot for if the fixation target is displayed to the subject
         :return:
         """
         button = self.sender()
-        if button.isChecked():
-            txt = button.text()
-            print(txt)
+        txt = button.text()
+        match txt:
+            case "Target Animation":
+                print(button.checkState())
+            case "Target Visible":
+                print(button.checkState())
+            case "Grid Visible":
+                print(button.checkState())
+            case _:
+                print("Something went wrong!")
+        print(txt)
 
 
 
