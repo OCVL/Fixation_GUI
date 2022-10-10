@@ -13,23 +13,23 @@ class InitialDialog(QDialog):
     """
     def __init__(self, var):
         super().__init__()
-        self.subject_id = None
+        self.var = var
+        # self.subject_id = None
         self.temp_loc_name = QLabel("")
         self.save_location_butt = QPushButton("Save Location")
-        self.eye_selected = None
+        # self.eye_selected = None
         self.sub_id = QLineEdit()
         self.device_menu = QComboBox()
-        self.save_location_dir = None
-        self.device_selected = None
+        # self.save_location_dir = None
+        # self.device_selected = None
         self.buttonBox = None
         self.setWindowTitle("Setup")
         # configuration file set up
-        self.config = configparser.ConfigParser()
-        self.config_name = os.getcwd() + "\\test_settings.ini"
-        # self.config_name = filedialog.askopenfilenames(title='Select the configuration file', filetypes=[
+        self.var.config_name = os.getcwd() + "\\test_settings.ini"
+        # self.var.config_name = filedialog.askopenfilenames(title='Select the configuration file', filetypes=[
         #     ("configuration file", ".ini")])
-        self.config.read(self.config_name)
-        self.device_list = self.config.get("ALL", "device_list").split("/")
+        self.var.config.read(self.var.config_name)
+        self.device_list = self.var.config.get("ALL", "device_list").split("/")
         self.setup()
 
     def setup(self):
@@ -90,29 +90,29 @@ class InitialDialog(QDialog):
         button = self.sender()
         if button.isChecked():
             print("Pressed the button called: " + button.text())
-            self.eye_selected = button.text()
+            self.var.eye = button.text()
 
     def onTextEnter(self):
         """
         Slot for the subject ID
         :return:
         """
-        self.subject_id = self.sub_id.text()
+        self.var.sub_id = self.sub_id.text()
 
     def on_save_click(self):
         """
         Slot for the save location button
         :return:
         """
-        self.save_location_dir = filedialog.askdirectory(title='Select the save location for generated files.')
-        self.temp_loc_name.setText(self.save_location_dir)
+        self.var.save_loc = filedialog.askdirectory(title='Select the save location for generated files.')
+        self.temp_loc_name.setText(self.var.save_loc)
 
     def on_combobox_changed(self):
         """
         Slot for the device selection drop down
         :return:
         """
-        self.device_selected = self.device_menu.currentText()
+        self.var.device = self.device_menu.currentText()
 
     def okay(self):
         """

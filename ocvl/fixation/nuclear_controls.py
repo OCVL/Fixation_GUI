@@ -13,12 +13,13 @@ class Tabs(QTabWidget):
     Main class for the control panel that contains various tabs, each with different functionality
     """
 
-    def __init__(self, var, eye=None, sub_id=None, save_loc=None, device=None, config_name="C:\\Users\\6262BrennaB\\Desktop\\FixationGUI\\ocvl\\fixation\\test_settings.ini",  parent=None):
+    def __init__(self, var, parent=None):
         """
         Initialization of the class variables
         """
         super(Tabs, self).__init__(parent)
         self.var = var
+
         # All the self class variables to be used in the various tabs
         self.ref_pt_label = None
         self.ref_pt_button = None
@@ -40,22 +41,21 @@ class Tabs(QTabWidget):
         self.target_on_bttn = None
         self.subject_view = None
         self.anatomical_view = None
-        self.dim = None
+        # self.dim = None
         self.grid_size_default_3 = None
         self.grid_size_default_2 = None
         self.grid_size_default_1 = None
         self.grid_defaults = None
         self.grid_display_save = None
-        self.savior_FOVs = None
+        # self.savior_FOVs = None
         self.dim_select = None
         self.FOV_menu = None
         self.info = None
-        self.stim_wavelengths = None
         self.save_p_label = None
         self.save_p_button = None
         self.load_p_label = None
         self.load_p_button = None
-        self.custom_color = QtGui.QColor('green')
+        # self.custom_color = QtGui.QColor('green')
         self.image_label = None
         self.twinkle = None
         self.circle = None
@@ -74,14 +74,13 @@ class Tabs(QTabWidget):
         self.size_bar = None
         self.image_cal_button = None
         self.load_bg_image_button = None
-        self.eye = eye
-        self.sub_id = sub_id
-        self.save_loc = save_loc
-        self.device = device
+        # self.eye = eye
+        # self.sub_id = sub_id
+        # self.save_loc = save_loc
+        # self.device = device
 
         # Load the config file
-        self.config = configparser.ConfigParser()
-        self.config.read(config_name)
+        self.var.config.read(self.var.config_name)
 
         # Generate the Tabs for the window to hold the settings
         self.tab1 = QWidget()
@@ -148,7 +147,7 @@ class Tabs(QTabWidget):
         dim_menu_label = QLabel("Grid Dimension:")
 
         # Default button size creation
-        self.grid_defaults = self.config.get("test", "grid_size_defaults").split("/")
+        self.grid_defaults = self.var.config.get("test", "grid_size_defaults").split("/")
         self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
         self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
         self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
@@ -178,8 +177,8 @@ class Tabs(QTabWidget):
         self.dim_select.currentTextChanged.connect(self.GridSizeChange)
 
         # Default from config file
-        self.dim = self.config.get("test", "grid_size_start_default")
-        self.dim_select.setCurrentIndex(self.dim_select.findText(self.dim))
+        self.var.dim = self.var.config.get("test", "grid_size_start_default")
+        self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
 
         # Add the dropdown and its label to the grid set up layout
         grid_setup_layout.addWidget(dim_menu_label)
@@ -521,10 +520,10 @@ class Tabs(QTabWidget):
 
         # get the FOVs from the config file to be added to the dropdown menu
         self.FOV_menu = QComboBox()
-        self.savior_FOVs = self.config.get("test", "savior_FOVs").split("/")
+        self.var.savior_FOVs = self.var.config.get("test", "savior_FOVs").split("/")
 
         # adds all the FOVs in the list
-        for x in self.savior_FOVs:
+        for x in self.var.savior_FOVs:
             self.FOV_menu.addItem(x)
 
         # sets the selection to the first one
@@ -596,7 +595,7 @@ class Tabs(QTabWidget):
 
         # Add the Nuclear info to the final review tab
         info_group = QGroupBox("Session Information")
-        self.info = NuclearInfo(self.eye, self.sub_id, self.save_loc, self.device)
+        self.info = NuclearInfo(self.var.eye, self.var.sub_id, self.var.save_loc, self.var.device)
         info_layout = QFormLayout()
         info_layout.addWidget(self.info)
 
@@ -628,7 +627,7 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 10)
         painter.setPen(pen)
         painter.drawLine(10, 50, 90, 50)
         painter.drawLine(50, 10, 50, 90)
@@ -641,7 +640,7 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 10)
         painter.setPen(pen)
         painter.drawLine(35, 50, 65, 50)
         painter.drawLine(50, 35, 50, 65)
@@ -654,9 +653,9 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 10)
         painter.setPen(pen)
-        painter.setBrush(self.custom_color)
+        painter.setBrush(self.var.custom_color)
         painter.drawRect(15, 15, 70, 70)
         painter.end()
         self.square.setIcon(canvas)
@@ -667,8 +666,8 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.custom_color, 10)
-        pen = QtGui.QPen(self.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 10)
         painter.setPen(pen)
         painter.drawLine(20, 20, 20, 80)
         painter.drawLine(20, 20, 80, 20)
@@ -683,9 +682,9 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 10)
         painter.setPen(pen)
-        painter.setBrush(QtGui.QColor(self.custom_color))
+        painter.setBrush(QtGui.QColor(self.var.custom_color))
         center = QPointF(50, 50)
         painter.drawEllipse(center, 35, 35)
         painter.end()
@@ -697,7 +696,7 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 10)
         painter.setPen(pen)
         painter.drawLine(35, 50, 65, 50)
         painter.drawLine(15, 50, 15, 50)
@@ -716,7 +715,7 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.custom_color, 5)
+        pen = QtGui.QPen(self.var.custom_color, 5)
         painter.setPen(pen)
         painter.drawLine(30, 10, 70, 90)
         painter.drawLine(70, 10, 30, 90)
@@ -780,7 +779,7 @@ class Tabs(QTabWidget):
         Slot used to select the color of the fixation target
         """
         color = QColorDialog.getColor()  # Might want to make a class variable to change the color of the fixation target to the one selected
-        self.custom_color = color
+        self.var.custom_color = color
         if color.isValid():
             self.color_name_label.setText("Current Color selected: " + str(color.name()))
             self.color_display_label.setGeometry(100, 100, 200, 60)
@@ -899,14 +898,14 @@ class Tabs(QTabWidget):
             v2 = str(self.grid_defaults[1])
             v3 = str(self.grid_defaults[2])
             if txt == v1:
-                self.dim = self.grid_defaults[0]
-                self.dim_select.setCurrentIndex(self.dim_select.findText(self.dim))
+                self.var.dim = self.grid_defaults[0]
+                self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
             elif txt == v2:
-                self.dim = self.grid_defaults[0]
-                self.dim_select.setCurrentIndex(self.dim_select.findText(self.dim))
+                self.var.dim = self.grid_defaults[0]
+                self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
             elif txt == v3:
-                self.dim = self.grid_defaults[0]
-                self.dim_select.setCurrentIndex(self.dim_select.findText(self.dim))
+                self.var.dim = self.grid_defaults[0]
+                self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
             else:
                 print("Something went wrong!")
 
@@ -915,8 +914,8 @@ class Tabs(QTabWidget):
         Slot for the horizontal drop down menu for the grid sizes
         :return:
         """
-        self.dim = self.dim_select.currentText()
-        print(self.dim)
+        self.var.dim = self.dim_select.currentText()
+        print(self.var.dim)
 
     def referencePointBttnClicked(self):
         """

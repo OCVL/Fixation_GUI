@@ -21,16 +21,14 @@ class NuclearDisplay(QWidget):
         self.dev_name = None
         self.config_name = None
 
-        self.LaunchInitialDialog()
-
         # setting up GUI panels
         # self.lefty = TargetLefty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name)
-        self.righty = TargetRighty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name, self.config_name, self.var)
-        self.bottom = TargetBottom(self.config_name, self.var)
+        self.righty = TargetRighty(self.var)
+        self.bottom = TargetBottom(self.var)
 
         # Get the dims from the Configuration tabs
-        dim = self.righty.target.dim.split("x")
-        self.target_area = TargetArea(self.config_name, dim, self.var)
+        var.dim = self.righty.target.var.dim.split("x")
+        self.target_area = TargetArea(self.var)
 
         # setting up layout
         self.grid_layout = QtWidgets.QGridLayout(self)
@@ -43,22 +41,6 @@ class NuclearDisplay(QWidget):
         # adding layouts to grid
         self.grid_layout.addLayout(self.layout2, 0, 0)
         self.grid_layout.addWidget(self.bottom, 2, 0, 2, 1)
-
-    def LaunchInitialDialog(self):
-        """
-        Launches initial dialog in the initial window file
-        Then gets and saves all the info that user enters into the dialog
-        :return:
-        """
-
-        dlg = InitialDialog(self.var)
-        dlg.exec()
-
-        self.config_name = dlg.config_name  # config file name
-        self.dev_name = dlg.device_selected  # device name
-        self.save_loc_dir = dlg.save_location_dir  # save location directory path
-        self.selected_eye = dlg.eye_selected
-        self.sub_id = dlg.subject_id
 
     @QtCore.Slot()
     def updateTarget(self):
@@ -74,16 +56,16 @@ class TargetArea(QWidget):
     Class for the grid display
     """
 
-    def __init__(self, config_name, lines, var):
+    def __init__(self, var):
         super().__init__()
 
         self.var = var
         self.config = configparser.ConfigParser()
-        self.config.read(config_name)
+        self.config.read(self.var.config_name)
         self.grid_size = self.config.get("test", "grid_size")
         self.circle_vis = self.config.get("test", "fixation_circle_visible")
-        self.horz_lines = int(lines[0])
-        self.vert_lines = int(lines[1])
+        self.horz_lines = int(self.var.dim[0])
+        self.vert_lines = int(self.var.dim[1])
 
     def paintEvent(self, arg__0):
         """
@@ -205,12 +187,12 @@ class TargetRighty(QWidget):
     Class for the right panel of the window
     """
 
-    def __init__(self, eye, sub_id, save_loc, device, config_name, var):
+    def __init__(self, var):
         super().__init__()
 
         self.var = var
         # calls the control panel
-        self.target = Tabs(self.var, eye, sub_id, save_loc, device, config_name)
+        self.target = Tabs(self.var)
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)
@@ -234,12 +216,12 @@ class TargetBottom(QWidget):
     Class for the bottom panel of the window
     """
 
-    def __init__(self, config_name, var):
+    def __init__(self, var):
         super().__init__()
 
         self.var = var
         # calls the notes panel
-        self.target = NuclearNotes(self.var, config_name)
+        self.target = NuclearNotes(self.var)
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)

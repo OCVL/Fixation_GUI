@@ -15,6 +15,8 @@ class NuclearBase(QWidget):
         super().__init__()
 
         var = variable_properties.Variables()
+        dlg = InitialDialog(var)
+        dlg.exec()
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(NuclearDisplay(var))
 

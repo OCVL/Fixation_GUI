@@ -2,10 +2,7 @@
 import sys
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea, QTableWidgetItem)
-import configparser
 import pandas as pd
-from threading import Timer
-import threading
 import pdfrw
 
 ANNOT_KEY = '/Annots'
@@ -19,13 +16,12 @@ class NuclearNotes(QtWidgets.QWidget):
     """
     Class for the notes panel
     """
-    def __init__(self, var, config_name):
+    def __init__(self, var):
         super().__init__()
 
         self.var = var
         # read in the config file
-        self.config = configparser.ConfigParser()
-        self.config.read(config_name)
+        self.var.config.read(self.var.config_name)
         self.notes_fname = 'test_file.xlsx'
         self.horizontal_table_headers = None
 
@@ -46,8 +42,8 @@ class NuclearNotes(QtWidgets.QWidget):
         self.layout.addWidget(self.table_widget, stretch=True)
 
         # start notes saving
-        self.template_pdf = pdfrw.PdfReader(self.config.get("test", "notes_pdf_template"))
-        self.notes_fields = self.config.get("test", "notes_fields").split("/")
+        self.template_pdf = pdfrw.PdfReader(self.var.config.get("test", "notes_pdf_template"))
+        self.notes_fields = self.var.config.get("test", "notes_fields").split("/")
         self.testPop = []
         self.saveNotes()
         self.test = 0
@@ -59,7 +55,7 @@ class NuclearNotes(QtWidgets.QWidget):
         :return:
         """
         # https://stackoverflow.com/questions/4097139/reading-array-from-config-file-in-python
-        self.horizontal_table_headers = self.config.get("test", "horizontal_table_headers").split("/")
+        self.horizontal_table_headers = self.var.config.get("test", "horizontal_table_headers").split("/")
         table_columns = len(self.horizontal_table_headers)
         table_rows = 0
 
@@ -95,7 +91,7 @@ class NuclearNotes(QtWidgets.QWidget):
         # https: // stackoverflow.com / questions / 6957943 / how - to - add - new - row - to - existing - qtablewidget
         self.row_count = self.table_widget.rowCount()
         self.table_widget.insertRow(self.row_count)
-        self.memory = self.config.get("test", "memory_columns").split("/")
+        self.memory = self.var.config.get("test", "memory_columns").split("/")
         length = len(self.memory)-1
 
         # Creating items for each cell in the table as it is created & setting text alignment to center
@@ -105,7 +101,7 @@ class NuclearNotes(QtWidgets.QWidget):
             self.table_widget.item(self.row_count, i).setTextAlignment(5)
 
         # populating columns --simulation for now. will need to get this info from savior/grid later
-        self.testPop = [str(self.count), "(1,1)", "2.0 x 2.0", "OD"]
+        self.testPop = [str(self.count), "(1,1)", "2.0 x 2.0", self.var.eye]
         for i in range(len(self.testPop)):
             self.table_widget.item(self.row_count, i).setText(self.testPop[i])
 
