@@ -4,10 +4,8 @@ from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import QPainter, Qt, QPen, QColor
 from PySide6.QtWidgets import QWidget
 import numpy as np
-from ocvl.fixation.initial_window import InitialDialog
 from ocvl.fixation.nuclear_controls import Tabs
 from ocvl.fixation.nuclear_notes import NuclearNotes
-from ocvl.fixation.nuclear_info import NuclearInfo
 
 
 class NuclearDisplay(QWidget):

@@ -1,4 +1,3 @@
-import configparser
 import sys
 from tkinter import filedialog
 import os
@@ -14,20 +13,13 @@ class InitialDialog(QDialog):
     def __init__(self, var):
         super().__init__()
         self.var = var
-        # self.subject_id = None
-        self.temp_loc_name = QLabel("")
+        self.loc_label = QLabel("")
         self.save_location_butt = QPushButton("Save Location")
-        # self.eye_selected = None
-        self.sub_id = QLineEdit()
+        self.sub_id_tbox = QLineEdit()
         self.device_menu = QComboBox()
-        # self.save_location_dir = None
-        # self.device_selected = None
         self.buttonBox = None
         self.setWindowTitle("Setup")
-        # configuration file set up
         self.var.config_name = os.getcwd() + "\\test_settings.ini"
-        # self.var.config_name = filedialog.askopenfilenames(title='Select the configuration file', filetypes=[
-        #     ("configuration file", ".ini")])
         self.var.config.read(self.var.config_name)
         self.device_list = self.var.config.get("ALL", "device_list").split("/")
         self.setup()
@@ -55,7 +47,7 @@ class InitialDialog(QDialog):
         right_eye.toggled.connect(self.eye_slot)
 
         # Linking the field where the sub id is listed to be saved for later use
-        self.sub_id.textChanged.connect(self.onTextEnter)
+        self.sub_id_tbox.textChanged.connect(self.onTextEnter)
 
         # Linking the button used to get the save direction and the variable to store this for later use
         self.save_location_butt.clicked.connect(self.on_save_click)
@@ -72,11 +64,11 @@ class InitialDialog(QDialog):
         eye_butt_layout.addWidget(left_eye)
         eye_butt_layout.addWidget(right_eye)
 
-        # Adding all components to the main layout of the pop up window
+        # Adding all components to the main layout of the pop-up window
         layout1.addRow("Select Eye", eye_butt_layout)
-        layout1.addRow("Subject ID:", self.sub_id)
+        layout1.addRow("Subject ID:", self.sub_id_tbox)
         layout1.addRow("Select Save Location", save_loc_butt_layout)
-        layout1.addRow(self.temp_loc_name)
+        layout1.addRow(self.loc_label)
         layout1.addRow("Device", self.device_menu)
         layout1.addWidget(self.buttonBox)
 
@@ -97,7 +89,7 @@ class InitialDialog(QDialog):
         Slot for the subject ID
         :return:
         """
-        self.var.sub_id = self.sub_id.text()
+        self.var.sub_id = self.sub_id_tbox.text()
 
     def on_save_click(self):
         """
@@ -105,7 +97,7 @@ class InitialDialog(QDialog):
         :return:
         """
         self.var.save_loc = filedialog.askdirectory(title='Select the save location for generated files.')
-        self.temp_loc_name.setText(self.var.save_loc)
+        self.loc_label.setText(self.var.save_loc)
 
     def on_combobox_changed(self):
         """

@@ -5,7 +5,6 @@ import sys
 from PySide6.QtGui import *
 from PySide6.QtCore import Qt, QSize, QPointF
 from PySide6.QtWidgets import *
-from ocvl.fixation.nuclear_info import NuclearInfo
 
 
 class Tabs(QTabWidget):
@@ -595,9 +594,16 @@ class Tabs(QTabWidget):
 
         # Add the Nuclear info to the final review tab
         info_group = QGroupBox("Session Information")
-        self.info = NuclearInfo(self.var.eye, self.var.sub_id, self.var.save_loc, self.var.device)
+
         info_layout = QFormLayout()
-        info_layout.addWidget(self.info)
+        info_layout.addRow("Eye:", QLabel(self.var.eye))
+        info_layout.addRow("Subject ID:", QLabel(self.var.sub_id))
+        info_layout.addRow("Device:", QLabel(self.var.device))
+        info_layout.addRow(QLabel(""))
+        info_layout.addRow("FOV:", QLabel("2.0 x 2.0"))
+        info_layout.addRow(QLabel(""))
+        info_layout.addRow(QLabel("Document Save Location:"))
+        info_layout.addRow(QLabel(self.var.save_loc))
 
         # Add the info layout to its group and then add the group to the main layout as another row
         info_group.setLayout(info_layout)
