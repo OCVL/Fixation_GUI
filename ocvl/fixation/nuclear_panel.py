@@ -13,11 +13,6 @@ class NuclearDisplay(QWidget):
         super().__init__()
 
         self.var = var
-        self.sub_id = None
-        self.selected_eye = None
-        self.save_loc_dir = None
-        self.dev_name = None
-        self.config_name = None
 
         # setting up GUI panels
         # self.lefty = TargetLefty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name)

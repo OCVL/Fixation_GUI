@@ -22,7 +22,7 @@ class NuclearNotes(QtWidgets.QWidget):
         self.var = var
         # read in the config file
         self.var.config.read(self.var.config_name)
-        self.notes_fname = 'test_file.xlsx'
+        self.notes_fname = 'test_file.xlsx'  # will need to use config file to get the convention and then fill in
         self.horizontal_table_headers = None
 
         self.layout = QtWidgets.QVBoxLayout(self)

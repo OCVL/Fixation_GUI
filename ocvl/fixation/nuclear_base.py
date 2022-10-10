@@ -14,7 +14,9 @@ class NuclearBase(QWidget):
     def __init__(self):
         super().__init__()
 
+        # get the instance of the variables class to pass to everything
         var = variable_properties.Variables()
+        # create the initial dialog window
         dlg = InitialDialog(var)
         dlg.exec()
         self.layout = QtWidgets.QHBoxLayout(self)

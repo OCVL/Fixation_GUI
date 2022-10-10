@@ -40,13 +40,11 @@ class Tabs(QTabWidget):
         self.target_on_bttn = None
         self.subject_view = None
         self.anatomical_view = None
-        # self.dim = None
         self.grid_size_default_3 = None
         self.grid_size_default_2 = None
         self.grid_size_default_1 = None
         self.grid_defaults = None
         self.grid_display_save = None
-        # self.savior_FOVs = None
         self.dim_select = None
         self.FOV_menu = None
         self.info = None
@@ -54,7 +52,6 @@ class Tabs(QTabWidget):
         self.save_p_button = None
         self.load_p_label = None
         self.load_p_button = None
-        # self.custom_color = QtGui.QColor('green')
         self.image_label = None
         self.twinkle = None
         self.circle = None
@@ -73,10 +70,6 @@ class Tabs(QTabWidget):
         self.size_bar = None
         self.image_cal_button = None
         self.load_bg_image_button = None
-        # self.eye = eye
-        # self.sub_id = sub_id
-        # self.save_loc = save_loc
-        # self.device = device
 
         # Load the config file
         self.var.config.read(self.var.config_name)
