@@ -141,19 +141,23 @@ class Tabs(QTabWidget):
         # Default button size creation
         self.grid_defaults = self.var.config.get("test", "grid_size_defaults").split("/")
         self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
+        self.grid_size_default_1.setChecked(True)
         self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
         self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
+        self.none_selected = QRadioButton("hidden")
 
         # Connect the buttons to the slots
         self.grid_size_default_1.toggled.connect(self.gridSizeChange)
         self.grid_size_default_2.toggled.connect(self.gridSizeChange)
         self.grid_size_default_3.toggled.connect(self.gridSizeChange)
+        # self.none_selected.toggled.connect(self.gridSizeChange)
 
         # Add the buttons to the layout
         grid_setup_layout.addWidget(quick_size_label)
         quick_size_layout.addWidget(self.grid_size_default_1)
         quick_size_layout.addWidget(self.grid_size_default_2)
         quick_size_layout.addWidget(self.grid_size_default_3)
+        # quick_size_layout.addWidget(self.none_selected)
 
         # Add the quick sizes to the grid set up layout
         grid_setup_layout.addLayout(quick_size_layout)
@@ -189,22 +193,22 @@ class Tabs(QTabWidget):
         grid_setup_layout.addWidget(self.ref_pt_button)
         grid_setup_layout.addWidget(self.ref_pt_label)
 
-        # Swap the view of T/N labels
-        view_layout = QHBoxLayout()
-        self.anatomical_view = QRadioButton("Anatomical View")
-        self.anatomical_view.setChecked(True)
-        self.subject_view = QRadioButton("Subject View")
-
-        # Connect the View Radio buttons to the slot
-        self.anatomical_view.toggled.connect(self.viewChange)
-        self.subject_view.toggled.connect(self.viewChange)
-
-        # Add view buttons to their layout and the main
-        view_layout.addWidget(self.anatomical_view)
-        view_layout.addWidget(self.subject_view)
-
-        # Add view buttons to the grid set up layout
-        grid_setup_layout.addLayout(view_layout)
+        # # Swap the view of T/N labels
+        # view_layout = QHBoxLayout()
+        # self.anatomical_view = QRadioButton("Anatomical View")
+        # self.anatomical_view.setChecked(True)
+        # self.subject_view = QRadioButton("Subject View")
+        #
+        # # Connect the View Radio buttons to the slot
+        # self.anatomical_view.toggled.connect(self.viewChange)
+        # self.subject_view.toggled.connect(self.viewChange)
+        #
+        # # Add view buttons to their layout and the main
+        # view_layout.addWidget(self.anatomical_view)
+        # view_layout.addWidget(self.subject_view)
+        #
+        # # Add view buttons to the grid set up layout
+        # grid_setup_layout.addLayout(view_layout)
 
         # Add the grid set up layout to the grid Group layout and then add the group to the main layout as another row
         grid_config_group.setLayout(grid_setup_layout)
@@ -897,15 +901,18 @@ class Tabs(QTabWidget):
             v1 = str(self.grid_defaults[0])
             v2 = str(self.grid_defaults[1])
             v3 = str(self.grid_defaults[2])
+            v4 = str(self.none_selected.text())
             if txt == v1:
                 self.var.dim = self.grid_defaults[0]
                 self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
             elif txt == v2:
-                self.var.dim = self.grid_defaults[0]
+                self.var.dim = self.grid_defaults[1]
                 self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
             elif txt == v3:
-                self.var.dim = self.grid_defaults[0]
+                self.var.dim = self.grid_defaults[2]
                 self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
+            elif txt == v4:
+                print("hidden button")
             else:
                 print("Something went wrong!")
 
@@ -916,6 +923,32 @@ class Tabs(QTabWidget):
         """
         self.var.dim = self.dim_select.currentText()
         print(self.var.dim)
+        txt = self.var.dim
+        print("Selected dim: " + txt)
+        v1 = str(self.grid_defaults[0])
+        print(v1 + "b")
+        v2 = str(self.grid_defaults[1])
+        print(v2 + "b")
+        v3 = str(self.grid_defaults[2])
+        print(v3 + "b")
+        if txt == v1:
+            self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
+            self.grid_size_default_1.setChecked(True)
+        elif txt == v2:
+            self.grid_size_default_2.setChecked(True)
+            self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
+        elif txt == v3:
+            self.grid_size_default_3.setChecked(True)
+            self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
+        else:
+            # self.none_selected.setChecked(True)
+            self.grid_size_default_1.released()
+            self.grid_size_default_2.released()
+            self.grid_size_default_3.released()
+
+
+
+
 
     def referencePointBttnClicked(self):
         """
