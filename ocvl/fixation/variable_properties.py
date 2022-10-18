@@ -6,7 +6,9 @@ from PySide6 import QtCore, QtGui
 
 # using property class
 class Variables:
-    def __init__(self, animation_speed_val=None, horz_val=None, vert_val=None, dim=None, savior_FOVs=None, custom_color=QtGui.QColor('green'), eye=None, sub_id=None, save_loc=None, device=None):
+    def __init__(self, animation_speed_val=None, horz_val=None, vert_val=None, dim=None, savior_FOVs=None, \
+                 custom_color=QtGui.QColor('green'), eye=None, sub_id=None, save_loc=None, device=None, left_label=None,
+                 right_label=None, label_or=None):
         self.animation_speed_val = animation_speed_val
         self.horz_val = horz_val
         self.vert_val = vert_val
@@ -17,11 +19,13 @@ class Variables:
         self.sub_id = sub_id
         self.save_loc = save_loc
         self.device = device
+        self.left_label = left_label
+        self.right_label = right_label
+        self.label_or = label_or
 
         # configuration file set up
         self.config = configparser.ConfigParser()
         self.config_name = os.getcwd() + "\\test_settings.ini"
-
 
     # getter
     def get_animation_speed_val(self):
@@ -103,6 +107,31 @@ class Variables:
     def set_device(self, value):
         self._device = value
 
+    # getter
+    def get_left_label(self):
+        return self._left_label
+
+    # setter
+    def set_left_label(self, value):
+        self._left_label = value
+
+    # getter
+    def get_right_label(self):
+        return self._right_label
+
+    # setter
+    def set_right_label(self, value):
+        self._right_label = value
+
+    # getter
+    # True - T=left, N=right; False - T=right, N=left
+    def get_label_or(self):
+        return self._label_or
+
+    # setter
+    def set_label_or(self, value):
+        self._label_or = value
+
 
     # creating property objects
     # sourced from tabs
@@ -116,7 +145,9 @@ class Variables:
     sub_id = QtCore.Property(str, get_sub_id, set_sub_id)
     save_loc = QtCore.Property(str, get_save_loc, set_save_loc)
     device = QtCore.Property(str, get_device, set_device)
-
+    left_label = QtCore.Property(str, get_left_label, set_left_label)
+    right_label = QtCore.Property(str, get_right_label, set_right_label)
+    label_or = QtCore.Property(bool, get_label_or, set_label_or)
 
 
 if __name__ == "__main__":

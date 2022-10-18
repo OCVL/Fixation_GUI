@@ -192,6 +192,7 @@ class Tabs(QTabWidget):
         # Swap the view of T/N labels
         view_layout = QHBoxLayout()
         self.anatomical_view = QRadioButton("Anatomical View")
+        self.anatomical_view.setChecked(True)
         self.subject_view = QRadioButton("Subject View")
 
         # Connect the View Radio buttons to the slot
@@ -941,7 +942,11 @@ class Tabs(QTabWidget):
         button = self.sender()
         txt = button.text()
         if button.isChecked():
-            print("Pressed the button called: " + txt)
+            if txt == "Subject View":
+                self.var.label_or = not self.var.label_or
+            if txt == "Anatomical View":
+                    self.var.label_or = not self.var.label_or
+            print(self.var.label_or)
 
     def saveGrid(self):
         """

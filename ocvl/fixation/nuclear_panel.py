@@ -2,7 +2,7 @@ import configparser
 from PySide6 import QtWidgets, QtCore
 from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import QPainter, Qt, QPen, QColor
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QLabel
 import numpy as np
 from ocvl.fixation.nuclear_controls import Tabs
 from ocvl.fixation.nuclear_notes import NuclearNotes
@@ -53,12 +53,23 @@ class TargetArea(QWidget):
         super().__init__()
 
         self.var = var
+
+        # Set up labels; Anatomical view is default
+        if self.var.eye == 'OS':
+            self.var.label_or = False
+        else:
+            self.var.label_or = True
+
         self.config = configparser.ConfigParser()
         self.config.read(self.var.config_name)
         self.grid_size = self.config.get("test", "grid_size")
         self.circle_vis = self.config.get("test", "fixation_circle_visible")
         self.horz_lines = int(self.var.dim[0])
         self.vert_lines = int(self.var.dim[1])
+
+    def labels(self):
+        left_label = QLabel(self.var.left_label)
+        right_label =QLabel(self.var.right_label)
 
     def paintEvent(self, arg__0):
         """
