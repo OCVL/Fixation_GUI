@@ -111,7 +111,7 @@ class Tabs(QTabWidget):
                 * Quick sizes
                 * Grid dimension drop down
                 * Set Reference Point
-                * Label (T/N) view
+                * Label (T/N) view - Removed might come back after meeting
             - Protocol
                 * Load Protocol button
                 * Label with file path with protocol
@@ -140,17 +140,27 @@ class Tabs(QTabWidget):
 
         # Default button size creation
         self.grid_defaults = self.var.config.get("test", "grid_size_defaults").split("/")
+
         self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
         self.grid_size_default_1.setChecked(True)
         self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
         self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
         self.none_selected = QRadioButton("hidden")
 
+        # Add buttons to the group to make them exclusive
+        self.grid_button_group = QButtonGroup()
+        self.grid_button_group.setExclusive(True)
+        self.grid_button_group.addButton(self.grid_size_default_1)
+        self.grid_button_group.addButton(self.grid_size_default_2)
+        self.grid_button_group.addButton(self.grid_size_default_3)
+        self.grid_button_group.addButton(self.none_selected)
+
+
         # Connect the buttons to the slots
-        self.grid_size_default_1.toggled.connect(self.gridSizeChange)
-        self.grid_size_default_2.toggled.connect(self.gridSizeChange)
-        self.grid_size_default_3.toggled.connect(self.gridSizeChange)
-        # self.none_selected.toggled.connect(self.gridSizeChange)
+        self.grid_size_default_1.clicked.connect(self.radioButtonGridSizeChange)
+        self.grid_size_default_2.clicked.connect(self.radioButtonGridSizeChange)
+        self.grid_size_default_3.clicked.connect(self.radioButtonGridSizeChange)
+        self.none_selected.toggled.connect(self.radioButtonGridSizeChange)
 
         # Add the buttons to the layout
         grid_setup_layout.addWidget(quick_size_label)
@@ -170,10 +180,11 @@ class Tabs(QTabWidget):
             self.dim_select.addItem(str(x) + "x" + str(x))
 
         # Connect the dropdown menus (grid dims) to their slots
-        self.dim_select.currentTextChanged.connect(self.GridSizeChange)
+        self.dim_select.currentTextChanged.connect(self.dropDownGridSizeChange)
 
         # Default from config file
-        self.var.dim = self.var.config.get("test", "grid_size_start_default")
+        # self.var.dim = self.var.config.get("test", "grid_size_start_default")
+        self.var.dim = self.grid_defaults[0]
         self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
 
         # Add the dropdown and its label to the grid set up layout
@@ -889,10 +900,10 @@ class Tabs(QTabWidget):
     slots for the Grid Configuration Tab
     """
 
-    def gridSizeChange(self):
+    def radioButtonGridSizeChange(self):
         """
         Slot for the grid default quick sizes to be changed
-        :return:
+        :return: None
         """
         button = self.sender()
         txt = button.text()
@@ -916,13 +927,13 @@ class Tabs(QTabWidget):
             else:
                 print("Something went wrong!")
 
-    def GridSizeChange(self):
+    def dropDownGridSizeChange(self):
         """
-        Slot for the horizontal drop down menu for the grid sizes
-        :return:
+        Slot for the drop-down menu for the grid sizes allowed
+        :return: None
         """
         self.var.dim = self.dim_select.currentText()
-        print(self.var.dim)
+        print(" ")
         txt = self.var.dim
         print("Selected dim: " + txt)
         v1 = str(self.grid_defaults[0])
@@ -941,14 +952,14 @@ class Tabs(QTabWidget):
             self.grid_size_default_3.setChecked(True)
             self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
         else:
-            # self.none_selected.setChecked(True)
-            self.grid_size_default_1.released()
-            self.grid_size_default_2.released()
-            self.grid_size_default_3.released()
-
-
-
-
+            print("Non Default selected!")
+            self.none_selected.setChecked(True)
+            # self.grid_size_default_1.setChecked(False)
+            # self.grid_size_default_2.setChecked(False)
+            # self.grid_size_default_3.setChecked(False)
+            # self.grid_size_default_1.released()
+            # self.grid_size_default_2.released()
+            # self.grid_size_default_3.released()
 
     def referencePointBttnClicked(self):
         """
