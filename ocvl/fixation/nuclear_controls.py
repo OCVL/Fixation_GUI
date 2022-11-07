@@ -17,6 +17,7 @@ class Tabs(QTabWidget):
         Initialization of the class variables
         """
         super(Tabs, self).__init__(parent)
+        self.target_vis_bttn = None
         self.var = var
 
         # All the self class variables to be used in the various tabs
@@ -142,9 +143,9 @@ class Tabs(QTabWidget):
         self.grid_defaults = self.var.config.get("test", "grid_size_defaults").split("/")
 
         self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
-        self.grid_size_default_1.setChecked(True)
         self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
         self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
+        self.grid_size_default_3.setChecked(True)
         self.none_selected = QRadioButton("hidden")
 
         # Add buttons to the group to make them exclusive
@@ -154,7 +155,6 @@ class Tabs(QTabWidget):
         self.grid_button_group.addButton(self.grid_size_default_2)
         self.grid_button_group.addButton(self.grid_size_default_3)
         self.grid_button_group.addButton(self.none_selected)
-
 
         # Connect the buttons to the slots
         self.grid_size_default_1.clicked.connect(self.radioButtonGridSizeChange)
@@ -167,7 +167,6 @@ class Tabs(QTabWidget):
         quick_size_layout.addWidget(self.grid_size_default_1)
         quick_size_layout.addWidget(self.grid_size_default_2)
         quick_size_layout.addWidget(self.grid_size_default_3)
-        # quick_size_layout.addWidget(self.none_selected)
 
         # Add the quick sizes to the grid set up layout
         grid_setup_layout.addLayout(quick_size_layout)
@@ -184,7 +183,7 @@ class Tabs(QTabWidget):
 
         # Default from config file
         # self.var.dim = self.var.config.get("test", "grid_size_start_default")
-        self.var.dim = self.grid_defaults[0]
+        self.var.dim = self.grid_defaults[2]
         self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
 
         # Add the dropdown and its label to the grid set up layout
@@ -421,7 +420,8 @@ class Tabs(QTabWidget):
 
         # Animation of target
         animate_layout = QHBoxLayout()
-        self.animation = QCheckBox("Target Animation")  #will need to figure out slot for this to have it work correctly
+        self.animation = QCheckBox(
+            "Target Animation")  # will need to figure out slot for this to have it work correctly
         self.animation_speed = QLineEdit()
 
         # Slot for the checkbox asking if target animation is on
@@ -437,17 +437,14 @@ class Tabs(QTabWidget):
 
         # Target display on/off layout and checkboxes
         target_display_bttns = QHBoxLayout()
-        # target_control_layout.addWidget(QLabel("Target Visible?"))
         self.target_vis_bttn = QCheckBox("Target Visible")
-        # self.target_off_bttn = QCheckBox("Off")
+        self.target_vis_bttn.setChecked(True)
 
         # Connect the checkbox to their slot
         self.target_vis_bttn.stateChanged.connect(self.checkBoxResponse)
-        # self.target_off_bttn.toggled.connect(self.displayTarget)
 
         # Add the checkboxes to the target button layout
         target_display_bttns.addWidget(self.target_vis_bttn)
-        # target_display_bttns.addWidget(self.target_off_bttn)
 
         # Add the target button layout to the target control layout
         target_control_layout.addLayout(target_display_bttns)
@@ -513,12 +510,15 @@ class Tabs(QTabWidget):
         grid_vis_group = QGroupBox("Grid Visibility")
         grid_vis_layout = QHBoxLayout()
 
+        # Make the grid visible checkbox and set default to be checked
         self.grid_vis = QCheckBox("Grid Visible")
+        self.grid_vis.setChecked(True)
+
+        # Connect the slot of the checkbox for grid visible
         self.grid_vis.stateChanged.connect(self.checkBoxResponse)
-
-
         grid_vis_layout.addWidget(self.grid_vis)
 
+        # Add the grid visible button and group to the main layout
         grid_vis_group.setLayout(grid_vis_layout)
         layout.addRow(grid_vis_group)
 
@@ -895,7 +895,6 @@ class Tabs(QTabWidget):
             case _:
                 print("Something went wrong!")
 
-
     """
     slots for the Grid Configuration Tab
     """
@@ -954,12 +953,6 @@ class Tabs(QTabWidget):
         else:
             print("Non Default selected!")
             self.none_selected.setChecked(True)
-            # self.grid_size_default_1.setChecked(False)
-            # self.grid_size_default_2.setChecked(False)
-            # self.grid_size_default_3.setChecked(False)
-            # self.grid_size_default_1.released()
-            # self.grid_size_default_2.released()
-            # self.grid_size_default_3.released()
 
     def referencePointBttnClicked(self):
         """
@@ -989,7 +982,7 @@ class Tabs(QTabWidget):
             if txt == "Subject View":
                 self.var.label_or = not self.var.label_or
             if txt == "Anatomical View":
-                    self.var.label_or = not self.var.label_or
+                self.var.label_or = not self.var.label_or
             print(self.var.label_or)
 
     def saveGrid(self):
@@ -1017,7 +1010,6 @@ class Tabs(QTabWidget):
             case _:
                 print("Something went wrong!")
         print(txt)
-
 
 
 if __name__ == "__main__":

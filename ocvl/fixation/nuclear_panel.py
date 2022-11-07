@@ -125,7 +125,8 @@ class TargetArea(QWidget):
         for y in vert_steps:
             if counter % 5 == 0:
                 if counter == center_line:
-                    painter.setPen(QPen(QColor(255, 79, 0), 2.5))
+                    # painter.setPen(QPen(QColor(255, 79, 0), 2.5))
+                    painter.setPen(QPen(QColor(255, 79, 0)))
                 else:
                     painter.setPen(QPen(QColor(255, 79, 0)))
                 painter.drawLine(rect.width() / 2 - radii, y, rect.width() / 2 + radii, y)
@@ -138,7 +139,8 @@ class TargetArea(QWidget):
         for x in horz_steps:
             if counter % 5 == 0:
                 if counter == center_line:
-                    painter.setPen(QPen(QColor(255, 79, 0), 2.5))
+                    # painter.setPen(QPen(QColor(255, 79, 0), 2.5))
+                    painter.setPen(QPen(QColor(255, 79, 0)))
                 else:
                     painter.setPen(QPen(QColor(255, 79, 0)))
                 painter.drawLine(x, rect.height() / 2 - radii, x, rect.height() / 2 + radii)
