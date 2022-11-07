@@ -1,4 +1,3 @@
-import configparser
 from tkinter import filedialog
 from PySide6 import QtWidgets, QtGui
 import sys
@@ -17,10 +16,11 @@ class Tabs(QTabWidget):
         Initialization of the class variables
         """
         super(Tabs, self).__init__(parent)
-        self.target_vis_bttn = None
+        self.none_selected = None
         self.var = var
 
         # All the self class variables to be used in the various tabs
+        self.target_vis_bttn = None
         self.ref_pt_label = None
         self.ref_pt_button = None
         self.MTE = None
@@ -103,14 +103,13 @@ class Tabs(QTabWidget):
         # Set the Title of the Window
         self.setWindowTitle("Control Settings")
 
-    # Currently Complete with all components
     def guiSetUp(self):
         """
         Function for the UI properties and functionality for the GUI set up tab
         Components:
             - Grid Configuration
                 * Quick sizes
-                * Grid dimension drop down
+                * Grid dimension drop-down
                 * Set Reference Point
                 * Label (T/N) view - Removed might come back after meeting
             - Protocol
@@ -141,7 +140,6 @@ class Tabs(QTabWidget):
 
         # Default button size creation
         self.grid_defaults = self.var.config.get("test", "grid_size_defaults").split("/")
-
         self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
         self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
         self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
@@ -149,12 +147,12 @@ class Tabs(QTabWidget):
         self.none_selected = QRadioButton("hidden")
 
         # Add buttons to the group to make them exclusive
-        self.grid_button_group = QButtonGroup()
-        self.grid_button_group.setExclusive(True)
-        self.grid_button_group.addButton(self.grid_size_default_1)
-        self.grid_button_group.addButton(self.grid_size_default_2)
-        self.grid_button_group.addButton(self.grid_size_default_3)
-        self.grid_button_group.addButton(self.none_selected)
+        grid_button_group = QButtonGroup()
+        grid_button_group.setExclusive(True)
+        grid_button_group.addButton(self.grid_size_default_1)
+        grid_button_group.addButton(self.grid_size_default_2)
+        grid_button_group.addButton(self.grid_size_default_3)
+        grid_button_group.addButton(self.none_selected)
 
         # Connect the buttons to the slots
         self.grid_size_default_1.clicked.connect(self.radioButtonGridSizeChange)
@@ -248,7 +246,6 @@ class Tabs(QTabWidget):
 
         # Attributes needed to display an image
         self.image_label = QLabel("")
-        # self.image_label.resize(500, 500)
 
         # Generate buttons needed for image calibration control
         self.load_bg_image_button = QPushButton()
@@ -347,7 +344,6 @@ class Tabs(QTabWidget):
 
         # Add the components to the target cl layout
         target_cal_layout.addWidget(QLabel(""))
-        # target_cal_layout.addLayout(fix_shape)
         target_cal_layout.addLayout(fix_shape_main)
         target_cal_layout.addWidget(self.test_label)
 
@@ -454,6 +450,7 @@ class Tabs(QTabWidget):
 
         # Quick Location Push buttons generated along with gridlayout for the buttons
         quick_bttn_layout = QGridLayout()
+
         # Push Buttons to be used for Quick Locations
         self.TRC = QPushButton("TRC")
         self.MTE = QPushButton("MTE")
@@ -624,7 +621,6 @@ class Tabs(QTabWidget):
     """
     Functions below are used in the UI for fixationTargetControlTab
     """
-
     def drawTargets(self):
         """
         Function that calls each function in charge of drawing on the fixation target to be selected
@@ -752,7 +748,6 @@ class Tabs(QTabWidget):
     """
     Slots that are used in the UI for fixationTargetControlTab
     """
-
     def onClick(self):
         """
         Slot for the shape of the fixation target to be selected
@@ -898,7 +893,6 @@ class Tabs(QTabWidget):
     """
     slots for the Grid Configuration Tab
     """
-
     def radioButtonGridSizeChange(self):
         """
         Slot for the grid default quick sizes to be changed

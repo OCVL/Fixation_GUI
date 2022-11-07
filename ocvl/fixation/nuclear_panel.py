@@ -15,7 +15,6 @@ class NuclearDisplay(QWidget):
         self.var = var
 
         # setting up GUI panels
-        # self.lefty = TargetLefty(self.selected_eye, self.sub_id, self.save_loc_dir, self.dev_name)
         self.righty = TargetRighty(self.var)
         self.bottom = TargetBottom(self.var)
 
@@ -26,8 +25,6 @@ class NuclearDisplay(QWidget):
         # setting up layout
         self.grid_layout = QtWidgets.QGridLayout(self)
         self.layout2 = QtWidgets.QHBoxLayout(self)
-
-        # self.layout2.addWidget(self.lefty, 2.5)
         self.layout2.addWidget(self.target_area, 5)
         self.layout2.addWidget(self.righty, 2.5)
 
@@ -69,7 +66,7 @@ class TargetArea(QWidget):
 
     def labels(self):
         left_label = QLabel(self.var.left_label)
-        right_label =QLabel(self.var.right_label)
+        right_label = QLabel(self.var.right_label)
 
     def paintEvent(self, arg__0):
         """
@@ -86,9 +83,8 @@ class TargetArea(QWidget):
 
         # sets up the size of the circle based on the window size
         radii = np.minimum(rect.width(), rect.height()) / 2
-        # win_h = rect.height() / 2
-        # win_w = rect.width() / 2
         cent = QPoint(rect.width() / 2, rect.height() / 2)
+
         # sets up the size of the grid lines (will need to be changed to be custom size)
         if self.grid_size == 'small':
             num_of_lines = 31
@@ -107,9 +103,6 @@ class TargetArea(QWidget):
 
         # spacing of lines
         spacing = (radii * 2) / num_of_lines
-        # spacing_h = (win_h*2)/ self.horz_lines
-        # spacing_v = (win_w*2)/ self.vert_lines
-        # painter.drawRect(rect.width() / 2 - win_w, rect.height() / 2 - win_h, win_w * 2, win_h * 2)
         painter.drawRect(rect.width() / 2 - radii, rect.height() / 2 - radii, radii * 2, radii * 2)
 
         # Generating the steps for painting the lines in different colors
@@ -117,8 +110,6 @@ class TargetArea(QWidget):
         vert_steps = np.linspace(rect.height() / 2 - radii, rect.height() / 2 + radii, self.vert_lines)
 
         center_line = (num_of_lines - 1) / 2
-        # center_h = (self.horz_lines - 1) / 2
-        # center_v = (self.vert_lines - 1) / 2
 
         # paints the lines with different colors depending on what step they are
         counter = 0
@@ -161,33 +152,6 @@ class TargetArea(QWidget):
         painter.setPen(Qt.black)
 
 
-# class TargetLefty(QWidget):
-#     """
-#     Class for the left panel of the window -- currently not being used
-#     """
-#
-#     def __init__(self, eye, sub_id, save_loc, device, var):
-#         super().__init__()
-#
-#         self.target = NuclearInfo(eye, sub_id, save_loc, device)
-#
-#         self.layout = QtWidgets.QHBoxLayout(self)
-#         self.layout.addWidget(self.target)
-#
-#     def paintEvent(self, arg__0):
-#         pass
-#         # painter = QPainter(self)
-#         # painter.setBrush(Qt.cyan)
-#         # painter.setRenderHint(QPainter.Antialiasing, True)
-#         #
-#         # rect = painter.window()
-#         #
-#         # radii = np.minimum(rect.width(), rect.height())/2
-#         # cent = QPoint(rect.width()/2, rect.height()/2)
-#         #
-#         # painter.drawEllipse(cent, radii, radii)
-
-
 class TargetRighty(QWidget):
     """
     Class for the right panel of the window
@@ -205,16 +169,6 @@ class TargetRighty(QWidget):
 
     def paintEvent(self, arg__0):
         pass
-        # painter = QPainter(self)
-        # painter.setBrush(Qt.cyan)
-        # painter.setRenderHint(QPainter.Antialiasing, True)
-        #
-        # rect = painter.window()
-        #
-        # radii = np.minimum(rect.width(), rect.height())/2
-        # cent = QPoint(rect.width()/2, rect.height()/2)
-        #
-        # painter.drawEllipse(cent, radii, radii)
 
 
 class TargetBottom(QWidget):
@@ -234,13 +188,3 @@ class TargetBottom(QWidget):
 
     def paintEvent(self, arg__0):
         pass
-        # painter = QPainter(self)
-        # painter.setBrush(Qt.cyan)
-        # painter.setRenderHint(QPainter.Antialiasing, True)
-        #
-        # rect = painter.window()
-        #
-        # radii = np.minimum(rect.width(), rect.height())/2
-        # cent = QPoint(rect.width()/2, rect.height()/2)
-        #
-        # painter.drawEllipse(cent, radii, radii)

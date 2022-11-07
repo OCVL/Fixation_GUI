@@ -1,6 +1,5 @@
 import configparser
 import os
-
 from PySide6 import QtCore, QtGui
 
 
@@ -131,7 +130,6 @@ class Variables:
     # setter
     def set_label_or(self, value):
         self._label_or = value
-
 
     # creating property objects
     # sourced from tabs

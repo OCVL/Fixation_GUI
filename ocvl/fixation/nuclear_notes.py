@@ -1,4 +1,3 @@
-
 import sys
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea, QTableWidgetItem)
@@ -11,6 +10,7 @@ ANNOT_VAL_KEY = '/V'
 ANNOT_RECT_KEY = '/Rect'
 SUBTYPE_KEY = '/Subtype'
 WIDGET_SUBTYPE_KEY = '/Widget'
+
 
 class NuclearNotes(QtWidgets.QWidget):
     """
@@ -120,7 +120,6 @@ class NuclearNotes(QtWidgets.QWidget):
         Saves the notes table
         :return:
         """
-
         # create pandas dataframe
         df = pd.DataFrame(columns=self.horizontal_table_headers)
 
@@ -182,16 +181,12 @@ class NuclearNotes(QtWidgets.QWidget):
         self.template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
         pdfrw.PdfWriter().write('testNotesPdf.pdf', self.template_pdf)  # will need to have this not be hard coded later on!!!!!!!!!!!!!!!!!!
 
-        # start timer to automatically save notes every 1 second
-        # threading.Timer(1.0, self.saveNotes).start()
-
 
 class ReadOnlyDelegate(QStyledItemDelegate):
     """
     Class to make things read only
     """
     def createEditor(self, parent, option, index):
-        # print('createEditor event fired')
         return
 
 
