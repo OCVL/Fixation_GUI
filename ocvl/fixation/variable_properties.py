@@ -26,6 +26,7 @@ class Variables:
         self.config = configparser.ConfigParser()
         self.config_name = os.getcwd() + "\\test_settings.ini"
 
+
     # getter
     def get_animation_speed_val(self):
         return self._animation_speed_val

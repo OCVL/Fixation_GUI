@@ -20,7 +20,6 @@ class InitialDialog(QDialog):
         self.setWindowTitle("Setup")
         self.var.config_name = os.getcwd() + "\\test_settings.ini"
         self.var.config.read(self.var.config_name)
-        self.device_list = self.var.config.get("ALL", "device_list").split("/")
         self.setup()
 
     def setup(self):
@@ -52,11 +51,11 @@ class InitialDialog(QDialog):
         self.save_location_butt.clicked.connect(self.on_save_click)
 
         # Generating and linking the drop-down menu to the signal/slot to save device selected
-        self.device_menu.addItem("Select Device")
-        for x in self.device_list:
-            self.device_menu.addItem(x)
-
-        self.device_menu.currentTextChanged.connect(self.on_combobox_changed)
+        # self.device_menu.addItem("Select Device")
+        # for x in self.device_list:
+        #     self.device_menu.addItem(x)
+        #
+        # self.device_menu.currentTextChanged.connect(self.on_combobox_changed)
 
         # Adding the sub widgets to their boxes for display purposes
         save_loc_butt_layout.addWidget(self.save_location_butt)
@@ -68,8 +67,11 @@ class InitialDialog(QDialog):
         layout1.addRow("Subject ID:", self.sub_id_tbox)
         layout1.addRow("Select Save Location", save_loc_butt_layout)
         layout1.addRow(self.loc_label)
-        layout1.addRow("Device", self.device_menu)
+        # layout1.addRow("Device", self.device_menu)
         layout1.addWidget(self.buttonBox)
+
+        # get device from the config file
+        self.var.device = self.var.config.get("ALL", "device")
 
         self.setLayout(layout1)
 
@@ -98,12 +100,12 @@ class InitialDialog(QDialog):
         self.var.save_loc = filedialog.askdirectory(title='Select the save location for generated files.')
         self.loc_label.setText(self.var.save_loc)
 
-    def on_combobox_changed(self):
-        """
-        Slot for the device selection drop down
-        :return:
-        """
-        self.var.device = self.device_menu.currentText()
+    # def on_combobox_changed(self):
+    #     """
+    #     Slot for the device selection drop down
+    #     :return:
+    #     """
+    #     self.var.device = self.device_menu.currentText()
 
     def okay(self):
         """
