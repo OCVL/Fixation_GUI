@@ -101,7 +101,7 @@ class NuclearNotes(QtWidgets.QWidget):
             self.table_widget.item(0, i).setTextAlignment(5)  # self.row_count
 
         # populating columns --simulation for now. will need to get this info from savior/grid later
-        self.testPop = [str(self.count), "(1,1)", "2.0 x 2.0", self.var.eye]
+        self.testPop = [str(self.count), "(1,1)", "2.0 x 2.0"]
         for i in range(len(self.testPop)):
             self.table_widget.item(0, i).setText(self.testPop[i])  # self.row_count
 
@@ -131,57 +131,59 @@ class NuclearNotes(QtWidgets.QWidget):
                 except AttributeError:
                     pass
 
-        # flip dataframe indexes so that it is in chronological order for the csv
+        # flip dataframe indices so that it is in chronological order for the csv
+        # https://stackoverflow.com/questions/20444087/right-way-to-reverse-a-pandas-dataframe
         df = df.iloc[::-1]
         # save the dataframe to an excel file
         df.to_excel(self.notes_fname, index=False)
 
-        # don't try to start saving notes to pdf if no videos have been taken yet
-        if len(self.testPop) != 0:
-
-            # Names of the fields for Notes Pdf template. Should be at least partially sourced from the config file!!!!!!!!!!!!!!
-            eye = self.testPop[0]
-            FOV =  self.notes_fields[0] + self.testPop[0]
-            locNotes = self.notes_fields[1] + self.testPop[0]
-            focus = self.notes_fields[2] + self.testPop[0]
-            # print(focus)
-            conf = self.notes_fields[3] + self.testPop[0]
-            dir = self.notes_fields[4] + self.testPop[0]
-            ref = self.notes_fields[5] + self.testPop[0]
-            vis = self.notes_fields[6] + self.testPop[0]
-
-            # this is the dictionary that has all the values that will be put into the pdf. currently has problems bc video number isn't changing
-            for z in range(0, self.table_widget.rowCount()):
-                data_dict = {
-                    eye: self.testPop[3],
-                    FOV: self.testPop[2],
-                    locNotes: self.testPop[1] + '; ' + self.table_widget.item(z, 4).text(),
-                    focus: self.table_widget.item(z, 5).text(), # will need to find a way to have these in order of what it is agnostically!!!!!!!!!!!!!!!!!!!
-                    conf: self.table_widget.item(z, 6).text(),
-                    dir: self.table_widget.item(z, 7).text(),
-                    ref: self.table_widget.item(z, 8).text(),
-                    vis: self.table_widget.item(z, 9).text(),
-                }
-
-            # code that puts the data into the pdf and saves it
-            for page in self.template_pdf.pages:
-                annotations = page[ANNOT_KEY]
-                for annotation in annotations:
-                    if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
-                        if annotation[ANNOT_FIELD_KEY]:
-                            key = annotation[ANNOT_FIELD_KEY][1:-1]
-                            if key in data_dict.keys():
-                                if type(data_dict[key]) == bool:
-                                    if data_dict[key] == True:
-                                        annotation.update(pdfrw.PdfDict(
-                                            AS=pdfrw.PdfName('Yes')))
-                                else:
-                                    annotation.update(
-                                        pdfrw.PdfDict(V='{}'.format(data_dict[key]))
-                                    )
-                                    annotation.update(pdfrw.PdfDict(AP=''))
-        self.template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
-        pdfrw.PdfWriter().write('testNotesPdf.pdf', self.template_pdf)  # will need to have this not be hard coded later on!!!!!!!!!!!!!!!!!!
+        # code that was created to save notes to pdf - maybe can reuse for the upon exit/conversion script
+        # # don't try to start saving notes to pdf if no videos have been taken yet
+        # if len(self.testPop) != 0:
+        #
+        #     # Names of the fields for Notes Pdf template. Should be at least partially sourced from the config file!!!!!!!!!!!!!!
+        #     eye = self.testPop[0]
+        #     FOV =  self.notes_fields[0] + self.testPop[0]
+        #     locNotes = self.notes_fields[1] + self.testPop[0]
+        #     focus = self.notes_fields[2] + self.testPop[0]
+        #     # print(focus)
+        #     conf = self.notes_fields[3] + self.testPop[0]
+        #     dir = self.notes_fields[4] + self.testPop[0]
+        #     ref = self.notes_fields[5] + self.testPop[0]
+        #     vis = self.notes_fields[6] + self.testPop[0]
+        #
+        #     # this is the dictionary that has all the values that will be put into the pdf. currently has problems bc video number isn't changing
+        #     for z in range(0, self.table_widget.rowCount()):
+        #         data_dict = {
+        #             eye: self.testPop[3],
+        #             FOV: self.testPop[2],
+        #             locNotes: self.testPop[1] + '; ' + self.table_widget.item(z, 4).text(),
+        #             focus: self.table_widget.item(z, 5).text(), # will need to find a way to have these in order of what it is agnostically!!!!!!!!!!!!!!!!!!!
+        #             conf: self.table_widget.item(z, 6).text(),
+        #             dir: self.table_widget.item(z, 7).text(),
+        #             ref: self.table_widget.item(z, 8).text(),
+        #             vis: self.table_widget.item(z, 9).text(),
+        #         }
+        #
+        #     # code that puts the data into the pdf and saves it
+        #     for page in self.template_pdf.pages:
+        #         annotations = page[ANNOT_KEY]
+        #         for annotation in annotations:
+        #             if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
+        #                 if annotation[ANNOT_FIELD_KEY]:
+        #                     key = annotation[ANNOT_FIELD_KEY][1:-1]
+        #                     if key in data_dict.keys():
+        #                         if type(data_dict[key]) == bool:
+        #                             if data_dict[key] == True:
+        #                                 annotation.update(pdfrw.PdfDict(
+        #                                     AS=pdfrw.PdfName('Yes')))
+        #                         else:
+        #                             annotation.update(
+        #                                 pdfrw.PdfDict(V='{}'.format(data_dict[key]))
+        #                             )
+        #                             annotation.update(pdfrw.PdfDict(AP=''))
+        # self.template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
+        # pdfrw.PdfWriter().write('testNotesPdf.pdf', self.template_pdf)  # will need to have this not be hard coded later on!!!!!!!!!!!!!!!!!!
 
 
 class ReadOnlyDelegate(QStyledItemDelegate):
