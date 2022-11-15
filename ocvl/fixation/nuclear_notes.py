@@ -90,25 +90,25 @@ class NuclearNotes(QtWidgets.QWidget):
         """
         # https: // stackoverflow.com / questions / 6957943 / how - to - add - new - row - to - existing - qtablewidget
         self.row_count = self.table_widget.rowCount()
-        self.table_widget.insertRow(self.row_count)
+        self.table_widget.insertRow(0)  # self.row_count
         self.memory = self.var.config.get("test", "memory_columns").split("/")
         length = len(self.memory)-1
 
         # Creating items for each cell in the table as it is created & setting text alignment to center
         for i in range(len(self.horizontal_table_headers)):
             item = QTableWidgetItem()
-            self.table_widget.setItem(self.row_count, i, item)
-            self.table_widget.item(self.row_count, i).setTextAlignment(5)
+            self.table_widget.setItem(0, i, item)  # self.row_count
+            self.table_widget.item(0, i).setTextAlignment(5)  # self.row_count
 
         # populating columns --simulation for now. will need to get this info from savior/grid later
         self.testPop = [str(self.count), "(1,1)", "2.0 x 2.0", self.var.eye]
         for i in range(len(self.testPop)):
-            self.table_widget.item(self.row_count, i).setText(self.testPop[i])
+            self.table_widget.item(0, i).setText(self.testPop[i])  # self.row_count
 
         # column memory - currently needs to have all memory columns next to each other
         try:
             for i in range(int(self.memory[0]), int(self.memory[len(self.memory)-1])+1):
-                self.table_widget.item(self.row_count, i).setText(str(self.table_widget.item(self.row_count-1, i).text()))
+                self.table_widget.item(0, i).setText(str(self.table_widget.item(1, i).text()))
         except AttributeError:
             pass
         self.saveNotes()
@@ -131,6 +131,8 @@ class NuclearNotes(QtWidgets.QWidget):
                 except AttributeError:
                     pass
 
+        # flip dataframe indexes so that it is in chronological order for the csv
+        df = df.iloc[::-1]
         # save the dataframe to an excel file
         df.to_excel(self.notes_fname, index=False)
 
