@@ -312,13 +312,14 @@ class Tabs(QTabWidget):
         self.test_label = QLabel("")
 
         # Change the shape of the buttons to be squares
-        self.cross.setFixedSize(QSize(25, 25))
-        self.s_cross.setFixedSize(QSize(25, 25))
-        self.m_cross.setFixedSize(QSize(25, 25))
-        self.square_out.setFixedSize(QSize(25, 25))
-        self.square.setFixedSize(QSize(25, 25))
-        self.circle.setFixedSize(QSize(25, 25))
-        self.twinkle.setFixedSize(QSize(25, 25))
+        buttonSize = 40
+        self.cross.setFixedSize(QSize(buttonSize, buttonSize))
+        self.s_cross.setFixedSize(QSize(buttonSize, buttonSize))
+        self.m_cross.setFixedSize(QSize(buttonSize, buttonSize))
+        self.square_out.setFixedSize(QSize(buttonSize, buttonSize))
+        self.square.setFixedSize(QSize(buttonSize, buttonSize))
+        self.circle.setFixedSize(QSize(buttonSize, buttonSize))
+        self.twinkle.setFixedSize(QSize(buttonSize, buttonSize))
 
         # Call the functions to draw the different targets
         self.drawTargets()
@@ -375,6 +376,20 @@ class Tabs(QTabWidget):
         """
         # Main tab layout
         layout = QFormLayout()
+
+        # Info group
+        info_group = QGroupBox("Info")
+        info_layout = QVBoxLayout()
+
+        # add the information we want
+        info_layout.addWidget(QLabel("Subject ID: " + self.var.sub_id))
+        info_layout.addWidget(QLabel("Eye: " + self.var.eye))
+        info_layout.addWidget(QLabel("FOV: " + self.var.current_fov))
+
+        # Add the info layout to the group and then the group to the main layout as another row
+        info_group.setLayout(info_layout)
+        layout.addRow(info_group)
+
 
         # Protocol Advance group
         protocol_group = QGroupBox("Protocol")
@@ -606,7 +621,7 @@ class Tabs(QTabWidget):
         info_layout.addRow("Subject ID:", QLabel(self.var.sub_id))
         info_layout.addRow("Device:", QLabel(self.var.device))
         info_layout.addRow(QLabel(""))
-        info_layout.addRow("FOV:", QLabel("2.0 x 2.0"))
+        info_layout.addRow("FOV:", QLabel(self.var.current_fov))
         info_layout.addRow(QLabel(""))
         info_layout.addRow(QLabel("Document Save Location:"))
         info_layout.addRow(QLabel(self.var.save_loc))
@@ -638,47 +653,46 @@ class Tabs(QTabWidget):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 15)
         painter.setPen(pen)
         painter.drawLine(10, 50, 90, 50)
         painter.drawLine(50, 10, 50, 90)
         painter.end()
         self.cross.setIcon(canvas)
-        self.cross.setIconSize(QSize(100, 100))
+        self.cross.setIconSize(QSize(32, 32))
         self.cross.setStyleSheet("text-align: left;")
 
     def drawSmallCross(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 15)
         painter.setPen(pen)
         painter.drawLine(35, 50, 65, 50)
         painter.drawLine(50, 35, 50, 65)
         painter.end()
         self.s_cross.setIcon(canvas)
-        self.s_cross.setIconSize(QSize(100, 100))
+        self.s_cross.setIconSize(QSize(32, 32))
         self.s_cross.setStyleSheet("text-align: left;")
 
     def drawSqaure(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 15)
         painter.setPen(pen)
         painter.setBrush(self.var.custom_color)
         painter.drawRect(15, 15, 70, 70)
         painter.end()
         self.square.setIcon(canvas)
-        self.square.setIconSize(QSize(100, 100))
+        self.square.setIconSize(QSize(32, 32))
         self.square.setStyleSheet("text-align: left;")
 
     def drawSquareOutline(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 10)
-        pen = QtGui.QPen(self.var.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 15)
         painter.setPen(pen)
         painter.drawLine(20, 20, 20, 80)
         painter.drawLine(20, 20, 80, 20)
@@ -686,21 +700,21 @@ class Tabs(QTabWidget):
         painter.drawLine(20, 80, 80, 80)
         painter.end()
         self.square_out.setIcon(canvas)
-        self.square_out.setIconSize(QSize(100, 100))
+        self.square_out.setIconSize(QSize(32, 32))
         self.square_out.setStyleSheet("text-align: left;")
 
     def drawCircle(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 10)
+        pen = QtGui.QPen(self.var.custom_color, 15)
         painter.setPen(pen)
         painter.setBrush(QtGui.QColor(self.var.custom_color))
         center = QPointF(50, 50)
         painter.drawEllipse(center, 35, 35)
         painter.end()
         self.circle.setIcon(canvas)
-        self.circle.setIconSize(QSize(100, 100))
+        self.circle.setIconSize(QSize(32, 32))
         self.circle.setStyleSheet("text-align: left;")
 
     def drawTwinkle(self):
@@ -719,14 +733,14 @@ class Tabs(QTabWidget):
         painter.drawLine(75, 25, 25, 75)
         painter.end()
         self.twinkle.setIcon(canvas)
-        self.twinkle.setIconSize(QSize(100, 100))
+        self.twinkle.setIconSize(QSize(32, 32))
         self.twinkle.setStyleSheet("text-align: left;")
 
     def drawMaltcross(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 5)
+        pen = QtGui.QPen(self.var.custom_color, 10)
         painter.setPen(pen)
         painter.drawLine(30, 10, 70, 90)
         painter.drawLine(70, 10, 30, 90)
@@ -742,7 +756,7 @@ class Tabs(QTabWidget):
         painter.drawLine(75, 50, 90, 30)
         painter.end()
         self.m_cross.setIcon(canvas)
-        self.m_cross.setIconSize(QSize(100, 100))
+        self.m_cross.setIconSize(QSize(32, 32))
         self.m_cross.setStyleSheet("text-align: left;")
 
     """

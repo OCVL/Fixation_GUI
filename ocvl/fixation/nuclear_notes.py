@@ -32,13 +32,23 @@ class NuclearNotes(QtWidgets.QWidget):
         self.layout.addWidget(self.button)
         self.button.clicked.connect(self.addRow)
 
-        # https: // stackoverflow.com / questions / 54612127 / how - to - i - set - the - size - hint -
-        # for -a - qtablewidget - in -python
+        # https://stackoverflow.com/questions/54612127/how-to-i-set-the-size-hint-for-a-qtablewidget-in-python
         # make the table and set it up to be formatted nicely
         self.table_widget = self.constructTable()
         self.table_widget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustIgnored)
         self.table_widget.setAlternatingRowColors(True)
-        self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)  # made the columns equal width
+        # Will need to make this adaptable in regards to having it fit whatever the headers are in the config file #905 is available
+        self.table_widget.setColumnWidth(0, 49)
+        self.table_widget.setColumnWidth(1, 51)
+        self.table_widget.setColumnWidth(2, 51)
+        self.table_widget.setColumnWidth(3, 464)
+        self.table_widget.setColumnWidth(4, 50)
+        self.table_widget.setColumnWidth(5, 60)
+        self.table_widget.setColumnWidth(6, 60)
+        self.table_widget.setColumnWidth(7, 60)
+        self.table_widget.setColumnWidth(8, 60)
+
         self.layout.addWidget(self.table_widget, stretch=True)
 
         # start notes saving
@@ -77,7 +87,6 @@ class NuclearNotes(QtWidgets.QWidget):
         table.setItemDelegateForColumn(0, delegate)
         table.setItemDelegateForColumn(1, delegate)
         table.setItemDelegateForColumn(2, delegate)
-        table.setItemDelegateForColumn(3, delegate)
         table.itemSelectionChanged.connect(self.saveNotes)
 
         return table
@@ -101,7 +110,8 @@ class NuclearNotes(QtWidgets.QWidget):
             self.table_widget.item(0, i).setTextAlignment(5)  # self.row_count
 
         # populating columns --simulation for now. will need to get this info from savior/grid later
-        self.testPop = [str(self.count), "(1,1)", "2.0 x 2.0"]
+        self.var.current_fov = "1.0 x 1.0"
+        self.testPop = [str(self.count), "(1,1)", self.var.current_fov]
         for i in range(len(self.testPop)):
             self.table_widget.item(0, i).setText(self.testPop[i])  # self.row_count
 

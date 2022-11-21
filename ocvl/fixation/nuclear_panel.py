@@ -1,7 +1,7 @@
 import configparser
-from PySide6 import QtWidgets, QtCore
+from PySide6 import QtWidgets, QtCore, QtQuick, QtGui
 from PySide6.QtCore import QPoint, QRect
-from PySide6.QtGui import QPainter, Qt, QPen, QColor
+from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap
 from PySide6.QtWidgets import QWidget, QLabel
 import numpy as np
 from ocvl.fixation.nuclear_controls import Tabs
@@ -63,6 +63,7 @@ class TargetArea(QWidget):
         self.circle_vis = self.config.get("test", "fixation_circle_visible")
         self.horz_lines = int(self.var.dim[0])
         self.vert_lines = int(self.var.dim[1])
+        self.rendered = True
 
     def labels(self):
         left_label = QLabel(self.var.left_label)
@@ -150,6 +151,15 @@ class TargetArea(QWidget):
         else:
             pass
         painter.setPen(Qt.black)
+
+        # https://stackoverflow.com/questions/24927869/how-to-save-qwidget-as-image-automatically
+        if self.rendered:
+            self.rendered = False
+            pixmap = QPixmap(self.size())
+            self.render(pixmap)
+            pixmap.save("test.png", "PNG", -1)
+            self.rendered = True
+
 
 
 class TargetRighty(QWidget):

@@ -6,8 +6,8 @@ from PySide6 import QtCore, QtGui
 # using property class
 class Variables:
     def __init__(self, animation_speed_val=None, horz_val=None, vert_val=None, dim=None, savior_FOVs=None, \
-                 custom_color=QtGui.QColor('green'), eye=None, sub_id=None, save_loc=None, device=None, left_label=None,
-                 right_label=None, label_or=None):
+                 custom_color=QtGui.QColor('green'), eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
+                 right_label=None, current_fov='1.0 x 1.0'):
         self.animation_speed_val = animation_speed_val
         self.horz_val = horz_val
         self.vert_val = vert_val
@@ -20,7 +20,7 @@ class Variables:
         self.device = device
         self.left_label = left_label
         self.right_label = right_label
-        self.label_or = label_or
+        self.current_fov = current_fov
 
         # configuration file set up
         self.config = configparser.ConfigParser()
@@ -124,13 +124,12 @@ class Variables:
         self._right_label = value
 
     # getter
-    # True - T=left, N=right; False - T=right, N=left
-    def get_label_or(self):
-        return self._label_or
+    def get_current_fov(self):
+        return self._current_fov
 
     # setter
-    def set_label_or(self, value):
-        self._label_or = value
+    def set_current_fov(self, value):
+        self._current_fov = value
 
     # creating property objects
     # sourced from tabs
@@ -146,10 +145,11 @@ class Variables:
     device = QtCore.Property(str, get_device, set_device)
     left_label = QtCore.Property(str, get_left_label, set_left_label)
     right_label = QtCore.Property(str, get_right_label, set_right_label)
-    label_or = QtCore.Property(bool, get_label_or, set_label_or)
+    fov = QtCore.Property(bool, get_current_fov, set_current_fov)
 
 
 if __name__ == "__main__":
     var = Variables()
+    # test
     var.horz = 22.5
     print(var.horz)
