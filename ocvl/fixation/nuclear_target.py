@@ -47,31 +47,31 @@ class NuclearTarget(QWidget):
         match self.var.shape:
             case "Large Crosshair":
                 # vertical line of crosshair
-                painter.drawRect((rect.width() / 2), 0, 5, rect.height())
+                painter.drawRect((rect.width() / 2)-2.5, 0, 5, rect.height())
                 # horizontal line of crosshair
-                painter.drawRect(0, rect.height() / 2, rect.width(), 5)
+                painter.drawRect(0, (rect.height() / 2)-2.5, rect.width(), 5)
 
             case "Small Crosshair":
                 # vertical line of crosshair
-                painter.drawRect((rect.width() / 2), (rect.height() / 2) -10, 5, 25)
+                painter.drawRect((rect.width() / 2)-2.5, (rect.height() / 2) -12.5, 5, 25)
                 # horizontal line of crosshair
-                painter.drawRect((rect.width() / 2) -10, (rect.height() / 2), 25, 5)
+                painter.drawRect((rect.width() / 2) -12.5, (rect.height() / 2)-2.5, 25, 5)
 
             case "Maltese Cross":
-                pen = QtGui.QPen(self.var.custom_color, 7)
+                pen = QtGui.QPen(self.var.custom_color, 2)
                 painter.setPen(pen)
-                painter.drawLine((rect.width() / 2)-30, (rect.height() / 2)-10, (rect.width() / 2)-70, (rect.height() / 2)-90)
-                painter.drawLine((rect.width() / 2)-70, (rect.height() / 2)-10, (rect.width() / 2)-30, (rect.height() / 2)-90)
-                painter.drawLine((rect.width() / 2)-10, (rect.height() / 2)-30, (rect.width() / 2)-90, (rect.height() / 2)-70)
-                painter.drawLine((rect.width() / 2)-10, (rect.height() / 2)-70, (rect.width() / 2)-90, (rect.height() / 2)-30)
-                painter.drawLine((rect.width() / 2)-50, (rect.height() / 2)-25, (rect.width() / 2)-30, (rect.height() / 2)-10)
-                painter.drawLine((rect.width() / 2)-50, (rect.height() / 2)-25, (rect.width() / 2)-70, (rect.height() / 2)-10)
-                painter.drawLine((rect.width() / 2)-50, (rect.height() / 2)-75, (rect.width() / 2)-30, (rect.height() / 2)-90)
-                painter.drawLine((rect.width() / 2)-50, (rect.height() / 2)-75, (rect.width() / 2)-70, (rect.height() / 2)-90)
-                painter.drawLine((rect.width() / 2)-25, (rect.height() / 2)-50, (rect.width() / 2)-10, (rect.height() / 2)-70)
-                painter.drawLine((rect.width() / 2)-25, (rect.height() / 2)-50, (rect.width() / 2)-10, (rect.height() / 2)-30)
-                painter.drawLine((rect.width() / 2)-75, (rect.height() / 2)-50, (rect.width() / 2)-90, (rect.height() / 2)-70)
-                painter.drawLine((rect.width() / 2)-75, (rect.height() / 2)-50, (rect.width() / 2)-90, (rect.height() / 2)-30)
+                painter.drawLine((rect.width() / 2)+4, (rect.height() / 2)+8, (rect.width() / 2)-4, (rect.height() / 2)-8)
+                painter.drawLine((rect.width() / 2)-4, (rect.height() / 2)+8, (rect.width() / 2)+4, (rect.height() / 2)-8)
+                painter.drawLine((rect.width() / 2)+8, (rect.height() / 2)+4, (rect.width() / 2)-8, (rect.height() / 2)-4)
+                painter.drawLine((rect.width() / 2)+8, (rect.height() / 2)-4, (rect.width() / 2)-8, (rect.height() / 2)+4)
+                painter.drawLine((rect.width() / 2), (rect.height() / 2)+5, (rect.width() / 2)+4, (rect.height() / 2)+8)
+                painter.drawLine((rect.width() / 2), (rect.height() / 2)+5, (rect.width() / 2)-4, (rect.height() / 2)+8)
+                painter.drawLine((rect.width() / 2), (rect.height() / 2)-5, (rect.width() / 2)+4, (rect.height() / 2)-8)
+                painter.drawLine((rect.width() / 2), (rect.height() / 2)-5, (rect.width() / 2)-4, (rect.height() / 2)-8)
+                painter.drawLine((rect.width() / 2)+5, (rect.height() / 2), (rect.width() / 2)+8, (rect.height() / 2)-4)
+                painter.drawLine((rect.width() / 2)+5, (rect.height() / 2), (rect.width() / 2)+8, (rect.height() / 2)+4)
+                painter.drawLine((rect.width() / 2)-5, (rect.height() / 2), (rect.width() / 2)-8, (rect.height() / 2)-4)
+                painter.drawLine((rect.width() / 2)-5, (rect.height() / 2), (rect.width() / 2)-8, (rect.height() / 2)+4)
                 painter.setPen(self.var.custom_color)
             case "Square":
                 painter.drawRect((rect.width()/2) - 5, (rect.height()/2) - 5, 10, 10)
