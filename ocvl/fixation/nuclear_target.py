@@ -1,3 +1,4 @@
+from PySide6 import QtGui
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PySide6.QtCore import Qt, QPoint, QPointF
 from PySide6.QtGui import QScreen, QPainter, QColor, QPen, QPixmap, QBrush
@@ -34,6 +35,8 @@ class NuclearTarget(QWidget):
 
         rect = painter.window()
 
+
+
         # filling the background with black
         painter.drawRect(0, 0, rect.width(), rect.height())
 
@@ -55,18 +58,21 @@ class NuclearTarget(QWidget):
                 painter.drawRect((rect.width() / 2) -10, (rect.height() / 2), 25, 5)
 
             case "Maltese Cross":
-                painter.drawLine(30, 10, 70, 90)
-                painter.drawLine(70, 10, 30, 90)
-                painter.drawLine(10, 30, 90, 70)
-                painter.drawLine(10, 70, 90, 30)
-                painter.drawLine(50, 25, 30, 10)
-                painter.drawLine(50, 25, 70, 10)
-                painter.drawLine(50, 75, 30, 90)
-                painter.drawLine(50, 75, 70, 90)
-                painter.drawLine(25, 50, 10, 70)
-                painter.drawLine(25, 50, 10, 30)
-                painter.drawLine(75, 50, 90, 70)
-                painter.drawLine(75, 50, 90, 30)
+                pen = QtGui.QPen(self.var.custom_color, 7)
+                painter.setPen(pen)
+                painter.drawLine((rect.width() / 2)-30, (rect.height() / 2)-10, (rect.width() / 2)-70, (rect.height() / 2)-90)
+                painter.drawLine((rect.width() / 2)-70, (rect.height() / 2)-10, (rect.width() / 2)-30, (rect.height() / 2)-90)
+                painter.drawLine((rect.width() / 2)-10, (rect.height() / 2)-30, (rect.width() / 2)-90, (rect.height() / 2)-70)
+                painter.drawLine((rect.width() / 2)-10, (rect.height() / 2)-70, (rect.width() / 2)-90, (rect.height() / 2)-30)
+                painter.drawLine((rect.width() / 2)-50, (rect.height() / 2)-25, (rect.width() / 2)-30, (rect.height() / 2)-10)
+                painter.drawLine((rect.width() / 2)-50, (rect.height() / 2)-25, (rect.width() / 2)-70, (rect.height() / 2)-10)
+                painter.drawLine((rect.width() / 2)-50, (rect.height() / 2)-75, (rect.width() / 2)-30, (rect.height() / 2)-90)
+                painter.drawLine((rect.width() / 2)-50, (rect.height() / 2)-75, (rect.width() / 2)-70, (rect.height() / 2)-90)
+                painter.drawLine((rect.width() / 2)-25, (rect.height() / 2)-50, (rect.width() / 2)-10, (rect.height() / 2)-70)
+                painter.drawLine((rect.width() / 2)-25, (rect.height() / 2)-50, (rect.width() / 2)-10, (rect.height() / 2)-30)
+                painter.drawLine((rect.width() / 2)-75, (rect.height() / 2)-50, (rect.width() / 2)-90, (rect.height() / 2)-70)
+                painter.drawLine((rect.width() / 2)-75, (rect.height() / 2)-50, (rect.width() / 2)-90, (rect.height() / 2)-30)
+                painter.setPen(self.var.custom_color)
             case "Square":
                 painter.drawRect((rect.width()/2) - 5, (rect.height()/2) - 5, 10, 10)
             case "Circle":
