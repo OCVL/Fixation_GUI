@@ -45,15 +45,15 @@ class NuclearTarget(QWidget):
         match self.var.shape:
             case "Large Crosshair":
                 # vertical line of crosshair
-                painter.drawRect(rect.width() / 2, 0, 5, rect.height())
+                painter.drawRect((rect.width() / 2), 0, 5, rect.height())
                 # horizontal line of crosshair
                 painter.drawRect(0, rect.height() / 2, rect.width(), 5)
 
             case "Small Crosshair":
                 # vertical line of crosshair
-                painter.drawRect(rect.width() / 2, (rect.height() / 2) - 10, 5, 20)
+                painter.drawRect((rect.width() / 2), (rect.height() / 2) -10, 5, 25)
                 # horizontal line of crosshair
-                painter.drawRect((rect.width() / 2) - 10, rect.height() / 2, 20, 5)
+                painter.drawRect((rect.width() / 2) -10, (rect.height() / 2), 25, 5)
 
             case "Maltese Cross":
                 # Will be changed to what each shape will look like in the future
