@@ -1,5 +1,6 @@
 import sys
 from PySide6 import QtCore, QtWidgets
+from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea, QTableWidgetItem)
 import pandas as pd
 import pdfrw
@@ -31,6 +32,8 @@ class NuclearNotes(QtWidgets.QWidget):
         self.button = QtWidgets.QPushButton("FakeRecordButton")
         self.layout.addWidget(self.button)
         self.button.clicked.connect(self.addRow)
+
+        self.button.setFocusPolicy(Qt.NoFocus)
 
         # https://stackoverflow.com/questions/54612127/how-to-i-set-the-size-hint-for-a-qtablewidget-in-python
         # make the table and set it up to be formatted nicely

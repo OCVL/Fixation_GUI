@@ -81,6 +81,9 @@ class Tabs(QTabWidget):
         self.tab3 = QWidget()
         self.tab4 = QWidget()
 
+        # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
+        self.setFocusPolicy(Qt.NoFocus)
+
         # Set the position of the tabs to be on the right
         self.setTabPosition(QTabWidget.East)
         self.setTabShape(QTabWidget.Triangular)
@@ -134,6 +137,9 @@ class Tabs(QTabWidget):
         grid_setup_layout = QVBoxLayout()
         quick_size_layout = QHBoxLayout()
 
+        # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
+        grid_config_group.setFocusPolicy(Qt.NoFocus)
+
         # Labels for each Grid section
         quick_size_label = QLabel("Quick Sizes:")
         dim_menu_label = QLabel("Grid Dimension:")
@@ -145,6 +151,11 @@ class Tabs(QTabWidget):
         self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
         self.grid_size_default_3.setChecked(True)
         self.none_selected = QRadioButton("hidden")
+
+        # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
+        self.grid_size_default_1.setFocusPolicy(Qt.NoFocus)
+        self.grid_size_default_2.setFocusPolicy(Qt.NoFocus)
+        self.grid_size_default_3.setFocusPolicy(Qt.NoFocus)
 
         # Add buttons to the group to make them exclusive
         grid_button_group = QButtonGroup()
@@ -172,6 +183,9 @@ class Tabs(QTabWidget):
         # Set up the other sizes in the dropdown menu
         self.dim_select = QComboBox()
 
+        # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
+        self.dim_select.setFocusPolicy(Qt.NoFocus)
+
         # Add all the different possible dims for grid
         for x in range(10, 61, 5):
             self.dim_select.addItem(str(x) + "x" + str(x))
@@ -192,6 +206,9 @@ class Tabs(QTabWidget):
         self.ref_pt_button = QPushButton()
         self.ref_pt_button.setText("Set Reference Point")
         self.ref_pt_label = QLabel("")
+
+        # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
+        self.ref_pt_button.setFocusPolicy(Qt.NoFocus)
 
         # Connect the reference point button to its slot
         self.ref_pt_button.clicked.connect(self.referencePointBttnClicked)
@@ -230,6 +247,7 @@ class Tabs(QTabWidget):
         self.load_p_button = QPushButton()
         self.load_p_button.setText("Load Protocol")  # Need an advance button
         self.load_p_label = QLabel()
+        self.load_p_button.setFocusPolicy(Qt.NoFocus)
 
         # Add the slot to the button and add the button and the layout to the group layout
         self.load_p_button.clicked.connect(self.onPressLoadP)
@@ -254,6 +272,10 @@ class Tabs(QTabWidget):
         self.image_cal_button.setText("Start Image Calibration")
         center_fovea_button = QPushButton()
         center_fovea_button.setText("Center Fovea")
+
+        self.load_bg_image_button.setFocusPolicy(Qt.NoFocus)
+        self.image_cal_button.setFocusPolicy(Qt.NoFocus)
+        center_fovea_button.setFocusPolicy(Qt.NoFocus)
 
         # Add the image calibration button to its slot when pressed
         self.image_cal_button.clicked.connect(self.onPressCal)
@@ -281,6 +303,8 @@ class Tabs(QTabWidget):
         self.color_display_label = QLabel()
         color_button.clicked.connect(self.onPressColor)
 
+        color_button.setFocusPolicy(Qt.NoFocus)
+
         # Add all the Color related widgets to their layout
         color_display.addWidget(self.color_name_label)
         color_display.addWidget(self.color_display_label)
@@ -288,6 +312,8 @@ class Tabs(QTabWidget):
 
         # Generate the scroll bar for the size of the fixation target
         self.size_bar = QSlider(Qt.Horizontal)
+        # set to no focus to disable the arrow keys from moving the size
+        self.size_bar.setFocusPolicy(Qt.NoFocus)
         self.label_size = QLabel()
         self.size_bar.setMinimum(1)
         self.size_bar.setMaximum(20)
@@ -320,6 +346,13 @@ class Tabs(QTabWidget):
         self.square.setFixedSize(QSize(buttonSize, buttonSize))
         self.circle.setFixedSize(QSize(buttonSize, buttonSize))
         self.twinkle.setFixedSize(QSize(buttonSize, buttonSize))
+
+        self.cross.setFocusPolicy(Qt.NoFocus)
+        self.s_cross.setFocusPolicy(Qt.NoFocus)
+        self.m_cross.setFocusPolicy(Qt.NoFocus)
+        self.square.setFocusPolicy(Qt.NoFocus)
+        self.circle.setFocusPolicy(Qt.NoFocus)
+        self.twinkle.setFocusPolicy(Qt.NoFocus)
 
         # Call the functions to draw the different targets
         self.drawTargets()

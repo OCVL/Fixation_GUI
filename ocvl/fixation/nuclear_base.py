@@ -12,18 +12,32 @@ class NuclearBase(QWidget):
     def __init__(self):
         super().__init__()
         # get the instance of the variables class to pass to everything
-        var = variable_properties.Variables()
+        self.var = variable_properties.Variables()
 
         # create the initial dialog window
-        dlg = InitialDialog(var)
+        dlg = InitialDialog(self.var)
         dlg.exec()
         self.layout = QtWidgets.QHBoxLayout(self)
-        self.layout.addWidget(NuclearDisplay(var))
+        self.layout.addWidget(NuclearDisplay(self.var))
 
         # call to make a new window
         # put if statement here to know if we need this to start up from info from the config file (animal land doesn't need the secondary display)
-        self.w = NuclearTarget(var)
+        self.w = NuclearTarget(self.var)
         self.w.show()
+
+    def keyPressEvent(self, eventQKeyEvent):
+
+        key = eventQKeyEvent.key()
+
+        # will need to check what increment is actually 1 deg for fixation target
+        if key == QtCore.Qt.Key_Left:
+            self.var.center_x = self.var.center_x - 10
+        elif key == QtCore.Qt.Key_Up:
+            self.var.center_y = self.var.center_y - 10
+        elif key == QtCore.Qt.Key_Right:
+            self.var.center_x = self.var.center_x + 10
+        elif key == QtCore.Qt.Key_Down:
+            self.var.center_y = self.var.center_y + 10
 
     # Handles when the red X is clicked. Has it save some things before actually quitting
     # https://stackoverflow.com/questions/24532043/proper-way-to-handle-the-close-button-in-a-main-window-pyqt-red-x
