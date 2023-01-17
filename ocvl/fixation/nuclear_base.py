@@ -21,7 +21,8 @@ class NuclearBase(QWidget):
         self.layout.addWidget(NuclearDisplay(var))
 
         # call to make a new window
-        self.w = NuclearTarget()
+        # put if statement here to know if we need this to start up from info from the config file (animal land doesn't need the secondary display)
+        self.w = NuclearTarget(var)
         self.w.show()
 
     # Handles when the red X is clicked. Has it save some things before actually quitting

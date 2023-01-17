@@ -7,7 +7,7 @@ from PySide6 import QtCore, QtGui
 class Variables:
     def __init__(self, animation_speed_val=None, horz_val=None, vert_val=None, dim=None, savior_FOVs=None, \
                  custom_color=QtGui.QColor('green'), eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
-                 right_label=None, current_fov='1.0 x 1.0'):
+                 right_label=None, current_fov='1.0 x 1.0', shape='Large Crosshair'):
         self.animation_speed_val = animation_speed_val
         self.horz_val = horz_val
         self.vert_val = vert_val
@@ -21,6 +21,7 @@ class Variables:
         self.left_label = left_label
         self.right_label = right_label
         self.current_fov = current_fov
+        self.shape = shape
 
         # configuration file set up
         self.config = configparser.ConfigParser()
@@ -131,6 +132,16 @@ class Variables:
     def set_current_fov(self, value):
         self._current_fov = value
 
+        # getter
+
+    def get_shape(self):
+        return self._shape
+
+        # setter
+
+    def set_shape(self, value):
+        self._shape = value
+
     # creating property objects
     # sourced from tabs
     animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
@@ -146,6 +157,7 @@ class Variables:
     left_label = QtCore.Property(str, get_left_label, set_left_label)
     right_label = QtCore.Property(str, get_right_label, set_right_label)
     fov = QtCore.Property(bool, get_current_fov, set_current_fov)
+    shape = QtCore.Property(bool, get_shape, set_shape)
 
 
 if __name__ == "__main__":

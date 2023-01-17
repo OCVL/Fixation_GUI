@@ -771,24 +771,31 @@ class Tabs(QTabWidget):
         match txt:
             case "Large Crosshair":
                 # Will be changed to what each shape will look like in the future
+                self.var.shape = txt
                 self.test_label.setText("You pressed the button called: " + txt)
             case "Small Crosshair":
                 # Will be changed to what each shape will look like in the future
+                self.var.shape = txt
                 self.test_label.setText("You pressed the button called: " + txt)
             case "Maltese Cross":
                 # Will be changed to what each shape will look like in the future
+                self.var.shape = txt
                 self.test_label.setText("You pressed the button called: " + txt)
             case "Square Outline":
                 # Will be changed to what each shape will look like in the future
+                self.var.shape = txt
                 self.test_label.setText("You pressed the button called: " + txt)
             case "Square":
                 # Will be changed to what each shape will look like in the future
+                self.var.shape = txt
                 self.test_label.setText("You pressed the button called: " + txt)
             case "Circle":
                 # Will be changed to what each shape will look like in the future
+                self.var.shape = txt
                 self.test_label.setText("You pressed the button called: " + txt)
             case "Twinkle":
                 # Will be changed to what each shape will look like in the future
+                self.var.shape = txt
                 self.test_label.setText("You pressed the button called: " + txt)
 
     def sizeChange(self):
