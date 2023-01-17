@@ -804,6 +804,7 @@ class Tabs(QTabWidget):
         """
         txt = "Target Size: " + str(self.size_bar.value())
         self.label_size.setText(txt)
+        self.var.size = self.size_bar.value()
 
     def onPressColor(self):
         """

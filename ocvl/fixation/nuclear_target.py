@@ -34,9 +34,6 @@ class NuclearTarget(QWidget):
         painter.setRenderHint(QPainter.Antialiasing, True)
 
         rect = painter.window()
-
-
-
         # filling the background with black
         painter.drawRect(0, 0, rect.width(), rect.height())
 
@@ -44,49 +41,44 @@ class NuclearTarget(QWidget):
         # need to set the pen and brush so there is no undesirable outline of the drawn items
         painter.setPen(self.var.custom_color)
         painter.setBrush(self.var.custom_color)
+
         match self.var.shape:
             case "Large Crosshair":
                 # vertical line of crosshair
-                painter.drawRect((rect.width() / 2)-2.5, 0, 5, rect.height())
+                painter.drawRect((rect.width() / 2)-(self.var.size/2), 0, self.var.size, rect.height())
                 # horizontal line of crosshair
-                painter.drawRect(0, (rect.height() / 2)-2.5, rect.width(), 5)
+                painter.drawRect(0, (rect.height() / 2)-(self.var.size/2), rect.width(), self.var.size)
 
             case "Small Crosshair":
                 # vertical line of crosshair
-                painter.drawRect((rect.width() / 2)-2.5, (rect.height() / 2) -12.5, 5, 25)
+                painter.drawRect((rect.width() / 2)-(self.var.size/2), (rect.height() / 2) - ((self.var.size * 5)/2), self.var.size, self.var.size * 5)
                 # horizontal line of crosshair
-                painter.drawRect((rect.width() / 2) -12.5, (rect.height() / 2)-2.5, 25, 5)
+                painter.drawRect((rect.width() / 2) - ((self.var.size * 5)/2), (rect.height() / 2)-(self.var.size/2), self.var.size * 5, self.var.size)
 
             case "Maltese Cross":
-                pen = QtGui.QPen(self.var.custom_color, 2)
+                pen = QtGui.QPen(self.var.custom_color, self.var.size*0.35)
                 painter.setPen(pen)
-                painter.drawLine((rect.width() / 2)+4, (rect.height() / 2)+8, (rect.width() / 2)-4, (rect.height() / 2)-8)
-                painter.drawLine((rect.width() / 2)-4, (rect.height() / 2)+8, (rect.width() / 2)+4, (rect.height() / 2)-8)
-                painter.drawLine((rect.width() / 2)+8, (rect.height() / 2)+4, (rect.width() / 2)-8, (rect.height() / 2)-4)
-                painter.drawLine((rect.width() / 2)+8, (rect.height() / 2)-4, (rect.width() / 2)-8, (rect.height() / 2)+4)
-                painter.drawLine((rect.width() / 2), (rect.height() / 2)+5, (rect.width() / 2)+4, (rect.height() / 2)+8)
-                painter.drawLine((rect.width() / 2), (rect.height() / 2)+5, (rect.width() / 2)-4, (rect.height() / 2)+8)
-                painter.drawLine((rect.width() / 2), (rect.height() / 2)-5, (rect.width() / 2)+4, (rect.height() / 2)-8)
-                painter.drawLine((rect.width() / 2), (rect.height() / 2)-5, (rect.width() / 2)-4, (rect.height() / 2)-8)
-                painter.drawLine((rect.width() / 2)+5, (rect.height() / 2), (rect.width() / 2)+8, (rect.height() / 2)-4)
-                painter.drawLine((rect.width() / 2)+5, (rect.height() / 2), (rect.width() / 2)+8, (rect.height() / 2)+4)
-                painter.drawLine((rect.width() / 2)-5, (rect.height() / 2), (rect.width() / 2)-8, (rect.height() / 2)-4)
-                painter.drawLine((rect.width() / 2)-5, (rect.height() / 2), (rect.width() / 2)-8, (rect.height() / 2)+4)
+                painter.drawLine((rect.width() / 2)+(self.var.size*0.8), (rect.height() / 2)+(self.var.size*1.6), (rect.width() / 2)-(self.var.size*0.8), (rect.height() / 2)-(self.var.size*1.6))
+                painter.drawLine((rect.width() / 2)-(self.var.size*0.8), (rect.height() / 2)+(self.var.size*1.6), (rect.width() / 2)+(self.var.size*0.8), (rect.height() / 2)-(self.var.size*1.6))
+                painter.drawLine((rect.width() / 2)+(self.var.size*1.6), (rect.height() / 2)+(self.var.size*0.8), (rect.width() / 2)-(self.var.size*1.6), (rect.height() / 2)-(self.var.size*0.8))
+                painter.drawLine((rect.width() / 2)+(self.var.size*1.6), (rect.height() / 2)-(self.var.size*0.8), (rect.width() / 2)-(self.var.size*1.6), (rect.height() / 2)+(self.var.size*0.8))
+                painter.drawLine((rect.width() / 2), (rect.height() / 2)+self.var.size, (rect.width() / 2)+(self.var.size*0.8), (rect.height() / 2)+(self.var.size*1.6))
+                painter.drawLine((rect.width() / 2), (rect.height() / 2)+self.var.size, (rect.width() / 2)-(self.var.size*0.8), (rect.height() / 2)+(self.var.size*1.6))
+                painter.drawLine((rect.width() / 2), (rect.height() / 2)-self.var.size, (rect.width() / 2)+(self.var.size*0.8), (rect.height() / 2)-(self.var.size*1.6))
+                painter.drawLine((rect.width() / 2), (rect.height() / 2)-self.var.size, (rect.width() / 2)-(self.var.size*0.8), (rect.height() / 2)-(self.var.size*1.6))
+                painter.drawLine((rect.width() / 2)+self.var.size, (rect.height() / 2), (rect.width() / 2)+(self.var.size*1.6), (rect.height() / 2)-(self.var.size*0.8))
+                painter.drawLine((rect.width() / 2)+self.var.size, (rect.height() / 2), (rect.width() / 2)+(self.var.size*1.6), (rect.height() / 2)+(self.var.size*0.8))
+                painter.drawLine((rect.width() / 2)-self.var.size, (rect.height() / 2), (rect.width() / 2)-(self.var.size*1.6), (rect.height() / 2)-(self.var.size*0.8))
+                painter.drawLine((rect.width() / 2)-self.var.size, (rect.height() / 2), (rect.width() / 2)-(self.var.size*1.6), (rect.height() / 2)+(self.var.size*0.8))
                 painter.setPen(self.var.custom_color)
             case "Square":
-                painter.drawRect((rect.width()/2) - 5, (rect.height()/2) - 5, 10, 10)
+                painter.drawRect((rect.width()/2) - self.var.size, (rect.height()/2) - self.var.size, self.var.size * 2, self.var.size * 2)
             case "Circle":
                 center = QPointF(rect.width()/2, rect.height()/2)
-                painter.drawEllipse(center, 5, 5)
+                painter.drawEllipse(center, self.var.size, self.var.size)
             case "Twinkle":
                 # Will be changed to what each shape will look like in the future
-                print("sierra mist is dead 6")
-
-        # # Large Crosshair
-        # # vertical line of crosshair
-        # painter.drawRect(rect.width()/2, 0, 5, rect.height())
-        # # horizontal line of crosshair
-        # painter.drawRect(0, rect.height() / 2, rect.width(), 5)
+                print("sierra mist is dead")
 
         self.update()
 
