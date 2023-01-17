@@ -643,7 +643,7 @@ class Tabs(QTabWidget):
         # Call the functions to draw the different targets
         self.drawCross()
         self.drawSmallCross()
-        self.drawSqaure()
+        self.drawSquare()
         self.drawSquareOutline()
         self.drawCircle()
         self.drawTwinkle()
@@ -675,7 +675,7 @@ class Tabs(QTabWidget):
         self.s_cross.setIconSize(QSize(32, 32))
         self.s_cross.setStyleSheet("text-align: left;")
 
-    def drawSqaure(self):
+    def drawSquare(self):
         canvas = QtGui.QPixmap(QSize(100, 100))
         canvas.fill(Qt.black)
         painter = QtGui.QPainter(canvas)

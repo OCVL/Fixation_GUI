@@ -41,7 +41,6 @@ class NuclearTarget(QWidget):
         # need to set the pen and brush so there is no undesirable outline of the drawn items
         painter.setPen(self.var.custom_color)
         painter.setBrush(self.var.custom_color)
-
         match self.var.shape:
             case "Large Crosshair":
                 # vertical line of crosshair
@@ -56,14 +55,23 @@ class NuclearTarget(QWidget):
                 painter.drawRect((rect.width() / 2) -10, (rect.height() / 2), 25, 5)
 
             case "Maltese Cross":
-                # Will be changed to what each shape will look like in the future
-                print("sierra mist is dead 2")
+                painter.drawLine(30, 10, 70, 90)
+                painter.drawLine(70, 10, 30, 90)
+                painter.drawLine(10, 30, 90, 70)
+                painter.drawLine(10, 70, 90, 30)
+                painter.drawLine(50, 25, 30, 10)
+                painter.drawLine(50, 25, 70, 10)
+                painter.drawLine(50, 75, 30, 90)
+                painter.drawLine(50, 75, 70, 90)
+                painter.drawLine(25, 50, 10, 70)
+                painter.drawLine(25, 50, 10, 30)
+                painter.drawLine(75, 50, 90, 70)
+                painter.drawLine(75, 50, 90, 30)
             case "Square Outline":
                 # Will be changed to what each shape will look like in the future
-                print("sierra mist is dead 3")
-            case "Square":
-                # Will be changed to what each shape will look like in the future
                 print("sierra mist is dead 4")
+            case "Square":
+                painter.drawRect(rect.width()/2, rect.height()/2, 10, 10)
             case "Circle":
                 # Will be changed to what each shape will look like in the future
                 print("sierra mist is dead 5")
