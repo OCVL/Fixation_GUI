@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
-from PySide6.QtCore import Qt, QPoint
+from PySide6.QtCore import Qt, QPoint, QPointF
 from PySide6.QtGui import QScreen, QPainter, QColor, QPen, QPixmap, QBrush
 import numpy as np
 import configparser
@@ -67,14 +67,11 @@ class NuclearTarget(QWidget):
                 painter.drawLine(25, 50, 10, 30)
                 painter.drawLine(75, 50, 90, 70)
                 painter.drawLine(75, 50, 90, 30)
-            case "Square Outline":
-                # Will be changed to what each shape will look like in the future
-                print("sierra mist is dead 4")
             case "Square":
-                painter.drawRect(rect.width()/2, rect.height()/2, 10, 10)
+                painter.drawRect((rect.width()/2) - 5, (rect.height()/2) - 5, 10, 10)
             case "Circle":
-                # Will be changed to what each shape will look like in the future
-                print("sierra mist is dead 5")
+                center = QPointF(rect.width()/2, rect.height()/2)
+                painter.drawEllipse(center, 5, 5)
             case "Twinkle":
                 # Will be changed to what each shape will look like in the future
                 print("sierra mist is dead 6")
