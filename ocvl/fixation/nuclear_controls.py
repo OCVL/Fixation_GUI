@@ -1,4 +1,6 @@
 from tkinter import filedialog
+
+import PySide6
 from PySide6 import QtWidgets, QtGui
 import sys
 from PySide6.QtGui import *
@@ -1053,7 +1055,12 @@ class Tabs(QTabWidget):
             case "Target Animation":
                 print(button.checkState())
             case "Target Visible":
-                print(button.checkState())
+                if button.checkState() == PySide6.QtCore.Qt.CheckState.Unchecked:
+                    self.var.target_vis = False
+                    print(self.var.target_vis)
+                else:
+                    self.var.target_vis = True
+                    print(self.var.target_vis)
             case "Grid Visible":
                 print(button.checkState())
             case _:

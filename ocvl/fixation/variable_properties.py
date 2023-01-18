@@ -7,7 +7,7 @@ from PySide6 import QtCore, QtGui
 class Variables:
     def __init__(self, animation_speed_val=None, horz_val=None, vert_val=None, dim=None, savior_FOVs=None, \
                  custom_color=QtGui.QColor('green'), eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
-                 right_label=None, current_fov='1.0 x 1.0', shape='Large Crosshair', size=5, center_x=None, center_y=None):
+                 right_label=None, current_fov='1.0 x 1.0', shape='Large Crosshair', size=5, center_x=None, center_y=None, target_vis=True):
         self.animation_speed_val = animation_speed_val
         self.horz_val = horz_val
         self.vert_val = vert_val
@@ -25,6 +25,7 @@ class Variables:
         self.size = size
         self.center_x = center_x
         self.center_y = center_y
+        self.target_vis = target_vis
 
         # configuration file set up
         self.config = configparser.ConfigParser()
@@ -166,6 +167,13 @@ class Variables:
     def set_center_y(self, value):
         self._center_y = value
 
+    def get_target_vis(self):
+        return self._target_vis
+
+    # setter
+    def set_target_vis(self, value):
+        self._target_vis = value
+
     # creating property objects
     # sourced from tabs
     animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
@@ -185,6 +193,7 @@ class Variables:
     size = QtCore.Property(bool, get_size, set_size)
     center_x = QtCore.Property(bool, get_center_x, set_center_x)
     center_y = QtCore.Property(bool, get_center_y, set_center_y)
+    target_vis = QtCore.Property(bool, get_target_vis, set_target_vis)
 
 
 if __name__ == "__main__":
