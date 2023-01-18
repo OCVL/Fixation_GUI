@@ -319,10 +319,10 @@ class Tabs(QTabWidget):
         self.label_size = QLabel()
         self.size_bar.setMinimum(1)
         self.size_bar.setMaximum(20)
-        self.size_bar.setValue(5)
+        self.size_bar.setValue(self.var.size)
         self.size_bar.setTickPosition(QSlider.TicksBelow)
         self.size_bar.setTickInterval(1)
-        self.label_size.setText("Target Size: " + str(self.size_bar.value()))
+        self.label_size.setText("Target Size: " + str(self.var.size))
         self.size_bar.valueChanged.connect(self.sizeChange)
 
         # Add scroll bar and label to the main widget
@@ -484,7 +484,7 @@ class Tabs(QTabWidget):
         # Target display on/off layout and checkboxes
         target_display_bttns = QHBoxLayout()
         self.target_vis_bttn = QCheckBox("Target Visible")
-        self.target_vis_bttn.setChecked(True)
+        self.target_vis_bttn.setChecked(self.var.target_vis)
 
         # Connect the checkbox to their slot
         self.target_vis_bttn.stateChanged.connect(self.checkBoxResponse)
@@ -1060,7 +1060,6 @@ class Tabs(QTabWidget):
                     print(self.var.target_vis)
                 else:
                     self.var.target_vis = True
-                    print(self.var.target_vis)
             case "Grid Visible":
                 print(button.checkState())
             case _:

@@ -17,10 +17,22 @@ class NuclearTarget(QWidget):
         monitor = monitors[display_monitor].availableGeometry()
         self.move(monitor.left(), monitor.top())
         self.showFullScreen()
-
-        self.config = configparser.ConfigParser()
-        self.config.read(self.var.config_name)
+        #
+        # self.var.config = configparser.ConfigParser()
+        # self.config.read(self.var.config_name)
         self.init = 1
+        self.var.config.read(self.var.config_name)
+        defaults = self.var.config.get("test", "fixation_default").split("/")
+
+        if defaults[0] == 'on':
+            self.var.target_vis = True
+        else:
+            self.var.target_vis = False
+        self.var.custom_color = QtGui.QColor(defaults[1])
+        self.var.size = int(defaults[2])
+        self.var.shape = defaults[3]
+
+
 
 
     def paintEvent(self, arg__0):

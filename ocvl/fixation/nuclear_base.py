@@ -17,13 +17,16 @@ class NuclearBase(QWidget):
         # create the initial dialog window
         dlg = InitialDialog(self.var)
         dlg.exec()
-        self.layout = QtWidgets.QHBoxLayout(self)
-        self.layout.addWidget(NuclearDisplay(self.var))
 
         # call to make a new window
         # put if statement here to know if we need this to start up from info from the config file (animal land doesn't need the secondary display)
         self.w = NuclearTarget(self.var)
         self.w.show()
+
+        self.layout = QtWidgets.QHBoxLayout(self)
+        self.layout.addWidget(NuclearDisplay(self.var))
+
+
 
     def keyPressEvent(self, eventQKeyEvent):
 

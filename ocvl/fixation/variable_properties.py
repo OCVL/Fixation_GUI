@@ -6,8 +6,8 @@ from PySide6 import QtCore, QtGui
 # using property class
 class Variables:
     def __init__(self, animation_speed_val=None, horz_val=None, vert_val=None, dim=None, savior_FOVs=None, \
-                 custom_color=QtGui.QColor('green'), eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
-                 right_label=None, current_fov='1.0 x 1.0', shape='Large Crosshair', size=5, center_x=None, center_y=None, target_vis=True):
+                 custom_color=None, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
+                 right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None, target_vis=None):
         self.animation_speed_val = animation_speed_val
         self.horz_val = horz_val
         self.vert_val = vert_val
