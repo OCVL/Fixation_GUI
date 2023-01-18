@@ -4,7 +4,7 @@ import PySide6
 from PySide6 import QtWidgets, QtGui
 import sys
 from PySide6.QtGui import *
-from PySide6.QtCore import Qt, QSize, QPointF
+from PySide6.QtCore import Qt, QSize, QPointF, QEvent
 from PySide6.QtWidgets import *
 
 
@@ -469,6 +469,8 @@ class Tabs(QTabWidget):
         self.animation = QCheckBox(
             "Target Animation")  # will need to figure out slot for this to have it work correctly
         self.animation_speed = QLineEdit()
+        self.animation.setFocusPolicy(Qt.NoFocus)
+        # self.animation_speed.setFocusPolicy(Qt.NoFocus)
 
         # Slot for the checkbox asking if target animation is on
         self.animation.stateChanged.connect(self.checkBoxResponse)
@@ -485,6 +487,7 @@ class Tabs(QTabWidget):
         target_display_bttns = QHBoxLayout()
         self.target_vis_bttn = QCheckBox("Target Visible")
         self.target_vis_bttn.setChecked(self.var.target_vis)
+        self.target_vis_bttn.setFocusPolicy(Qt.NoFocus)
 
         # Connect the checkbox to their slot
         self.target_vis_bttn.stateChanged.connect(self.checkBoxResponse)
@@ -511,6 +514,17 @@ class Tabs(QTabWidget):
         self.BRC = QPushButton("BRC")
         self.MRE = QPushButton("MRE")
         self.CTR = QPushButton("CTR")
+
+        self.TRC.setFocusPolicy(Qt.NoFocus)
+        self.MTE.setFocusPolicy(Qt.NoFocus)
+        self.TLC.setFocusPolicy(Qt.NoFocus)
+        self.MLE.setFocusPolicy(Qt.NoFocus)
+        self.BLC.setFocusPolicy(Qt.NoFocus)
+        self.MBE.setFocusPolicy(Qt.NoFocus)
+        self.BRC.setFocusPolicy(Qt.NoFocus)
+        self.MRE.setFocusPolicy(Qt.NoFocus)
+        self.CTR.setFocusPolicy(Qt.NoFocus)
+
 
         # Change the shape of the buttons to be squares
         size = 30
@@ -560,6 +574,7 @@ class Tabs(QTabWidget):
         # Make the grid visible checkbox and set default to be checked
         self.grid_vis = QCheckBox("Grid Visible")
         self.grid_vis.setChecked(True)
+        self.grid_vis.setFocusPolicy(Qt.NoFocus)
 
         # Connect the slot of the checkbox for grid visible
         self.grid_vis.stateChanged.connect(self.checkBoxResponse)
@@ -587,6 +602,7 @@ class Tabs(QTabWidget):
         # Add the components to the savior layout
         savior_layout.addRow("Number of Frames:", QLineEdit())
         savior_layout.addRow("Current FOV:", self.FOV_menu)
+        self.FOV_menu.setFocusPolicy(Qt.NoFocus)
 
         # Add the savior layout to the savior group and then add the group to the main layout as another row
         savior_group.setLayout(savior_layout)

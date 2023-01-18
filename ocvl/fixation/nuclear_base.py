@@ -25,22 +25,45 @@ class NuclearBase(QWidget):
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(NuclearDisplay(self.var))
+        self.keylist = []
+        # self.multi = 1
 
 
 
     def keyPressEvent(self, eventQKeyEvent):
-
         key = eventQKeyEvent.key()
+        self.firstrelease = True
+        self.keylist.append(key)
+    def keyReleaseEvent(self, event):
+        if self.firstrelease:
+            self.processmultikeys(self.keylist)
+        self.firstrelease = False
+        del self.keylist[-1]
+
+    def processmultikeys(self, key):
 
         # will need to check what increment is actually 1 deg for fixation target
-        if key == QtCore.Qt.Key_Left:
+        # major increment
+        if key == [QtCore.Qt.Key_Left]:
             self.var.center_x = self.var.center_x - 10
-        elif key == QtCore.Qt.Key_Up:
+        elif key == [QtCore.Qt.Key_Up]:
             self.var.center_y = self.var.center_y - 10
-        elif key == QtCore.Qt.Key_Right:
+        elif key == [QtCore.Qt.Key_Right]:
             self.var.center_x = self.var.center_x + 10
-        elif key == QtCore.Qt.Key_Down:
+        elif key == [QtCore.Qt.Key_Down]:
             self.var.center_y = self.var.center_y + 10
+
+        # shift + arrow for minor increment
+        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
+            self.var.center_x = self.var.center_x - 5
+        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
+            self.var.center_y = self.var.center_y - 5
+        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
+            self.var.center_x = self.var.center_x + 5
+        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
+            self.var.center_y = self.var.center_y + 5
+
+
 
     # Handles when the red X is clicked. Has it save some things before actually quitting
     # https://stackoverflow.com/questions/24532043/proper-way-to-handle-the-close-button-in-a-main-window-pyqt-red-x
