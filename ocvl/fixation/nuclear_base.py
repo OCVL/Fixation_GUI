@@ -1,5 +1,6 @@
 import sys
 from PySide6 import QtWidgets, QtCore
+from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget
 from ocvl.fixation.nuclear_panel import NuclearDisplay
 from ocvl.fixation.nuclear_panel import TargetArea
@@ -26,7 +27,8 @@ class NuclearBase(QWidget):
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(NuclearDisplay(self.var))
         self.keylist = []
-        # self.multi = 1
+        self.firstrelease = None
+        self.send_again = None
 
 
 
@@ -34,14 +36,25 @@ class NuclearBase(QWidget):
         key = eventQKeyEvent.key()
         self.firstrelease = True
         self.keylist.append(key)
+        print('pressed')
+        # resending the event to keyrelease if this was called from keyRelease
+        if self.send_again:
+            self.send_again = False
+            self.keyReleaseEvent(eventQKeyEvent)
     def keyReleaseEvent(self, event):
         if self.firstrelease:
             self.processmultikeys(self.keylist)
         self.firstrelease = False
+        # resending the event to keypress if the press wasn't originally recognized
+        if len(self.keylist) == 0:
+            self.send_again = True
+            self.keyPressEvent(event)
+            return
         del self.keylist[-1]
+        print('deleted')
 
     def processmultikeys(self, key):
-
+        print(key)
         # will need to check what increment is actually 1 deg for fixation target
         # major increment
         if key == [QtCore.Qt.Key_Left]:
@@ -82,5 +95,6 @@ if __name__ == "__main__":
     base = NuclearBase()
     base.resize(1000, 500)
     base.show()
+    base.setFocusPolicy(Qt.StrongFocus)
     sys.exit(app.exec())
 
