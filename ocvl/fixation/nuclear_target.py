@@ -2,8 +2,7 @@ from PySide6 import QtGui
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PySide6.QtCore import Qt, QPoint, QPointF
 from PySide6.QtGui import QScreen, QPainter, QColor, QPen, QPixmap, QBrush
-import numpy as np
-import configparser
+import random
 
 
 class NuclearTarget(QWidget):
@@ -32,6 +31,12 @@ class NuclearTarget(QWidget):
         self.var.custom_color = QtGui.QColor(defaults[1])
         self.var.size = int(defaults[2])
         self.var.shape = defaults[3]
+        self.list1 = [1, 2, 3, 4]
+        # self.rand_num = random.choice(self.list1)
+        self.rand_num = 1
+        # self.prev = 1
+        self.count = 0
+
 
     def paintEvent(self, arg__0):
         '''
@@ -106,8 +111,41 @@ class NuclearTarget(QWidget):
                     center = QPointF(self.var.center_x, self.var.center_y)
                     painter.drawEllipse(center, self.var.size, self.var.size)
                 case "Twinkle":
-                    # Will be changed to what each shape will look like in the future
-                    print("sierra mist is dead")
+                    pen = QtGui.QPen(self.var.custom_color, self.var.size * 0.4)
+                    painter.setPen(pen)
+                    painter.drawLine(self.var.center_x + (self.var.size*0.6), self.var.center_y, self.var.center_x - (self.var.size*0.6), self.var.center_y)
+                    painter.drawLine(self.var.center_x, self.var.center_y + (self.var.size*0.6), self.var.center_x, self.var.center_y - (self.var.size*0.6))
+                    painter.drawLine(self.var.center_x + self.var.size, self.var.center_y + self.var.size, self.var.center_x - self.var.size, self.var.center_y - self.var.size)
+                    painter.drawLine(self.var.center_x - self.var.size, self.var.center_y + self.var.size, self.var.center_x + self.var.size, self.var.center_y - self.var.size)
+
+                    if self.count == 100:
+                        if self.rand_num == 1:
+                            self.rand_num = 2
+                        elif self.rand_num == 2:
+                            self.rand_num = 3
+                        elif self.rand_num == 3:
+                            self.rand_num = 4
+                        elif self.rand_num == 4:
+                            self.rand_num = 1
+                        # self.rand_num = random.choice(self.list1)
+                        # # while loop so that there are no numbers in a row.
+                        # while self.rand_num == self.prev:
+                        #     self.rand_num = random.choice(self.list1)
+                        self.count = 0
+
+                    match self.rand_num:
+                        case 1:
+                            painter.drawLine(self.var.center_x + (self.var.size*1.4), self.var.center_y, self.var.center_x + (self.var.size*1.4), self.var.center_y)
+                        case 2:
+                            painter.drawLine(self.var.center_x, self.var.center_y + (self.var.size * 1.4), self.var.center_x, self.var.center_y + (self.var.size * 1.4))
+                        case 3:
+                            painter.drawLine(self.var.center_x - (self.var.size * 1.4), self.var.center_y, self.var.center_x - (self.var.size * 1.4), self.var.center_y)
+                        case 4:
+                            painter.drawLine(self.var.center_x, self.var.center_y - (self.var.size*1.4), self.var.center_x, self.var.center_y - (self.var.size*1.4))
+
+                    painter.setPen(self.var.custom_color)
+                    # self.prev = self.rand_num
+                    self.count = self.count + 1
 
         self.update()
 
