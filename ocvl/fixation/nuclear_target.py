@@ -14,13 +14,13 @@ class NuclearTarget(QWidget):
     def __init__(self, var):
         super().__init__()
         self.var = var
-        # display_monitor = 0
-        # #send it to a different monitor and make full screen
-        # monitors = QScreen.virtualSiblings(self.screen())
-        # monitor = monitors[display_monitor].availableGeometry()
-        # self.move(monitor.left(), monitor.top())
-        # self.showFullScreen()
-        #
+        display_monitor = 0
+        #send it to a different monitor and make full screen
+        monitors = QScreen.virtualSiblings(self.screen())
+        monitor = monitors[display_monitor].availableGeometry()
+        self.move(monitor.left(), monitor.top())
+        self.showFullScreen()
+
         self.init = 1
         defaults = self.var.config.get("test", "fixation_default").split("/")
 
@@ -113,11 +113,13 @@ class NuclearTarget(QWidget):
                 case "Twinkle":
                     pen = QtGui.QPen(self.var.custom_color, self.var.size * 0.4)
                     painter.setPen(pen)
+                    # draw the parts of the shape that always stay the same
                     painter.drawLine(self.var.center_x + (self.var.size*0.6), self.var.center_y, self.var.center_x - (self.var.size*0.6), self.var.center_y)
                     painter.drawLine(self.var.center_x, self.var.center_y + (self.var.size*0.6), self.var.center_x, self.var.center_y - (self.var.size*0.6))
                     painter.drawLine(self.var.center_x + self.var.size, self.var.center_y + self.var.size, self.var.center_x - self.var.size, self.var.center_y - self.var.size)
                     painter.drawLine(self.var.center_x - self.var.size, self.var.center_y + self.var.size, self.var.center_x + self.var.size, self.var.center_y - self.var.size)
 
+                    # this is necessary so it doesn't change too fast
                     if self.count == 100:
                         if self.rand_num == 1:
                             self.rand_num = 2
@@ -133,6 +135,7 @@ class NuclearTarget(QWidget):
                         #     self.rand_num = random.choice(self.list1)
                         self.count = 0
 
+                    # draw the parts of the shape that change (currently drawn or not)
                     match self.rand_num:
                         case 1:
                             painter.drawLine(self.var.center_x + (self.var.size*1.4), self.var.center_y, self.var.center_x + (self.var.size*1.4), self.var.center_y)
