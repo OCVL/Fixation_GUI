@@ -7,7 +7,7 @@ from PySide6 import QtCore, QtGui
 class Variables:
     def __init__(self, animation_speed_val=None, horz_val=None, vert_val=None, dim=None, savior_FOVs=None, \
                  custom_color=None, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
-                 right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None, target_vis=None):
+                 right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None, center_x_og=None, center_y_og=None, target_vis=None):
         self.animation_speed_val = animation_speed_val
         self.horz_val = horz_val
         self.vert_val = vert_val
@@ -25,6 +25,8 @@ class Variables:
         self.size = size
         self.center_x = center_x
         self.center_y = center_y
+        self.center_x_og = center_x_og
+        self.center_y_og = center_y_og
         self.target_vis = target_vis
 
         # configuration file set up
@@ -167,6 +169,21 @@ class Variables:
     def set_center_y(self, value):
         self._center_y = value
 
+    # getter
+    def get_center_x_og(self):
+        return self._center_x_og
+
+    # setter
+    def set_center_x_og(self, value):
+        self._center_x_og = value
+
+    def get_center_y_og(self):
+        return self._center_y_og
+
+    # setter
+    def set_center_y_og(self, value):
+        self._center_y_og = value
+
     def get_target_vis(self):
         return self._target_vis
 
@@ -193,6 +210,8 @@ class Variables:
     size = QtCore.Property(bool, get_size, set_size)
     center_x = QtCore.Property(bool, get_center_x, set_center_x)
     center_y = QtCore.Property(bool, get_center_y, set_center_y)
+    center_x_og = QtCore.Property(bool, get_center_x_og, set_center_x_og)
+    center_y_og = QtCore.Property(bool, get_center_y_og, set_center_y_og)
     target_vis = QtCore.Property(bool, get_target_vis, set_target_vis)
 
 

@@ -948,25 +948,37 @@ class Tabs(QTabWidget):
     def onPressQuickLocs(self):
         button = self.sender()
         txt = str(button.text())
+        tmp = self.var.current_fov.split(" ")
+        h_fov = float(tmp[0])
+        v_fov = float(tmp[2])
         match txt:
             case "TLC":
-                print(txt)
+                self.var.center_x = self.var.center_x_og - (h_fov/2)
+                self.var.center_y = self.var.center_y_og - (v_fov/2)
             case "MTE":
-                print(txt)
+                self.var.center_x = self.var.center_x_og
+                self.var.center_y = self.var.center_y_og - (v_fov / 2)
             case "TRC":
-                print(txt)
+                self.var.center_x = self.var.center_x_og + (h_fov / 2)
+                self.var.center_y = self.var.center_y_og - (v_fov / 2)
             case "MLE":
-                print(txt)
+                self.var.center_x = self.var.center_x_og - (h_fov / 2)
+                self.var.center_y = self.var.center_y_og
             case "CTR":
-                print(txt)
+                self.var.center_x = self.var.center_x_og
+                self.var.center_y = self.var.center_y_og
             case "MRE":
-                print(txt)
+                self.var.center_x = self.var.center_x_og + (h_fov / 2)
+                self.var.center_y = self.var.center_y_og
             case "BLC":
-                print(txt)
+                self.var.center_x = self.var.center_x_og - (h_fov / 2)
+                self.var.center_y = self.var.center_y_og + (v_fov / 2)
             case "MBE":
-                print(txt)
+                self.var.center_x = self.var.center_x_og
+                self.var.center_y = self.var.center_y_og + (v_fov / 2)
             case "BRC":
-                print(txt)
+                self.var.center_x = self.var.center_x_og + (h_fov / 2)
+                self.var.center_y = self.var.center_y_og + (v_fov / 2)
             case _:
                 print("Something went wrong!")
 

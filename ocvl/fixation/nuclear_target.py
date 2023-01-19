@@ -8,6 +8,10 @@ import configparser
 
 class NuclearTarget(QWidget):
 
+    # maybe want to put this in the config file
+    # The number of ppd of the screen we'll be projecting to (e.g. Lightcrafter, Projector, etc).
+    SCREEN_PPD = 20
+
     def __init__(self, var):
         super().__init__()
         self.var = var
@@ -31,9 +35,6 @@ class NuclearTarget(QWidget):
         self.var.custom_color = QtGui.QColor(defaults[1])
         self.var.size = int(defaults[2])
         self.var.shape = defaults[3]
-
-
-
 
     def paintEvent(self, arg__0):
         '''
@@ -62,6 +63,15 @@ class NuclearTarget(QWidget):
                 # set it to the middle of the screen with this
                 self.var.center_x = rect.width()/2
                 self.var.center_y = rect.height()/2
+                self.var.center_x_og = rect.width() / 2
+                self.var.center_y_og = rect.height() / 2
+
+                # convert to degrees?
+                x = self.var.center_x_og / self.SCREEN_PPD
+                y = self.var.center_y_og / self.SCREEN_PPD
+                print(x)
+                print(y)
+
                 self.init = 0
 
             match self.var.shape:

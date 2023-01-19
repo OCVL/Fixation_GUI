@@ -26,9 +26,18 @@ class NuclearBase(QWidget):
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(NuclearDisplay(self.var))
+
         self.keylist = []
         self.firstrelease = None
         self.send_again = None
+
+        # maybe want to put this in the config file
+        # The number of ppd of the screen we'll be projecting to (e.g. Lightcrafter, Projector, etc).
+        self.screen_ppd = 20
+
+        # The increment steps we'll use. Need to put in config file too
+        self.minor_increment = 0.5
+        self.major_increment = 1
 
 
 
@@ -55,26 +64,26 @@ class NuclearBase(QWidget):
 
     def processmultikeys(self, key):
         print(key)
-        # will need to check what increment is actually 1 deg for fixation target
+        # will need to check what increment is actually 1 deg for fixation target and if multiplying by screen ppd is correct
         # major increment
         if key == [QtCore.Qt.Key_Left]:
-            self.var.center_x = self.var.center_x - 10
+            self.var.center_x = self.var.center_x - self.major_increment * self.screen_ppd
         elif key == [QtCore.Qt.Key_Up]:
-            self.var.center_y = self.var.center_y - 10
+            self.var.center_y = self.var.center_y - self.major_increment * self.screen_ppd
         elif key == [QtCore.Qt.Key_Right]:
-            self.var.center_x = self.var.center_x + 10
+            self.var.center_x = self.var.center_x + self.major_increment * self.screen_ppd
         elif key == [QtCore.Qt.Key_Down]:
-            self.var.center_y = self.var.center_y + 10
+            self.var.center_y = self.var.center_y + self.major_increment * self.screen_ppd
 
         # shift + arrow for minor increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
-            self.var.center_x = self.var.center_x - 5
+            self.var.center_x = self.var.center_x - self.minor_increment * self.screen_ppd
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
-            self.var.center_y = self.var.center_y - 5
+            self.var.center_y = self.var.center_y - self.minor_increment * self.screen_ppd
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
-            self.var.center_x = self.var.center_x + 5
+            self.var.center_x = self.var.center_x + self.minor_increment * self.screen_ppd
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
-            self.var.center_y = self.var.center_y + 5
+            self.var.center_y = self.var.center_y + self.minor_increment * self.screen_ppd
 
 
 
