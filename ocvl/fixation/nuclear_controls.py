@@ -1,11 +1,12 @@
 from tkinter import filedialog
 
 import PySide6
-from PySide6 import QtWidgets, QtGui
+from PySide6 import QtWidgets, QtGui, QtCore
 import sys
 from PySide6.QtGui import *
 from PySide6.QtCore import Qt, QSize, QPointF, QEvent
 from PySide6.QtWidgets import *
+from pynput.keyboard import Key
 
 
 class Tabs(QTabWidget):
@@ -73,6 +74,7 @@ class Tabs(QTabWidget):
         self.size_bar = None
         self.image_cal_button = None
         self.load_bg_image_button = None
+        self.n_frames = None
 
         # Load the config file
         self.var.config.read(self.var.config_name)
@@ -454,6 +456,8 @@ class Tabs(QTabWidget):
         loc_layout = QHBoxLayout()
         self.horz = QLineEdit()
         self.vert = QLineEdit()
+        self.horz.installEventFilter(self)
+        self.vert.installEventFilter(self)
 
         # Add the Components to the location control layout
         loc_layout.addWidget(QLabel("X"))
@@ -470,6 +474,7 @@ class Tabs(QTabWidget):
             "Target Animation")  # will need to figure out slot for this to have it work correctly
         self.animation_speed = QLineEdit()
         self.animation.setFocusPolicy(Qt.NoFocus)
+        self.animation_speed.installEventFilter(self)
         # self.animation_speed.setFocusPolicy(Qt.NoFocus)
 
         # Slot for the checkbox asking if target animation is on
@@ -600,9 +605,11 @@ class Tabs(QTabWidget):
         self.FOV_menu.setCurrentIndex(0)
 
         # Add the components to the savior layout
-        savior_layout.addRow("Number of Frames:", QLineEdit())
+        self.n_frames = QLineEdit()
+        savior_layout.addRow("Number of Frames:", self.n_frames)
         savior_layout.addRow("Current FOV:", self.FOV_menu)
         self.FOV_menu.setFocusPolicy(Qt.NoFocus)
+        self.n_frames.installEventFilter(self)
 
         # Add the savior layout to the savior group and then add the group to the main layout as another row
         savior_group.setLayout(savior_layout)
@@ -1081,6 +1088,60 @@ class Tabs(QTabWidget):
             case _:
                 print("Something went wrong!")
         print(txt)
+
+    def eventFilter(self, source, event, keyboard=None):
+        """
+        clears the focus on the text boxes when arrow keys or enter is pressed
+        :param source: the source of the event
+        :param event: the event
+        :return:
+        """
+        if source == self.horz and event.type() == QEvent.Type.KeyPress:
+            if event.key() == (QtCore.Qt.Key_Up):
+                self.horz.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Down):
+                self.horz.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Left):
+                self.horz.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Right):
+                self.horz.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Enter):
+                self.horz.clearFocus()
+        if source == self.vert and event.type() == QEvent.Type.KeyPress:
+            if event.key() == (QtCore.Qt.Key_Up):
+                self.vert.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Down):
+                self.vert.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Left):
+                self.vert.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Right):
+                self.vert.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Enter):
+                self.vert.clearFocus()
+        if source == self.animation_speed and event.type() == QEvent.Type.KeyPress:
+            if event.key() == (QtCore.Qt.Key_Up):
+                self.animation_speed.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Down):
+                self.animation_speed.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Left):
+                self.animation_speed.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Right):
+                self.animation_speed.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Enter):
+                self.animation_speed.clearFocus()
+        if source == self.n_frames and event.type() == QEvent.Type.KeyPress:
+            if event.key() == (QtCore.Qt.Key_Up):
+                self.n_frames.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Down):
+                self.n_frames.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Left):
+                self.n_frames.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Right):
+                self.n_frames.clearFocus()
+            elif event.key() == (QtCore.Qt.Key_Enter):
+                self.n_frames.clearFocus()
+        return super().eventFilter(source, event)
+
 
 
 if __name__ == "__main__":

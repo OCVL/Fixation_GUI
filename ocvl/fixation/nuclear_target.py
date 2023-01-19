@@ -11,12 +11,12 @@ class NuclearTarget(QWidget):
     def __init__(self, var):
         super().__init__()
         self.var = var
-        display_monitor = 0
-        #send it to a different monitor and make full screen
-        monitors = QScreen.virtualSiblings(self.screen())
-        monitor = monitors[display_monitor].availableGeometry()
-        self.move(monitor.left(), monitor.top())
-        self.showFullScreen()
+        # display_monitor = 0
+        # #send it to a different monitor and make full screen
+        # monitors = QScreen.virtualSiblings(self.screen())
+        # monitor = monitors[display_monitor].availableGeometry()
+        # self.move(monitor.left(), monitor.top())
+        # self.showFullScreen()
         #
         # self.var.config = configparser.ConfigParser()
         # self.config.read(self.var.config_name)
