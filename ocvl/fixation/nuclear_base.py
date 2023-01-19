@@ -31,13 +31,13 @@ class NuclearBase(QWidget):
         self.firstrelease = None
         self.send_again = None
 
-        # maybe want to put this in the config file
         # The number of ppd of the screen we'll be projecting to (e.g. Lightcrafter, Projector, etc).
-        self.screen_ppd = 20
+        self.screen_ppd = float(self.var.config.get("test", "screen_ppd"))
 
-        # The increment steps we'll use. Need to put in config file too
-        self.minor_increment = 0.5
-        self.major_increment = 1
+        # The increment steps we'll use.
+        increments = self.var.config.get("test", "major_minor_increments").split("/")
+        self.major_increment = float(increments[0])
+        self.minor_increment = float(increments[1])
 
 
 

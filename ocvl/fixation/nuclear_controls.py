@@ -76,9 +76,6 @@ class Tabs(QTabWidget):
         self.load_bg_image_button = None
         self.n_frames = None
 
-        # Load the config file
-        self.var.config.read(self.var.config_name)
-
         # Generate the Tabs for the window to hold the settings
         self.tab1 = QWidget()
         self.tab2 = QWidget()

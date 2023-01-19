@@ -22,10 +22,7 @@ class NuclearTarget(QWidget):
         # self.move(monitor.left(), monitor.top())
         # self.showFullScreen()
         #
-        # self.var.config = configparser.ConfigParser()
-        # self.config.read(self.var.config_name)
         self.init = 1
-        self.var.config.read(self.var.config_name)
         defaults = self.var.config.get("test", "fixation_default").split("/")
 
         if defaults[0] == 'on':

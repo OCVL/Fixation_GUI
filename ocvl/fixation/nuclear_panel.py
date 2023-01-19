@@ -57,10 +57,8 @@ class TargetArea(QWidget):
         else:
             self.var.label_or = True
 
-        self.config = configparser.ConfigParser()
-        self.config.read(self.var.config_name)
-        self.grid_size = self.config.get("test", "grid_size")
-        self.circle_vis = self.config.get("test", "fixation_circle_visible")
+        self.grid_size = self.var.config.get("test", "grid_size")
+        self.circle_vis = self.var.config.get("test", "fixation_circle_visible")
         self.horz_lines = int(self.var.dim[0])
         self.vert_lines = int(self.var.dim[1])
         self.rendered = True

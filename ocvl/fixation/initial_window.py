@@ -19,7 +19,6 @@ class InitialDialog(QDialog):
         self.buttonBox = None
         self.setWindowTitle("Setup")
         self.var.config_name = os.getcwd() + "\\test_settings.ini"
-        self.var.config.read(self.var.config_name)
         self.setup()
 
     def setup(self):

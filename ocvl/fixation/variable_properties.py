@@ -32,6 +32,7 @@ class Variables:
         # configuration file set up
         self.config = configparser.ConfigParser()
         self.config_name = os.getcwd() + "\\test_settings.ini"
+        self.config.read(self.config_name)
 
 
     # getter
