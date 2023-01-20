@@ -1,7 +1,7 @@
 from PySide6 import QtWidgets, QtCore, QtQuick, QtGui
 from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap
-from PySide6.QtWidgets import QWidget, QLabel
+from PySide6.QtWidgets import QWidget, QLabel, QSizePolicy
 import numpy as np
 from ocvl.fixation.nuclear_controls import Tabs
 from ocvl.fixation.nuclear_notes import NuclearNotes
@@ -47,6 +47,9 @@ class TargetArea(QWidget):
 
     def __init__(self, var):
         super().__init__()
+        policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        policy.setHeightForWidth(True)
+        self.setSizePolicy(policy)
 
         self.var = var
 
@@ -61,6 +64,9 @@ class TargetArea(QWidget):
         self.horz_lines = int(self.var.dim[0])
         self.vert_lines = int(self.var.dim[1])
         self.rendered = True
+
+    def heightForWidth(self, width):
+        return width
 
     def labels(self):
         left_label = QLabel(self.var.left_label)
@@ -149,11 +155,21 @@ class TargetArea(QWidget):
                             spacing * 30.5, spacing * 30.5, 0, 16 * 360)
         else:
             pass
-        painter.setBrush(Qt.green)
+        painter.setBrush(Qt.NoBrush)
         painter.setPen(Qt.green)
-        painter.drawRect(center_x - 5, center_y - 5, 10, 10)
+        # painter.drawLine(center_x - 10, center_y - 10, center_x + 10, center_y - 10)
+        # painter.drawLine(center_x - 10, center_y - 10, center_x + 10, center_y - 10)
 
+        # painter.drawRect((self.var.center_x * 0.314) - 9, (self.var.center_y * 0.66) - 9, 18, 18)
+        painter.drawRect((self.var.center_x * 0.314)- (20 / 2.0) - .5, (self.var.center_y * 0.66) - (20 / 2.0) - .5, 20,
+                         20)
+        # gc.DrawRectangle(self._fixLoc.x - (fovwidth / 2.0) - .5, self._fixLoc.y - (fovheight / 2.0) - .5, fovwidth,
+        #                  fovheight)
+        # painter.drawRect(center_x - 8, center_y - 8, 16, 16)
+        painter.setBrush(QColor(75, 75, 75))
         painter.setPen(Qt.black)
+        # print(rect.width())
+        # print(rect.height())
 
         # https://stackoverflow.com/questions/24927869/how-to-save-qwidget-as-image-automatically
         if self.rendered:
