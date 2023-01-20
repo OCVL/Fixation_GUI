@@ -12,6 +12,7 @@ from ocvl.fixation.nuclear_target import NuclearTarget
 class NuclearBase(QWidget):
     def __init__(self):
         super().__init__()
+
         # get the instance of the variables class to pass to everything
         self.var = variable_properties.Variables()
 
@@ -102,7 +103,7 @@ class NuclearBase(QWidget):
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     base = NuclearBase()
-    base.resize(1000, 500)
+    # base.resize(1000, 500)
     base.show()
     base.setFocusPolicy(Qt.StrongFocus)
     sys.exit(app.exec())

@@ -47,9 +47,11 @@ class TargetArea(QWidget):
 
     def __init__(self, var):
         super().__init__()
-        policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        policy.setHeightForWidth(True)
-        self.setSizePolicy(policy)
+        # policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        # policy.setHeightForWidth(True)
+        # self.setSizePolicy(policy)
+
+        self.setMinimumSize(700, 700)
 
         self.var = var
 
@@ -65,8 +67,8 @@ class TargetArea(QWidget):
         self.vert_lines = int(self.var.dim[1])
         self.rendered = True
 
-    def heightForWidth(self, width):
-        return width
+    # def heightForWidth(self, width):
+    #     return width
 
     def labels(self):
         left_label = QLabel(self.var.left_label)
