@@ -6,7 +6,6 @@ import sys
 from PySide6.QtGui import *
 from PySide6.QtCore import Qt, QSize, QPointF, QEvent
 from PySide6.QtWidgets import *
-from pynput.keyboard import Key
 
 
 class Tabs(QTabWidget):

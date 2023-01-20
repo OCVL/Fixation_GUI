@@ -1,4 +1,3 @@
-import configparser
 from PySide6 import QtWidgets, QtCore, QtQuick, QtGui
 from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap
@@ -83,6 +82,8 @@ class TargetArea(QWidget):
         # sets up the size of the circle based on the window size
         radii = np.minimum(rect.width(), rect.height()) / 2
         cent = QPoint(rect.width() / 2, rect.height() / 2)
+        center_x = rect.width() / 2
+        center_y = rect.height() / 2
 
         # sets up the size of the grid lines (will need to be changed to be custom size)
         if self.grid_size == 'small':
@@ -148,6 +149,10 @@ class TargetArea(QWidget):
                             spacing * 30.5, spacing * 30.5, 0, 16 * 360)
         else:
             pass
+        painter.setBrush(Qt.green)
+        painter.setPen(Qt.green)
+        painter.drawRect(center_x - 5, center_y - 5, 10, 10)
+
         painter.setPen(Qt.black)
 
         # https://stackoverflow.com/questions/24927869/how-to-save-qwidget-as-image-automatically
@@ -157,6 +162,8 @@ class TargetArea(QWidget):
             self.render(pixmap)
             pixmap.save("test.png", "PNG", -1)
             self.rendered = True
+
+        self.update()
 
 
 
