@@ -1,6 +1,5 @@
 import sys
 from PySide6 import QtCore, QtWidgets
-from PySide6.QtCore import QPoint
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea, QTableWidgetItem)
 import pandas as pd

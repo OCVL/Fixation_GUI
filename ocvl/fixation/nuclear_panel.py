@@ -170,6 +170,9 @@ class TargetArea(QWidget):
             pass
         painter.setBrush(Qt.NoBrush)
         painter.setPen(Qt.green)
+        tmp = self.var.current_fov.split(" ")
+        h_fov = float(tmp[0])
+        v_fov = float(tmp[2])
         # painter.drawLine(center_x - 10, center_y - 10, center_x + 10, center_y - 10)
         # painter.drawLine(center_x - 10, center_y - 10, center_x + 10, center_y - 10)
 
@@ -179,7 +182,8 @@ class TargetArea(QWidget):
         # gc.DrawRectangle(self._fixLoc.x - (fovwidth / 2.0) - .5, self._fixLoc.y - (fovheight / 2.0) - .5, fovwidth,
         #                  fovheight)
         # painter.drawRect(center_x - 8, center_y - 8, 16, 16)
-        painter.drawRect(self.var.center_x_grid - 12, self.var.center_y_grid - 12, 24, 24)
+        # painter.drawRect(self.var.center_x_grid - 12, self.var.center_y_grid - 12, 24, 24)
+        painter.drawRect(self.var.center_x_grid - ((radii/self.horz_lines) * h_fov), self.var.center_y_grid - ((radii/self.vert_lines) * v_fov), ((radii/self.horz_lines) * h_fov) * 2, ((radii/self.vert_lines) * v_fov) * 2)
         painter.setBrush(QColor(75, 75, 75))
         painter.setPen(Qt.black)
         # print(rect.width())
