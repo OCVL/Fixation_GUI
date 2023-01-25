@@ -932,46 +932,64 @@ class Tabs(QTabWidget):
         # need to make sure these end up being in the correct locations
         match txt:
             case "TLC":
+                self.var.x_val = self.var.center_x_og - (h_fov / 4)
+                self.var.y_val = self.var.center_y_og - (v_fov / 4)
                 self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
                 self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             case "MTE":
+                self.var.x_val = self.var.center_x_og
+                self.var.y_val = self.var.center_y_og - (v_fov / 4)
                 self.var.center_x = self.var.center_x_og
                 self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid
                 self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             case "TRC":
+                self.var.x_val = self.var.center_x_og + (h_fov / 4)
+                self.var.y_val = self.var.center_y_og - (v_fov / 4)
                 self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
                 self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             case "MLE":
+                self.var.x_val = self.var.center_x_og - (h_fov / 4)
+                self.var.y_val = self.var.center_y_og
                 self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
                 self.var.center_y = self.var.center_y_og
                 self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid
             case "CTR":
+                self.var.x_val = self.var.center_x_og
+                self.var.y_val = self.var.center_y_og
                 self.var.center_x = self.var.center_x_og
                 self.var.center_y = self.var.center_y_og
                 self.var.center_x_grid = self.var.center_x_og_grid
                 self.var.center_y_grid = self.var.center_y_og_grid
             case "MRE":
+                self.var.x_val = self.var.center_x_og + (h_fov / 4)
+                self.var.y_val = self.var.center_y_og
                 self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
                 self.var.center_y = self.var.center_y_og
                 self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid
             case "BLC":
+                self.var.x_val = self.var.center_x_og - (h_fov / 4)
+                self.var.y_val = self.var.center_y_og + (v_fov / 4)
                 self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
                 self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             case "MBE":
+                self.var.x_val = self.var.center_x_og
+                self.var.y_val = self.var.center_y_og + (v_fov / 4)
                 self.var.center_x = self.var.center_x_og
                 self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid
                 self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             case "BRC":
+                self.var.x_val = self.var.center_x_og + (h_fov / 4)
+                self.var.y_val = self.var.center_y_og + (v_fov / 4)
                 self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
                 self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)

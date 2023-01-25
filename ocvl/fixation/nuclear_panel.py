@@ -173,21 +173,9 @@ class TargetArea(QWidget):
         tmp = self.var.current_fov.split(" ")
         h_fov = float(tmp[0])
         v_fov = float(tmp[2])
-        # painter.drawLine(center_x - 10, center_y - 10, center_x + 10, center_y - 10)
-        # painter.drawLine(center_x - 10, center_y - 10, center_x + 10, center_y - 10)
-
-        # painter.drawRect((self.var.center_x * 0.314) - 9, (self.var.center_y * 0.66) - 9, 18, 18)
-        # painter.drawRect((self.var.center_x * 0.314)- (20 / 2.0) - .5, (self.var.center_y * 0.66) - (20 / 2.0) - .5, 20,
-        #                  20)
-        # gc.DrawRectangle(self._fixLoc.x - (fovwidth / 2.0) - .5, self._fixLoc.y - (fovheight / 2.0) - .5, fovwidth,
-        #                  fovheight)
-        # painter.drawRect(center_x - 8, center_y - 8, 16, 16)
-        # painter.drawRect(self.var.center_x_grid - 12, self.var.center_y_grid - 12, 24, 24)
         painter.drawRect(self.var.center_x_grid - ((radii/self.horz_lines) * h_fov), self.var.center_y_grid - ((radii/self.vert_lines) * v_fov), ((radii/self.horz_lines) * h_fov) * 2, ((radii/self.vert_lines) * v_fov) * 2)
         painter.setBrush(QColor(75, 75, 75))
         painter.setPen(Qt.black)
-        # print(rect.width())
-        # print(rect.height())
 
         # https://stackoverflow.com/questions/24927869/how-to-save-qwidget-as-image-automatically
         if self.rendered:
