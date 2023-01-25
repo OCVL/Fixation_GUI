@@ -72,30 +72,26 @@ class NuclearBase(QWidget):
 
         if key == [QtCore.Qt.Key_Left]:
             self.var.x_val = self.var.x_val - self.major_increment
-            self.var.center_x = self.var.center_x - self.major_increment * self.var.screen_ppd
         elif key == [QtCore.Qt.Key_Up]:
             self.var.y_val = self.var.y_val + self.major_increment
-            self.var.center_y = self.var.center_y - self.major_increment * self.var.screen_ppd
         elif key == [QtCore.Qt.Key_Right]:
             self.var.x_val = self.var.x_val + self.major_increment
-            self.var.center_x = self.var.center_x + self.major_increment * self.var.screen_ppd
         elif key == [QtCore.Qt.Key_Down]:
             self.var.y_val = self.var.y_val - self.major_increment
-            self.var.center_y = self.var.center_y + self.major_increment * self.var.screen_ppd
 
         # shift + arrow for minor increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
             self.var.x_val = self.var.x_val - self.minor_increment
-            self.var.center_x = self.var.center_x - self.minor_increment * self.var.screen_ppd
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
             self.var.y_val = self.var.y_val + self.minor_increment
-            self.var.center_y = self.var.center_y - self.minor_increment * self.var.screen_ppd
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
             self.var.x_val = self.var.x_val + self.minor_increment
-            self.var.center_x = self.var.center_x + self.minor_increment * self.var.screen_ppd
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
             self.var.y_val = self.var.y_val - self.minor_increment
-            self.var.center_y = self.var.center_y + self.minor_increment * self.var.screen_ppd
+
+        # updating the current target location
+        self.var.center_x = self.var.center_x_og + self.var.x_val * self.var.screen_ppd
+        self.var.center_y = self.var.center_y_og - self.var.y_val * self.var.screen_ppd
 
 
     # Handles when the red X is clicked. Has it save some things before actually quitting
