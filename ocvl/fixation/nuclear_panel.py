@@ -110,8 +110,8 @@ class TargetArea(QWidget):
 
         # setting the position to the place the mouse clicked
         if self.position:
-            self.var.x_val = -(self.var.center_x_og_grid - self.position.x()) / (((rect.width()/2) / self.horz_lines) * 2)
-            self.var.y_val = (self.var.center_y_og_grid - self.position.y()) / (((rect.height()/2) / self.vert_lines) * 2)
+            self.var.x_val = -(self.var.center_x_og_grid - self.position.x()) / self.var.grid_mult
+            self.var.y_val = (self.var.center_y_og_grid - self.position.y()) / self.var.grid_mult
             # self.tabs.updateCoordText()
             self.position = None
 

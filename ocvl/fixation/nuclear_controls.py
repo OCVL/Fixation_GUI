@@ -966,7 +966,6 @@ class Tabs(QTabWidget):
                 self.var.center_y = self.var.center_y_og
                 self.var.center_x_grid = self.var.center_x_og_grid
                 self.var.center_y_grid = self.var.center_y_og_grid
-                print(self.var.center_x_og_grid)
             case "MRE":
                 self.var.x_val = 0 + (h_fov / 4)
                 self.var.y_val = 0
