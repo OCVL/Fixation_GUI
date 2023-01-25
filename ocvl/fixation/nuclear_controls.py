@@ -998,6 +998,9 @@ class Tabs(QTabWidget):
             case _:
                 print("Something went wrong!")
 
+        # call to update the coordinates in the horz and vert text boxes
+        self.updateCoordText()
+
     """
     slots for the Grid Configuration Tab
     """

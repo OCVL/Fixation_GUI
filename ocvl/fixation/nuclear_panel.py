@@ -67,6 +67,7 @@ class TargetArea(QWidget):
         self.vert_lines = int(self.var.dim[1])
         self.rendered = True
         self.init = 1
+        self.position = None
 
     # def heightForWidth(self, width):
     #     return width
@@ -75,9 +76,14 @@ class TargetArea(QWidget):
         left_label = QLabel(self.var.left_label)
         right_label = QLabel(self.var.right_label)
 
+    def mouseReleaseEvent(self, event):
+        self.position = event.pos()
+
+
     def paintEvent(self, arg__0):
         """
         This paints the grid with the lines and the size of it
+        :param position:
         :param arg__0:
         :return:
         """
@@ -101,6 +107,13 @@ class TargetArea(QWidget):
 
         # updating the grid multiplier based on the size of the grid
         self.var.grid_mult = (radii / (self.horz_lines -1)) * 2
+
+        # setting the position to the place the mouse clicked
+        if self.position:
+            self.var.x_val = -(self.var.center_x_og_grid - self.position.x()) / (((rect.width()/2) / self.horz_lines) * 2)
+            self.var.y_val = (self.var.center_y_og_grid - self.position.y()) / (((rect.height()/2) / self.vert_lines) * 2)
+            # self.tabs.updateCoordText()
+            self.position = None
 
 
         # sets up the size of the grid lines (will need to be changed to be custom size)
