@@ -36,7 +36,7 @@ class NuclearTarget(QWidget):
         self.rand_num = 1
         # self.prev = 1
         self.count = 0
-        self.var.center_x = QPainter(self).window().width()/2
+        self.var.center_x = QPainter(self).window().width() / 2
         self.var.center_y = QPainter(self).window().height() / 2
 
 
@@ -70,13 +70,6 @@ class NuclearTarget(QWidget):
                 self.var.center_y = rect.height()/2
                 self.var.center_x_og = rect.width() / 2
                 self.var.center_y_og = rect.height() / 2
-
-                # convert to degrees?
-                x = self.var.center_x_og / self.SCREEN_PPD
-                y = self.var.center_y_og / self.SCREEN_PPD
-                print(x)
-                print(y)
-
                 self.init = 0
 
             match self.var.shape:
