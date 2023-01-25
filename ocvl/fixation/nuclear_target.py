@@ -14,7 +14,7 @@ class NuclearTarget(QWidget):
     def __init__(self, var):
         super().__init__()
         self.var = var
-        display_monitor = 1
+        display_monitor = 2
         #send it to a different monitor and make full screen
         monitors = QScreen.virtualSiblings(self.screen())
         monitor = monitors[display_monitor].availableGeometry()
@@ -71,6 +71,10 @@ class NuclearTarget(QWidget):
                 self.var.center_x_og = rect.width() / 2
                 self.var.center_y_og = rect.height() / 2
                 self.init = 0
+
+            # updating the current target location
+            self.var.center_x = self.var.center_x_og + self.var.x_val * self.var.screen_ppd
+            self.var.center_y = self.var.center_y_og - self.var.y_val * self.var.screen_ppd
 
             match self.var.shape:
                 case "Large Crosshair":

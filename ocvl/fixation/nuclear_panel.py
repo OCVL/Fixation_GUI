@@ -108,7 +108,7 @@ class TargetArea(QWidget):
         self.var.center_y_grid = self.var.center_y_og_grid - self.var.y_val * self.var.grid_mult
 
         # updating the grid multiplier based on the size of the grid
-        self.var.grid_mult = (radii / (self.horz_lines -1)) * 2
+        self.var.grid_mult = (radii / (self.horz_lines - 1)) * 2
 
         # setting the position to the place the mouse clicked
         if self.position:
