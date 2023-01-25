@@ -26,7 +26,8 @@ class NuclearBase(QWidget):
         self.w.show()
 
         self.layout = QtWidgets.QHBoxLayout(self)
-        self.layout.addWidget(NuclearDisplay(self.var))
+        self.j = NuclearDisplay(self.var)
+        self.layout.addWidget(self.j)
 
         self.keylist = []
         self.firstrelease = None
@@ -93,6 +94,8 @@ class NuclearBase(QWidget):
         self.var.center_x = self.var.center_x_og + self.var.x_val * self.var.screen_ppd
         self.var.center_y = self.var.center_y_og - self.var.y_val * self.var.screen_ppd
 
+        # call to function in nuclear_controls to update the coordinate text in the control panel
+        self.j.righty.target.updateCoordText()
 
     # Handles when the red X is clicked. Has it save some things before actually quitting
     # https://stackoverflow.com/questions/24532043/proper-way-to-handle-the-close-button-in-a-main-window-pyqt-red-x

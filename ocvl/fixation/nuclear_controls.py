@@ -434,8 +434,8 @@ class Tabs(QTabWidget):
         self.horz.installEventFilter(self)
         self.vert.installEventFilter(self)
 
-        # self.horz.textChanged.connect(self.textChanged)
-        # self.vert.textChanged.connect(self.textChanged)
+        self.horz.textChanged.connect(self.textChanged)
+        self.vert.textChanged.connect(self.textChanged)
 
         # Add the Components to the location control layout
         loc_layout.addWidget(QLabel("X"))
@@ -1117,24 +1117,28 @@ class Tabs(QTabWidget):
                 print("Something went wrong!")
         print(txt)
 
-    # def textChanged(self):
-    #     txt_box = self.sender()
-    #     txt = txt_box.text()
-    #     # self.horz.setText(str(self.var.center_x))
-    #     # self.vert.setText(str(self.var.center_y))
-    #     print(txt)
-        # match txt_box:
-        #     case self.horz:
-        #         if self.prev_val_horz + int(txt) > self.prev_val_horz:
-        #             self.var.center_x = self.var.center_x + int(txt)
-        #             self.prev_val_horz = int(txt)
-        #         else:
-        #             self.var.center_x = self.var.center_x - int(txt)
-        #             self.prev_val_horz = int(txt)
-        #     case self.vert:
-        #         self.var.center_y = self.var.center_y + int(txt)
-        #     case _:
-        #         print("Something went wrong!")
+
+    def updateCoordText(self):
+        """
+        Update the coordinate text in the horz and vert text boxes (called when the location changed)
+        :return:
+        """
+        self.horz.setText(str(self.var.x_val))
+        self.vert.setText(str(self.var.y_val))
+
+    def textChanged(self):
+        """
+        When the text is changed in a text box check what text box sent the signal and then extract the text
+        If it is from the horz or vert (x and y coordinates) then update the x and y values
+        :return:
+        """
+        txt_box = self.sender()
+        txt = txt_box.text()
+        if txt_box == self.horz:
+            self.var.x_val = float(txt)
+        if txt_box == self.vert:
+            self.var.y_val = float(txt)
+
 
     def eventFilter(self, source, event, keyboard=None):
         """
