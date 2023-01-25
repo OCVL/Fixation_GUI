@@ -53,8 +53,6 @@ class Tabs(QTabWidget):
         self.info = None
         self.save_p_label = None
         self.save_p_button = None
-        self.load_p_label = None
-        self.load_p_button = None
         self.image_label = None
         self.twinkle = None
         self.circle = None
@@ -238,25 +236,6 @@ class Tabs(QTabWidget):
         # Add the grid set up layout to the grid Group layout and then add the group to the main layout as another row
         grid_config_group.setLayout(grid_setup_layout)
         layout.addRow(grid_config_group)
-
-        # Load Protocol Set up stuff
-        protocol_config_group = QGroupBox("Protocol")
-        protocol_layout = QVBoxLayout()
-
-        # Make the load Protocol button and its corresponding label
-        self.load_p_button = QPushButton()
-        self.load_p_button.setText("Load Protocol")  # Need an advance button
-        self.load_p_label = QLabel()
-        self.load_p_button.setFocusPolicy(Qt.NoFocus)
-
-        # Add the slot to the button and add the button and the layout to the group layout
-        self.load_p_button.clicked.connect(self.onPressLoadP)
-        protocol_layout.addWidget(self.load_p_button)  # Should mark locations with size of FOV on display screen
-        protocol_layout.addWidget(self.load_p_label)
-
-        # Add the protocol layout to the group layout and then add the group to the main layout as another row
-        protocol_config_group.setLayout(protocol_layout)
-        layout.addRow(protocol_config_group)
 
         # Image Calibration Group
         image_config_group = QGroupBox("Image Calibration")
@@ -928,12 +907,12 @@ class Tabs(QTabWidget):
     Slots that are used in the UI for protocolControlTab
     """
 
-    def onPressLoadP(self):
-        button = self.sender()
-        protocol_path = filedialog.askopenfilenames(title='Select the protocol to load', filetypes=[
-            ("protocol", ".csv")])
-        print(protocol_path)
-        self.load_p_label.setText(str(protocol_path))
+    # def onPressLoadP(self):
+    #     button = self.sender()
+    #     protocol_path = filedialog.askopenfilenames(title='Select the protocol to load', filetypes=[
+    #         ("protocol", ".csv")])
+    #     print(protocol_path)
+    #     self.load_p_label.setText(str(protocol_path))
 
     def onPressAdvanceP(self):
         button = self.sender()

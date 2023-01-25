@@ -2,7 +2,8 @@ import sys
 from tkinter import filedialog
 import os
 from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QLineEdit, QComboBox, QDialogButtonBox, QFormLayout, \
-    QHBoxLayout, QRadioButton
+    QHBoxLayout, QRadioButton, QVBoxLayout
+from PySide6.QtGui import *
 
 
 class InitialDialog(QDialog):
@@ -62,12 +63,24 @@ class InitialDialog(QDialog):
         eye_butt_layout.addWidget(left_eye)
         eye_butt_layout.addWidget(right_eye)
 
+        # Load protocol button
+        protocol_layout = QVBoxLayout()
+        load_p_button = QPushButton()
+        load_p_button.setText("Load Protocol")  # Need an advance button
+        load_p_label = QLabel()
+        load_p_button.setFocusPolicy(Qt.NoFocus)
+
+        # Add the slot to the button and add the button and the layout to the group layout
+        load_p_button.clicked.connect(self.onPressLoadP)
+        protocol_layout.addWidget(load_p_button)  # Should mark locations with size of FOV on display screen
+        protocol_layout.addWidget(load_p_label)
+
         # Adding all components to the main layout of the pop-up window
         layout1.addRow("Select Eye", eye_butt_layout)
         layout1.addRow("Subject ID:", self.sub_id_tbox)
         layout1.addRow("Select Save Location", save_loc_butt_layout)
         layout1.addRow(self.loc_label)
-        # layout1.addRow("Device", self.device_menu)
+        layout1.addRow("Protocol:", protocol_layout)
         layout1.addWidget(self.buttonBox)
 
         # get device from the config file
@@ -91,6 +104,13 @@ class InitialDialog(QDialog):
         :return:
         """
         self.var.sub_id = self.sub_id_tbox.text()
+
+    def onPressLoadP(self):
+        button = self.sender()
+        protocol_path = filedialog.askopenfilenames(title='Select the protocol to load', filetypes=[
+            ("protocol", ".csv")])
+        print(protocol_path)
+        button.setText(str(protocol_path))
 
     def on_save_click(self):
         """
