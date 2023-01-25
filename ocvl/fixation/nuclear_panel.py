@@ -66,6 +66,7 @@ class TargetArea(QWidget):
         self.horz_lines = int(self.var.dim[0])
         self.vert_lines = int(self.var.dim[1])
         self.rendered = True
+        self.init = 1
 
     # def heightForWidth(self, width):
     #     return width
@@ -92,6 +93,16 @@ class TargetArea(QWidget):
         cent = QPoint(rect.width() / 2, rect.height() / 2)
         center_x = rect.width() / 2
         center_y = rect.height() / 2
+
+        if self.init == 1:
+            # set it to the middle of the screen with this
+            self.var.center_x_grid = rect.width() / 2
+            self.var.center_y_grid = rect.height() / 2
+            self.init = 0
+
+        self.var.center_x_og_grid = rect.width() / 2
+        self.var.center_y_og_grid = rect.height() / 2
+
 
         # sets up the size of the grid lines (will need to be changed to be custom size)
         if self.grid_size == 'small':
@@ -163,11 +174,12 @@ class TargetArea(QWidget):
         # painter.drawLine(center_x - 10, center_y - 10, center_x + 10, center_y - 10)
 
         # painter.drawRect((self.var.center_x * 0.314) - 9, (self.var.center_y * 0.66) - 9, 18, 18)
-        painter.drawRect((self.var.center_x * 0.314)- (20 / 2.0) - .5, (self.var.center_y * 0.66) - (20 / 2.0) - .5, 20,
-                         20)
+        # painter.drawRect((self.var.center_x * 0.314)- (20 / 2.0) - .5, (self.var.center_y * 0.66) - (20 / 2.0) - .5, 20,
+        #                  20)
         # gc.DrawRectangle(self._fixLoc.x - (fovwidth / 2.0) - .5, self._fixLoc.y - (fovheight / 2.0) - .5, fovwidth,
         #                  fovheight)
         # painter.drawRect(center_x - 8, center_y - 8, 16, 16)
+        painter.drawRect(self.var.center_x_grid - 12, self.var.center_y_grid - 12, 24, 24)
         painter.setBrush(QColor(75, 75, 75))
         painter.setPen(Qt.black)
         # print(rect.width())

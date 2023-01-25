@@ -5,9 +5,10 @@ from PySide6 import QtCore, QtGui
 
 # using property class
 class Variables:
-    def __init__(self, animation_speed_val=None, x_val=None, y_val=None, dim=None, savior_FOVs=None, \
+    def __init__(self, animation_speed_val=None, x_val=0, y_val=0, dim=None, savior_FOVs=None, \
                  custom_color=None, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
-                 right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None, center_x_og=None, center_y_og=None, target_vis=None):
+                 right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None, center_x_og=None, center_y_og=None, target_vis=None,
+                 center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.5):
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
         self.y_val = y_val
@@ -28,6 +29,11 @@ class Variables:
         self.center_x_og = center_x_og
         self.center_y_og = center_y_og
         self.target_vis = target_vis
+        self.center_x_grid = center_x_grid
+        self.center_y_grid = center_y_grid
+        self.center_x_og_grid = center_x_og_grid
+        self.center_y_og_grid = center_y_og_grid
+        self.grid_mult = grid_mult
 
         # configuration file set up
         self.config = configparser.ConfigParser()
@@ -192,6 +198,43 @@ class Variables:
     def set_target_vis(self, value):
         self._target_vis = value
 
+    # getter
+    def get_center_x_grid(self):
+        return self._center_x_grid
+
+    # setter
+    def set_center_x_grid(self, value):
+        self._center_x_grid = value
+
+    def get_center_y_grid(self):
+        return self._center_y_grid
+
+    # setter
+    def set_center_y_grid(self, value):
+        self._center_y_grid = value
+
+    # getter
+    def get_center_x_og_grid(self):
+        return self._center_x_og_grid
+
+    # setter
+    def set_center_x_og_grid(self, value):
+        self._center_x_og_grid = value
+
+    def get_center_y_og_grid(self):
+        return self._center_y_og_grid
+
+    # setter
+    def set_center_y_og_grid(self, value):
+        self._center_y_og_grid = value
+
+    def get_grid_mult(self):
+        return self._grid_mult
+
+    # setter
+    def set_grid_mult(self, value):
+        self._grid_mult = value
+
     # creating property objects
     # sourced from tabs
     animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
@@ -214,6 +257,11 @@ class Variables:
     center_x_og = QtCore.Property(bool, get_center_x_og, set_center_x_og)
     center_y_og = QtCore.Property(bool, get_center_y_og, set_center_y_og)
     target_vis = QtCore.Property(bool, get_target_vis, set_target_vis)
+    center_x_grid = QtCore.Property(bool, get_center_x_grid, set_center_x_grid)
+    center_y_grid = QtCore.Property(bool, get_center_y_grid, set_center_y_grid)
+    center_x_og_grid = QtCore.Property(bool, get_center_x_og_grid, set_center_x_og_grid)
+    center_y_og_grid = QtCore.Property(bool, get_center_y_og_grid, set_center_y_og_grid)
+    grid_mult = QtCore.Property(bool, get_grid_mult, set_grid_mult)
 
 
 if __name__ == "__main__":

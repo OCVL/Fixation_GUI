@@ -46,7 +46,7 @@ class NuclearBase(QWidget):
         key = eventQKeyEvent.key()
         self.firstrelease = True
         self.keylist.append(key)
-        print('pressed')
+        # print('pressed')
         # resending the event to keyrelease if this was called from keyRelease
         if self.send_again:
             self.send_again = False
@@ -61,30 +61,88 @@ class NuclearBase(QWidget):
             self.keyPressEvent(event)
             return
         del self.keylist[-1]
-        print('deleted')
+        # print('deleted')
 
     def processmultikeys(self, key):
-        print(key)
+        # print(key)
         # will need to check what increment is actually 1 deg for fixation target and if multiplying by screen ppd is correct
         # major increment
+        self.prev_x = self.var.x_val
+        self.prev_y = self.var.y_val
+
         if key == [QtCore.Qt.Key_Left]:
+            self.var.x_val = self.var.x_val - self.major_increment
             self.var.center_x = self.var.center_x - self.major_increment * self.screen_ppd
+            self.var.center_x_grid = self.var.center_x_grid - self.major_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Up]:
+            self.var.y_val = self.var.y_val + self.major_increment
             self.var.center_y = self.var.center_y - self.major_increment * self.screen_ppd
+            self.var.center_y_grid = self.var.center_y_grid - self.major_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Right]:
+            self.var.x_val = self.var.x_val + self.major_increment
             self.var.center_x = self.var.center_x + self.major_increment * self.screen_ppd
+            self.var.center_x_grid = self.var.center_x_grid + self.major_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Down]:
+            self.var.y_val = self.var.y_val - self.major_increment
             self.var.center_y = self.var.center_y + self.major_increment * self.screen_ppd
+            self.var.center_y_grid = self.var.center_y_grid + self.major_increment * self.var.grid_mult
 
         # shift + arrow for minor increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
+            self.var.x_val = self.var.x_val - self.minor_increment
             self.var.center_x = self.var.center_x - self.minor_increment * self.screen_ppd
+            self.var.center_x_grid = self.var.center_x_grid - self.minor_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
+            self.var.y_val = self.var.y_val + self.minor_increment
             self.var.center_y = self.var.center_y - self.minor_increment * self.screen_ppd
+            self.var.center_y_grid = self.var.center_y_grid - self.minor_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
+            self.var.x_val = self.var.x_val + self.minor_increment
             self.var.center_x = self.var.center_x + self.minor_increment * self.screen_ppd
+            self.var.center_x_grid = self.var.center_x_grid + self.minor_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
+            self.var.y_val = self.var.y_val - self.minor_increment
             self.var.center_y = self.var.center_y + self.minor_increment * self.screen_ppd
+            self.var.center_y_grid = self.var.center_y_grid + self.minor_increment * self.var.grid_mult
+
+        # print("previous value: ")
+        # print(self.prev_x)
+        # print("current value: ")
+        # print(self.var.x_val)
+        # # print(self.var.y_val)
+        #
+        # if self.prev_x > self.var.x_val:
+        #     if self.var.x_val == 0:
+        #         self.var.center_x = self.var.center_x_og
+        #     else:
+        #         self.var.center_x = self.var.center_x_og - (abs(self.var.x_val) * self.screen_ppd)
+        # if self.prev_x < self.var.x_val:
+        #     if self.var.x_val == 0:
+        #         self.var.center_x = self.var.center_x_og
+        #     else:
+        #         self.var.center_x = self.var.center_x_og + (abs(self.var.x_val) * self.screen_ppd)
+        # if self.prev_y != self.var.y_val:
+        #     self.var.center_y = self.var.center_y - (self.var.y_val * self.screen_ppd)
+        # self.var.center_x_grid =
+
+        # if key == [QtCore.Qt.Key_Left]:
+        #     self.var.center_x = self.var.center_x - self.major_increment * self.screen_ppd
+        # elif key == [QtCore.Qt.Key_Up]:
+        #     self.var.center_y = self.var.center_y - self.major_increment * self.screen_ppd
+        # elif key == [QtCore.Qt.Key_Right]:
+        #     self.var.center_x = self.var.center_x + self.major_increment * self.screen_ppd
+        # elif key == [QtCore.Qt.Key_Down]:
+        #     self.var.center_y = self.var.center_y + self.major_increment * self.screen_ppd
+        #
+        # # shift + arrow for minor increment
+        # elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
+        #     self.var.center_x = self.var.center_x - self.minor_increment * self.screen_ppd
+        # elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
+        #     self.var.center_y = self.var.center_y - self.minor_increment * self.screen_ppd
+        # elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
+        #     self.var.center_x = self.var.center_x + self.minor_increment * self.screen_ppd
+        # elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
+        #     self.var.center_y = self.var.center_y + self.minor_increment * self.screen_ppd
 
 
 
