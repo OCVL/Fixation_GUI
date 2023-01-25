@@ -950,34 +950,53 @@ class Tabs(QTabWidget):
         tmp = self.var.current_fov.split(" ")
         h_fov = float(tmp[0])
         v_fov = float(tmp[2])
+        # need to make sure these end up being in the correct locations
         match txt:
             case "TLC":
-                self.var.center_x = self.var.center_x_og - (h_fov/2)
-                self.var.center_y = self.var.center_y_og - (v_fov/2)
+                self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
+                self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
+                self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
+                self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             case "MTE":
                 self.var.center_x = self.var.center_x_og
-                self.var.center_y = self.var.center_y_og - (v_fov / 2)
+                self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
+                self.var.center_x_grid = self.var.center_x_og_grid
+                self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             case "TRC":
-                self.var.center_x = self.var.center_x_og + (h_fov / 2)
-                self.var.center_y = self.var.center_y_og - (v_fov / 2)
+                self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
+                self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
+                self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
+                self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             case "MLE":
-                self.var.center_x = self.var.center_x_og - (h_fov / 2)
+                self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
                 self.var.center_y = self.var.center_y_og
+                self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
+                self.var.center_y_grid = self.var.center_y_og_grid
             case "CTR":
                 self.var.center_x = self.var.center_x_og
                 self.var.center_y = self.var.center_y_og
+                self.var.center_x_grid = self.var.center_x_og_grid
+                self.var.center_y_grid = self.var.center_y_og_grid
             case "MRE":
-                self.var.center_x = self.var.center_x_og + (h_fov / 2)
+                self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
                 self.var.center_y = self.var.center_y_og
+                self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
+                self.var.center_y_grid = self.var.center_y_og_grid
             case "BLC":
-                self.var.center_x = self.var.center_x_og - (h_fov / 2)
-                self.var.center_y = self.var.center_y_og + (v_fov / 2)
+                self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
+                self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
+                self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
+                self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             case "MBE":
                 self.var.center_x = self.var.center_x_og
-                self.var.center_y = self.var.center_y_og + (v_fov / 2)
+                self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
+                self.var.center_x_grid = self.var.center_x_og_grid
+                self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             case "BRC":
-                self.var.center_x = self.var.center_x_og + (h_fov / 2)
-                self.var.center_y = self.var.center_y_og + (v_fov / 2)
+                self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
+                self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
+                self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
+                self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             case _:
                 print("Something went wrong!")
 

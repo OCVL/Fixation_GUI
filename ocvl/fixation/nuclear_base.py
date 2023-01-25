@@ -33,7 +33,7 @@ class NuclearBase(QWidget):
         self.send_again = None
 
         # The number of ppd of the screen we'll be projecting to (e.g. Lightcrafter, Projector, etc).
-        self.screen_ppd = float(self.var.config.get("test", "screen_ppd"))
+        self.var.screen_ppd = float(self.var.config.get("test", "screen_ppd"))
 
         # The increment steps we'll use.
         increments = self.var.config.get("test", "major_minor_increments").split("/")
@@ -72,37 +72,37 @@ class NuclearBase(QWidget):
 
         if key == [QtCore.Qt.Key_Left]:
             self.var.x_val = self.var.x_val - self.major_increment
-            self.var.center_x = self.var.center_x - self.major_increment * self.screen_ppd
+            self.var.center_x = self.var.center_x - self.major_increment * self.var.screen_ppd
             self.var.center_x_grid = self.var.center_x_grid - self.major_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Up]:
             self.var.y_val = self.var.y_val + self.major_increment
-            self.var.center_y = self.var.center_y - self.major_increment * self.screen_ppd
+            self.var.center_y = self.var.center_y - self.major_increment * self.var.screen_ppd
             self.var.center_y_grid = self.var.center_y_grid - self.major_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Right]:
             self.var.x_val = self.var.x_val + self.major_increment
-            self.var.center_x = self.var.center_x + self.major_increment * self.screen_ppd
+            self.var.center_x = self.var.center_x + self.major_increment * self.var.screen_ppd
             self.var.center_x_grid = self.var.center_x_grid + self.major_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Down]:
             self.var.y_val = self.var.y_val - self.major_increment
-            self.var.center_y = self.var.center_y + self.major_increment * self.screen_ppd
+            self.var.center_y = self.var.center_y + self.major_increment * self.var.screen_ppd
             self.var.center_y_grid = self.var.center_y_grid + self.major_increment * self.var.grid_mult
 
         # shift + arrow for minor increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
             self.var.x_val = self.var.x_val - self.minor_increment
-            self.var.center_x = self.var.center_x - self.minor_increment * self.screen_ppd
+            self.var.center_x = self.var.center_x - self.minor_increment * self.var.screen_ppd
             self.var.center_x_grid = self.var.center_x_grid - self.minor_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
             self.var.y_val = self.var.y_val + self.minor_increment
-            self.var.center_y = self.var.center_y - self.minor_increment * self.screen_ppd
+            self.var.center_y = self.var.center_y - self.minor_increment * self.var.screen_ppd
             self.var.center_y_grid = self.var.center_y_grid - self.minor_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
             self.var.x_val = self.var.x_val + self.minor_increment
-            self.var.center_x = self.var.center_x + self.minor_increment * self.screen_ppd
+            self.var.center_x = self.var.center_x + self.minor_increment * self.var.screen_ppd
             self.var.center_x_grid = self.var.center_x_grid + self.minor_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
             self.var.y_val = self.var.y_val - self.minor_increment
-            self.var.center_y = self.var.center_y + self.minor_increment * self.screen_ppd
+            self.var.center_y = self.var.center_y + self.minor_increment * self.var.screen_ppd
             self.var.center_y_grid = self.var.center_y_grid + self.minor_increment * self.var.grid_mult
 
         # print("previous value: ")
