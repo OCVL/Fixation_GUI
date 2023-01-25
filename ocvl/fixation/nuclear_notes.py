@@ -1,5 +1,6 @@
 import sys
 from PySide6 import QtCore, QtWidgets
+from PySide6.QtCore import QPoint
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea, QTableWidgetItem)
 import pandas as pd
@@ -112,7 +113,8 @@ class NuclearNotes(QtWidgets.QWidget):
 
         # populating columns --simulation for now. will need to get this info from savior/grid later
         self.var.current_fov = "1.0 x 1.0"
-        self.testPop = [str(self.count), "(1,1)", self.var.current_fov]
+        self.current_location = "(" + str(self.var.x_val) + "," + str(self.var.y_val) + ")"
+        self.testPop = [str(self.count), self.current_location, self.var.current_fov]
         for i in range(len(self.testPop)):
             self.table_widget.item(0, i).setText(self.testPop[i])  # self.row_count
 

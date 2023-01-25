@@ -105,46 +105,6 @@ class NuclearBase(QWidget):
             self.var.center_y = self.var.center_y + self.minor_increment * self.var.screen_ppd
             self.var.center_y_grid = self.var.center_y_grid + self.minor_increment * self.var.grid_mult
 
-        # print("previous value: ")
-        # print(self.prev_x)
-        # print("current value: ")
-        # print(self.var.x_val)
-        # # print(self.var.y_val)
-        #
-        # if self.prev_x > self.var.x_val:
-        #     if self.var.x_val == 0:
-        #         self.var.center_x = self.var.center_x_og
-        #     else:
-        #         self.var.center_x = self.var.center_x_og - (abs(self.var.x_val) * self.screen_ppd)
-        # if self.prev_x < self.var.x_val:
-        #     if self.var.x_val == 0:
-        #         self.var.center_x = self.var.center_x_og
-        #     else:
-        #         self.var.center_x = self.var.center_x_og + (abs(self.var.x_val) * self.screen_ppd)
-        # if self.prev_y != self.var.y_val:
-        #     self.var.center_y = self.var.center_y - (self.var.y_val * self.screen_ppd)
-        # self.var.center_x_grid =
-
-        # if key == [QtCore.Qt.Key_Left]:
-        #     self.var.center_x = self.var.center_x - self.major_increment * self.screen_ppd
-        # elif key == [QtCore.Qt.Key_Up]:
-        #     self.var.center_y = self.var.center_y - self.major_increment * self.screen_ppd
-        # elif key == [QtCore.Qt.Key_Right]:
-        #     self.var.center_x = self.var.center_x + self.major_increment * self.screen_ppd
-        # elif key == [QtCore.Qt.Key_Down]:
-        #     self.var.center_y = self.var.center_y + self.major_increment * self.screen_ppd
-        #
-        # # shift + arrow for minor increment
-        # elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
-        #     self.var.center_x = self.var.center_x - self.minor_increment * self.screen_ppd
-        # elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
-        #     self.var.center_y = self.var.center_y - self.minor_increment * self.screen_ppd
-        # elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
-        #     self.var.center_x = self.var.center_x + self.minor_increment * self.screen_ppd
-        # elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
-        #     self.var.center_y = self.var.center_y + self.minor_increment * self.screen_ppd
-
-
 
     # Handles when the red X is clicked. Has it save some things before actually quitting
     # https://stackoverflow.com/questions/24532043/proper-way-to-handle-the-close-button-in-a-main-window-pyqt-red-x
