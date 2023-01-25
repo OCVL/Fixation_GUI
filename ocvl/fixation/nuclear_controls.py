@@ -1123,10 +1123,11 @@ class Tabs(QTabWidget):
     def updateCoordText(self):
         """
         Update the coordinate text in the horz and vert text boxes (called when the location changed)
+        Rounds value to 2 decimal places
         :return:
         """
-        self.horz.setText(str(self.var.x_val))
-        self.vert.setText(str(self.var.y_val))
+        self.horz.setText(str(round(self.var.x_val, 2)))
+        self.vert.setText(str(round(self.var.y_val, 2)))
 
     def textChanged(self):
         """
