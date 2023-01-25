@@ -90,15 +90,17 @@ class TargetArea(QWidget):
 
         # sets up the size of the circle based on the window size
         radii = np.minimum(rect.width(), rect.height()) / 2
-        cent = QPoint(rect.width() / 2, rect.height() / 2)
-        center_x = rect.width() / 2
-        center_y = rect.height() / 2
 
+        # updating the original center location on the grid (esp. if the size changes)
         self.var.center_x_og_grid = rect.width() / 2
         self.var.center_y_og_grid = rect.height() / 2
 
+        # updating the current location on the grid (accounts for the size changing as well)
         self.var.center_x_grid = self.var.center_x_og_grid + self.var.x_val * self.var.grid_mult
         self.var.center_y_grid = self.var.center_y_og_grid - self.var.y_val * self.var.grid_mult
+
+        # updating the grid multiplier based on the size of the grid
+        self.var.grid_mult = (radii / (self.horz_lines -1)) * 2
 
 
         # sets up the size of the grid lines (will need to be changed to be custom size)
