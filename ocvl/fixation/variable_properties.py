@@ -5,12 +5,12 @@ from PySide6 import QtCore, QtGui
 
 # using property class
 class Variables:
-    def __init__(self, animation_speed_val=None, horz_val=None, vert_val=None, dim=None, savior_FOVs=None, \
+    def __init__(self, animation_speed_val=None, x_val=None, y_val=None, dim=None, savior_FOVs=None, \
                  custom_color=None, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
                  right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None, center_x_og=None, center_y_og=None, target_vis=None):
         self.animation_speed_val = animation_speed_val
-        self.horz_val = horz_val
-        self.vert_val = vert_val
+        self.x_val = x_val
+        self.y_val = y_val
         self.dim = dim
         self.savior_FOVs = savior_FOVs
         self.custom_color = custom_color
@@ -44,20 +44,20 @@ class Variables:
         self._animation_speed_val = value
 
     # getter
-    def get_horz_val(self):
-        return self._horz_val
+    def get_x_val(self):
+        return self._x_val
 
     # setter
-    def set_horz_val(self, value):
-        self._horz_val = value
+    def set_x_val(self, value):
+        self._x_val = value
 
     # getter
-    def get_vert_val(self):
-        return self._vert_val
+    def get_y_val(self):
+        return self._y_val
 
     # setter
-    def set_vert_val(self, value):
-        self._vert_val = value
+    def set_y_val(self, value):
+        self._y_val = value
 
     # getter
     def get_dim(self):
@@ -195,8 +195,8 @@ class Variables:
     # creating property objects
     # sourced from tabs
     animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
-    horz_val = QtCore.Property(int, get_horz_val, set_horz_val)
-    vert_val = QtCore.Property(int, get_vert_val, set_vert_val)
+    x_val = QtCore.Property(int, get_x_val, set_x_val)
+    y_val = QtCore.Property(int, get_y_val, set_y_val)
     dim = QtCore.Property(str, get_dim, set_dim)
     savior_FOVs = QtCore.Property(str, get_savior_FOVs, set_savior_FOVs)
     custom_color = QtCore.Property(QtGui.QColor, get_custom_color, set_custom_color)  # QtGui.QColor('green')

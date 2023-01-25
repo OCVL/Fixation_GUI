@@ -14,7 +14,7 @@ class NuclearTarget(QWidget):
     def __init__(self, var):
         super().__init__()
         self.var = var
-        display_monitor = 1
+        display_monitor = 2
         #send it to a different monitor and make full screen
         monitors = QScreen.virtualSiblings(self.screen())
         monitor = monitors[display_monitor].availableGeometry()
@@ -123,7 +123,7 @@ class NuclearTarget(QWidget):
                     painter.drawLine(self.var.center_x - self.var.size, self.var.center_y + self.var.size, self.var.center_x + self.var.size, self.var.center_y - self.var.size)
 
                     # this is necessary so it doesn't change too fast
-                    if self.count == 3:
+                    if self.count == 2:
                         if self.rand_num == 1:
                             self.rand_num = 2
                         elif self.rand_num == 2:
