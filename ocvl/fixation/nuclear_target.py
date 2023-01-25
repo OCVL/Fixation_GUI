@@ -14,7 +14,7 @@ class NuclearTarget(QWidget):
     def __init__(self, var):
         super().__init__()
         self.var = var
-        display_monitor = 2
+        display_monitor = 1
         #send it to a different monitor and make full screen
         monitors = QScreen.virtualSiblings(self.screen())
         monitor = monitors[display_monitor].availableGeometry()

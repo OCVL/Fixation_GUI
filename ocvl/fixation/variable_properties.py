@@ -7,7 +7,8 @@ from PySide6 import QtCore, QtGui
 class Variables:
     def __init__(self, animation_speed_val=None, x_val=0, y_val=0, dim=None, savior_FOVs=None, \
                  custom_color=None, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
-                 right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None, center_x_og=None, center_y_og=None, target_vis=None,
+                 right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None,
+                 center_x_og=None, center_y_og=None, target_vis=None, stimulus_imaging=None,
                  center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.5, screen_ppd=None):
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
@@ -29,6 +30,7 @@ class Variables:
         self.center_x_og = center_x_og
         self.center_y_og = center_y_og
         self.target_vis = target_vis
+        self.stimulus_imaging = stimulus_imaging
         self.center_x_grid = center_x_grid
         self.center_y_grid = center_y_grid
         self.center_x_og_grid = center_x_og_grid
@@ -41,6 +43,13 @@ class Variables:
         self.config_name = os.getcwd() + "\\test_settings.ini"
         self.config.read(self.config_name)
 
+    # getter
+    def get_stimulus_imaging(self):
+        return self._stimulus_imaging
+
+    # setter
+    def set_stimulus_imaging(self, value):
+        self._stimulus_imaging = value
 
     # getter
     def get_animation_speed_val(self):
@@ -266,6 +275,7 @@ class Variables:
     center_x_og = QtCore.Property(bool, get_center_x_og, set_center_x_og)
     center_y_og = QtCore.Property(bool, get_center_y_og, set_center_y_og)
     target_vis = QtCore.Property(bool, get_target_vis, set_target_vis)
+    stimulus_imaging = QtCore.Property(bool, get_stimulus_imaging, set_stimulus_imaging)
     center_x_grid = QtCore.Property(bool, get_center_x_grid, set_center_x_grid)
     center_y_grid = QtCore.Property(bool, get_center_y_grid, set_center_y_grid)
     center_x_og_grid = QtCore.Property(bool, get_center_x_og_grid, set_center_x_og_grid)

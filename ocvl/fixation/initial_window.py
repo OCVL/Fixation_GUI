@@ -1,8 +1,10 @@
 import sys
 from tkinter import filedialog
 import os
+
+import PySide6
 from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QLineEdit, QComboBox, QDialogButtonBox, QFormLayout, \
-    QHBoxLayout, QRadioButton, QVBoxLayout
+    QHBoxLayout, QRadioButton, QVBoxLayout, QCheckBox
 from PySide6.QtGui import *
 
 
@@ -68,19 +70,24 @@ class InitialDialog(QDialog):
         load_p_button = QPushButton()
         load_p_button.setText("Load Protocol")  # Need an advance button
         load_p_label = QLabel()
-        load_p_button.setFocusPolicy(Qt.NoFocus)
 
         # Add the slot to the button and add the button and the layout to the group layout
         load_p_button.clicked.connect(self.onPressLoadP)
         protocol_layout.addWidget(load_p_button)  # Should mark locations with size of FOV on display screen
         protocol_layout.addWidget(load_p_label)
 
+        # Add a stimulus Imaging check box
+        stim_imaging = QCheckBox("Yes")
+        stim_imaging.stateChanged.connect(self.checkBoxResponse)
+
         # Adding all components to the main layout of the pop-up window
-        layout1.addRow("Select Eye", eye_butt_layout)
+        layout1.addRow("Select Eye:", eye_butt_layout)
         layout1.addRow("Subject ID:", self.sub_id_tbox)
         layout1.addRow("Select Save Location", save_loc_butt_layout)
         layout1.addRow(self.loc_label)
         layout1.addRow("Protocol:", protocol_layout)
+        layout1.addRow("Stimulus Imaging:", stim_imaging)
+
         layout1.addWidget(self.buttonBox)
 
         # get device from the config file
@@ -111,6 +118,28 @@ class InitialDialog(QDialog):
             ("protocol", ".csv")])
         print(protocol_path)
         button.setText(str(protocol_path))
+
+    def checkBoxResponse(self):
+        """
+        Slot for if the fixation target is displayed to the subject
+        :return:
+        """
+        button = self.sender()
+        txt = button.text()
+        match txt:
+            case "Target Animation":
+                print(button.checkState())
+            case "Target Visible":
+                if button.checkState() == PySide6.QtCore.Qt.CheckState.Unchecked:
+                    self.var.stimulus_imaging = False
+                    print(self.var.stimulus_imaging)
+                else:
+                    self.var.stimulus_imaging = True
+            case "Grid Visible":
+                print(button.checkState())
+            case _:
+                print("Something went wrong!")
+        print(txt)
 
     def on_save_click(self):
         """
