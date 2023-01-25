@@ -94,14 +94,11 @@ class TargetArea(QWidget):
         center_x = rect.width() / 2
         center_y = rect.height() / 2
 
-        if self.init == 1:
-            # set it to the middle of the screen with this
-            self.var.center_x_grid = rect.width() / 2
-            self.var.center_y_grid = rect.height() / 2
-            self.init = 0
-
         self.var.center_x_og_grid = rect.width() / 2
         self.var.center_y_og_grid = rect.height() / 2
+
+        self.var.center_x_grid = self.var.center_x_og_grid + self.var.x_val * self.var.grid_mult
+        self.var.center_y_grid = self.var.center_y_og_grid - self.var.y_val * self.var.grid_mult
 
 
         # sets up the size of the grid lines (will need to be changed to be custom size)

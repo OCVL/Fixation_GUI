@@ -73,37 +73,29 @@ class NuclearBase(QWidget):
         if key == [QtCore.Qt.Key_Left]:
             self.var.x_val = self.var.x_val - self.major_increment
             self.var.center_x = self.var.center_x - self.major_increment * self.var.screen_ppd
-            self.var.center_x_grid = self.var.center_x_grid - self.major_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Up]:
             self.var.y_val = self.var.y_val + self.major_increment
             self.var.center_y = self.var.center_y - self.major_increment * self.var.screen_ppd
-            self.var.center_y_grid = self.var.center_y_grid - self.major_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Right]:
             self.var.x_val = self.var.x_val + self.major_increment
             self.var.center_x = self.var.center_x + self.major_increment * self.var.screen_ppd
-            self.var.center_x_grid = self.var.center_x_grid + self.major_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Down]:
             self.var.y_val = self.var.y_val - self.major_increment
             self.var.center_y = self.var.center_y + self.major_increment * self.var.screen_ppd
-            self.var.center_y_grid = self.var.center_y_grid + self.major_increment * self.var.grid_mult
 
         # shift + arrow for minor increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
             self.var.x_val = self.var.x_val - self.minor_increment
             self.var.center_x = self.var.center_x - self.minor_increment * self.var.screen_ppd
-            self.var.center_x_grid = self.var.center_x_grid - self.minor_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
             self.var.y_val = self.var.y_val + self.minor_increment
             self.var.center_y = self.var.center_y - self.minor_increment * self.var.screen_ppd
-            self.var.center_y_grid = self.var.center_y_grid - self.minor_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
             self.var.x_val = self.var.x_val + self.minor_increment
             self.var.center_x = self.var.center_x + self.minor_increment * self.var.screen_ppd
-            self.var.center_x_grid = self.var.center_x_grid + self.minor_increment * self.var.grid_mult
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
             self.var.y_val = self.var.y_val - self.minor_increment
             self.var.center_y = self.var.center_y + self.minor_increment * self.var.screen_ppd
-            self.var.center_y_grid = self.var.center_y_grid + self.minor_increment * self.var.grid_mult
 
 
     # Handles when the red X is clicked. Has it save some things before actually quitting
