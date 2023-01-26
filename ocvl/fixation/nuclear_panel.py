@@ -138,43 +138,43 @@ class TargetArea(QWidget):
         # spacing of lines
         spacing = (radii * 2) / num_of_lines
         painter.drawRect(rect.width() / 2 - radii, rect.height() / 2 - radii, radii * 2, radii * 2)
+        if self.var.grid_vis:
+            # Generating the steps for painting the lines in different colors
+            horz_steps = np.linspace(rect.width() / 2 - radii, rect.width() / 2 + radii, self.horz_lines)
+            vert_steps = np.linspace(rect.height() / 2 - radii, rect.height() / 2 + radii, self.vert_lines)
 
-        # Generating the steps for painting the lines in different colors
-        horz_steps = np.linspace(rect.width() / 2 - radii, rect.width() / 2 + radii, self.horz_lines)
-        vert_steps = np.linspace(rect.height() / 2 - radii, rect.height() / 2 + radii, self.vert_lines)
+            center_line = (num_of_lines - 1) / 2
 
-        center_line = (num_of_lines - 1) / 2
-
-        # paints the lines with different colors depending on what step they are
-        counter = 0
-        for y in vert_steps:
-            if counter % 5 == 0:
-                if counter == center_line:
-                    # painter.setPen(QPen(QColor(255, 79, 0), 2.5))
-                    painter.setPen(QPen(QColor(255, 79, 0)))
+            # paints the lines with different colors depending on what step they are
+            counter = 0
+            for y in vert_steps:
+                if counter % 5 == 0:
+                    if counter == center_line:
+                        # painter.setPen(QPen(QColor(255, 79, 0), 2.5))
+                        painter.setPen(QPen(QColor(255, 79, 0)))
+                    else:
+                        painter.setPen(QPen(QColor(255, 79, 0)))
+                    painter.drawLine(rect.width() / 2 - radii, y, rect.width() / 2 + radii, y)
                 else:
-                    painter.setPen(QPen(QColor(255, 79, 0)))
-                painter.drawLine(rect.width() / 2 - radii, y, rect.width() / 2 + radii, y)
-            else:
-                painter.setPen(Qt.black)
-                painter.drawLine(rect.width() / 2 - radii, y, rect.width() / 2 + radii, y)
-            counter += 1
+                    painter.setPen(Qt.black)
+                    painter.drawLine(rect.width() / 2 - radii, y, rect.width() / 2 + radii, y)
+                counter += 1
 
-        counter = 0
-        for x in horz_steps:
-            if counter % 5 == 0:
-                if counter == center_line:
-                    # painter.setPen(QPen(QColor(255, 79, 0), 2.5))
-                    painter.setPen(QPen(QColor(255, 79, 0)))
+            counter = 0
+            for x in horz_steps:
+                if counter % 5 == 0:
+                    if counter == center_line:
+                        # painter.setPen(QPen(QColor(255, 79, 0), 2.5))
+                        painter.setPen(QPen(QColor(255, 79, 0)))
+                    else:
+                        painter.setPen(QPen(QColor(255, 79, 0)))
+                    painter.drawLine(x, rect.height() / 2 - radii, x, rect.height() / 2 + radii)
                 else:
-                    painter.setPen(QPen(QColor(255, 79, 0)))
-                painter.drawLine(x, rect.height() / 2 - radii, x, rect.height() / 2 + radii)
-            else:
-                painter.setPen(Qt.black)
-                painter.drawLine(x, rect.height() / 2 - radii, x, rect.height() / 2 + radii)
-            counter += 1
+                    painter.setPen(Qt.black)
+                    painter.drawLine(x, rect.height() / 2 - radii, x, rect.height() / 2 + radii)
+                counter += 1
 
-        painter.setPen(Qt.black)
+            painter.setPen(Qt.black)
 
         # used to set circle visible on  screen (from config file)
         if self.circle_vis == "1":

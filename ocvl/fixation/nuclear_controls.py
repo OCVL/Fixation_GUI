@@ -1114,7 +1114,11 @@ class Tabs(QTabWidget):
                 else:
                     self.var.target_vis = True
             case "Grid Visible":
-                print(button.checkState())
+                if button.checkState() == PySide6.QtCore.Qt.CheckState.Unchecked:
+                    self.var.grid_vis = False
+                    print(self.var.grid_vis)
+                else:
+                    self.var.grid_vis = True
             case _:
                 print("Something went wrong!")
         print(txt)
