@@ -73,6 +73,13 @@ class Tabs(QTabWidget):
         self.load_bg_image_button = None
         self.n_frames = None
 
+        # getting the default whether the grid is on or not from the config file
+        grid_def = int(self.var.config.get("test", "grid_visible"))
+        if grid_def == 1:
+            self.var.grid_vis = True
+        else:
+            self.var.grid_vis = False
+
         # Generate the Tabs for the window to hold the settings
         self.tab1 = QWidget()
         self.tab2 = QWidget()
@@ -556,7 +563,7 @@ class Tabs(QTabWidget):
 
         # Make the grid visible checkbox and set default to be checked
         self.grid_vis = QCheckBox("Grid Visible")
-        self.grid_vis.setChecked(True)
+        self.grid_vis.setChecked(self.var.grid_vis)
         self.grid_vis.setFocusPolicy(Qt.NoFocus)
 
         # Connect the slot of the checkbox for grid visible

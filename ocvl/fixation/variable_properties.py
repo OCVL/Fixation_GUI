@@ -9,7 +9,7 @@ class Variables:
                  custom_color=None, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
                  right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None,
                  center_x_og=None, center_y_og=None, target_vis=None, stimulus_imaging=None,
-                 center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3, screen_ppd=None, grid_vis=True):
+                 center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3, screen_ppd=None, grid_vis=None):
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
         self.y_val = y_val
