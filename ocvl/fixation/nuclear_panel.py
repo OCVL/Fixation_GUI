@@ -15,12 +15,13 @@ class NuclearDisplay(QWidget):
 
         # setting up GUI panels
         self.righty = TargetRighty(self.var)
+        self.var.righty = self.righty
         self.bottom = TargetBottom(self.var)
 
         # Get the dims from the Configuration tabs
         var.dim = self.righty.target.var.dim.split("x")
         # may not be the best way to send instance - maybe save all instances as vars...
-        self.target_area = TargetArea(self.var, self.righty)
+        self.target_area = TargetArea(self.var)
 
         # setting up layout
         self.grid_layout = QtWidgets.QGridLayout(self)
@@ -46,7 +47,7 @@ class TargetArea(QWidget):
     Class for the grid display
     """
 
-    def __init__(self, var, nuclear_display_ref):
+    def __init__(self, var):
         super().__init__()
         # policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         # policy.setHeightForWidth(True)
@@ -55,7 +56,6 @@ class TargetArea(QWidget):
         self.setMinimumSize(700, 700)
 
         self.var = var
-        self.nuclear_display_ref = nuclear_display_ref
 
         # Set up labels; Anatomical view is default
         if self.var.eye == 'OS':
@@ -115,7 +115,7 @@ class TargetArea(QWidget):
             self.var.x_val = -(self.var.center_x_og_grid - self.position.x()) / self.var.grid_mult
             self.var.y_val = (self.var.center_y_og_grid - self.position.y()) / self.var.grid_mult
             # call to update the x and y text boxes
-            self.nuclear_display_ref.target.updateCoordText()
+            self.var.righty.target.updateCoordText()
             self.position = None
 
 
