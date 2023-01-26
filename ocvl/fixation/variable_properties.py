@@ -10,7 +10,7 @@ class Variables:
                  right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None,
                  center_x_og=None, center_y_og=None, target_vis=None, stimulus_imaging=None,
                  center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3,
-                 screen_ppd=None, grid_vis=None, righty=None):
+                 screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None):
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
         self.y_val = y_val
@@ -39,7 +39,8 @@ class Variables:
         self.grid_mult = grid_mult
         self.screen_ppd = screen_ppd
         self.grid_vis = grid_vis
-        self.righty = righty
+        self.control_ref = control_ref
+        self.notes_ref = notes_ref
 
         # configuration file set up
         self.config = configparser.ConfigParser()
@@ -265,12 +266,20 @@ class Variables:
         self._grid_vis = value
 
     # getter
-    def get_righty(self):
-        return self._righty
+    def get_control_ref(self):
+        return self._control_ref
 
     # setter
-    def set_righty(self, value):
-        self._righty = value
+    def set_control_ref(self, value):
+        self._control_ref = value
+
+    # getter
+    def get_notes_ref(self):
+        return self._notes_ref
+
+    # setter
+    def set_notes_ref(self, value):
+        self._notes_ref = value
 
     # creating property objects
     # sourced from tabs
@@ -302,7 +311,8 @@ class Variables:
     grid_mult = QtCore.Property(bool, get_grid_mult, set_grid_mult)
     screen_ppd = QtCore.Property(bool, get_screen_ppd, set_screen_ppd)
     grid_vis = QtCore.Property(bool, get_grid_vis, set_grid_vis)
-    righty = QtCore.Property(bool, get_righty, set_righty)
+    control_ref = QtCore.Property(bool, get_control_ref, set_control_ref)
+    notes_ref = QtCore.Property(bool, get_notes_ref, set_notes_ref)
 
 
 if __name__ == "__main__":

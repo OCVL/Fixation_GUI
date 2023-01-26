@@ -15,8 +15,9 @@ class NuclearDisplay(QWidget):
 
         # setting up GUI panels
         self.righty = TargetRighty(self.var)
-        self.var.righty = self.righty
+        self.var.control_ref = self.righty
         self.bottom = TargetBottom(self.var)
+        self.var.notes_ref = self.bottom
 
         # Get the dims from the Configuration tabs
         var.dim = self.righty.target.var.dim.split("x")
@@ -115,7 +116,7 @@ class TargetArea(QWidget):
             self.var.x_val = -(self.var.center_x_og_grid - self.position.x()) / self.var.grid_mult
             self.var.y_val = (self.var.center_y_og_grid - self.position.y()) / self.var.grid_mult
             # call to update the x and y text boxes
-            self.var.righty.target.updateCoordText()
+            self.var.control_ref.target.updateCoordText()
             self.position = None
 
 
