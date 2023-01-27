@@ -113,7 +113,7 @@ class NuclearNotes(QtWidgets.QWidget):
         # populating columns --simulation for now. will need to get this info from savior/grid later
         self.var.current_fov = "1.0 x 1.0"
         self.current_location = "(" + str(self.var.x_val) + "," + str(self.var.y_val) + ")"
-        self.testPop = [str(self.count), self.current_location, self.var.current_fov]
+        self.testPop = [str(self.count), self.current_location, self.var.current_fov, self.var.notes_entry]
         for i in range(len(self.testPop)):
             self.table_widget.item(0, i).setText(self.testPop[i])  # self.row_count
 
@@ -125,6 +125,7 @@ class NuclearNotes(QtWidgets.QWidget):
             pass
         self.saveNotes()
         self.count = self.count+1
+        self.var.notes_entry = ""
 
     @QtCore.Slot()
     def saveNotes(self):

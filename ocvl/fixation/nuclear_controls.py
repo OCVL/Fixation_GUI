@@ -953,6 +953,7 @@ class Tabs(QTabWidget):
                 self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
+                self.var.notes_entry = "TLC"
             case "MTE":
                 self.var.x_val = 0
                 self.var.y_val = 0 + (v_fov / 4)
@@ -960,6 +961,7 @@ class Tabs(QTabWidget):
                 self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid
                 self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
+                self.var.notes_entry = "MTE"
             case "TRC":
                 self.var.x_val = 0 + (h_fov / 4)
                 self.var.y_val = 0 + (v_fov / 4)
@@ -967,6 +969,7 @@ class Tabs(QTabWidget):
                 self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
+                self.var.notes_entry = "TRC"
             case "MLE":
                 self.var.x_val = 0 - (h_fov / 4)
                 self.var.y_val = 0
@@ -974,6 +977,7 @@ class Tabs(QTabWidget):
                 self.var.center_y = self.var.center_y_og
                 self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid
+                self.var.notes_entry = "MLE"
             case "CTR":
                 self.var.x_val = 0
                 self.var.y_val = 0
@@ -988,6 +992,7 @@ class Tabs(QTabWidget):
                 self.var.center_y = self.var.center_y_og
                 self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid
+                self.var.notes_entry = "MRE"
             case "BLC":
                 self.var.x_val = 0 - (h_fov / 4)
                 self.var.y_val = 0 - (v_fov / 4)
@@ -995,6 +1000,7 @@ class Tabs(QTabWidget):
                 self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
+                self.var.notes_entry = "BLC"
             case "MBE":
                 self.var.x_val = 0
                 self.var.y_val = 0 - (v_fov / 4)
@@ -1002,6 +1008,7 @@ class Tabs(QTabWidget):
                 self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid
                 self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
+                self.var.notes_entry = "MBE"
             case "BRC":
                 self.var.x_val = 0 + (h_fov / 4)
                 self.var.y_val = 0 - (v_fov / 4)
@@ -1009,6 +1016,7 @@ class Tabs(QTabWidget):
                 self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
                 self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
                 self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
+                self.var.notes_entry = "BRC"
             case _:
                 print("Something went wrong!")
 
@@ -1026,7 +1034,6 @@ class Tabs(QTabWidget):
         button = self.sender()
         txt = button.text()
         if button.isChecked():
-            print("Pressed the button called: " + txt)
             v1 = str(self.grid_defaults[0])
             v2 = str(self.grid_defaults[1])
             v3 = str(self.grid_defaults[2])

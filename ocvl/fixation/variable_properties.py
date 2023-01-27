@@ -10,7 +10,7 @@ class Variables:
                  right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None,
                  center_x_og=None, center_y_og=None, target_vis=None, stimulus_imaging=None,
                  center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3,
-                 screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None):
+                 screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None, notes_entry=""):
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
         self.y_val = y_val
@@ -41,6 +41,7 @@ class Variables:
         self.grid_vis = grid_vis
         self.control_ref = control_ref
         self.notes_ref = notes_ref
+        self.notes_entry = notes_entry
 
         # configuration file set up
         self.config = configparser.ConfigParser()
@@ -281,6 +282,14 @@ class Variables:
     def set_notes_ref(self, value):
         self._notes_ref = value
 
+    # getter
+    def get_notes_entry(self):
+        return self._notes_entry
+
+    # setter
+    def set_notes_entry(self, value):
+        self._notes_entry = value
+
     # creating property objects
     # sourced from tabs
     animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
@@ -313,6 +322,7 @@ class Variables:
     grid_vis = QtCore.Property(bool, get_grid_vis, set_grid_vis)
     control_ref = QtCore.Property(bool, get_control_ref, set_control_ref)
     notes_ref = QtCore.Property(bool, get_notes_ref, set_notes_ref)
+    notes_entry = QtCore.Property(bool, get_notes_entry, set_notes_entry)
 
 
 if __name__ == "__main__":
