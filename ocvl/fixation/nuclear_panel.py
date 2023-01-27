@@ -213,7 +213,7 @@ class TargetArea(QWidget):
 
             # paint the recorded video locations with the correct FOV
             painter.setBrush(Qt.NoBrush)
-            painter.setPen(Qt.blue)
+            painter.setPen(QColor(0, 206, 207))
             painter.drawRect(x_loc - ((radii / self.horz_lines) * x_fov),
                              y_loc - ((radii / self.vert_lines) * y_fov),
                              ((radii / self.horz_lines) * x_fov) * 2, ((radii / self.vert_lines) * y_fov) * 2)
