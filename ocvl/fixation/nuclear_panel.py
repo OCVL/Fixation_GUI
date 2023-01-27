@@ -20,8 +20,7 @@ class NuclearDisplay(QWidget):
         self.var.notes_ref = self.bottom
 
         # Get the dims from the Configuration tabs
-        var.dim = self.righty.target.var.dim.split("x")
-        # may not be the best way to send instance - maybe save all instances as vars...
+        self.var.dim = self.var.dim.split("x")
         self.target_area = TargetArea(self.var)
 
         # setting up layout
@@ -118,7 +117,6 @@ class TargetArea(QWidget):
             # call to update the x and y text boxes
             self.var.control_ref.target.updateCoordText()
             self.position = None
-
 
         # sets up the size of the grid lines (will need to be changed to be custom size)
         if self.grid_size == 'small':

@@ -198,9 +198,8 @@ class Tabs(QTabWidget):
         # Connect the dropdown menus (grid dims) to their slots
         self.dim_select.currentTextChanged.connect(self.dropDownGridSizeChange)
 
-        # Default from config file - comment
-        # self.var.dim = self.var.config.get("test", "grid_size_start_default")
-        self.var.dim = self.grid_defaults[2]
+        # Default from config file
+        self.var.dim = self.var.config.get("test", "grid_size_start_default")
         self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
 
         # Add the dropdown and its label to the grid set up layout
