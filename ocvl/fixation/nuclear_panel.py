@@ -90,6 +90,10 @@ class TargetArea(QWidget):
         :return:
         """
 
+        # need to get the number of horz and vert lines each time in case the dimensions have changed
+        self.horz_lines = int(self.var.dim[0])
+        self.vert_lines = int(self.var.dim[1])
+
         painter = QPainter(self)
         painter.setBrush(QColor(75, 75, 75))
         painter.setRenderHint(QPainter.Antialiasing, True)

@@ -147,10 +147,11 @@ class Tabs(QTabWidget):
 
         # Labels for each Grid section
         quick_size_label = QLabel("Quick Sizes:")
-        dim_menu_label = QLabel("Grid Dimension:")
+        # dim_menu_label = QLabel("Grid Dimension:")
 
         # Default button size creation
         self.grid_defaults = self.var.config.get("test", "grid_size_defaults").split("/")
+        print(self.grid_defaults)
         self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
         self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
         self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
@@ -186,25 +187,25 @@ class Tabs(QTabWidget):
         grid_setup_layout.addLayout(quick_size_layout)
 
         # Set up the other sizes in the dropdown menu
-        self.dim_select = QComboBox()
+        # self.dim_select = QComboBox()
 
         # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
-        self.dim_select.setFocusPolicy(Qt.NoFocus)
+        # self.dim_select.setFocusPolicy(Qt.NoFocus)
 
         # Add all the different possible dims for grid
-        for x in range(10, 61, 5):
-            self.dim_select.addItem(str(x) + "x" + str(x))
+        # for x in range(10, 61, 5):
+        #     self.dim_select.addItem(str(x) + "x" + str(x))
 
         # Connect the dropdown menus (grid dims) to their slots
-        self.dim_select.currentTextChanged.connect(self.dropDownGridSizeChange)
+        # self.dim_select.currentTextChanged.connect(self.dropDownGridSizeChange)
 
         # Default from config file
         self.var.dim = self.var.config.get("test", "grid_size_start_default")
-        self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
+        # self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
 
         # Add the dropdown and its label to the grid set up layout
-        grid_setup_layout.addWidget(dim_menu_label)
-        grid_setup_layout.addWidget(self.dim_select)
+        # grid_setup_layout.addWidget(dim_menu_label)
+        # grid_setup_layout.addWidget(self.dim_select)
 
         # Selected Reference point/ reset button
         self.ref_pt_button = QPushButton()
@@ -1023,14 +1024,14 @@ class Tabs(QTabWidget):
             v3 = str(self.grid_defaults[2])
             v4 = str(self.none_selected.text())
             if txt == v1:
-                self.var.dim = self.grid_defaults[0]
-                self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
+                self.var.dim = self.grid_defaults[0].split("x")
+                # self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
             elif txt == v2:
-                self.var.dim = self.grid_defaults[1]
-                self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
+                self.var.dim = self.grid_defaults[1].split("x")
+                # self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
             elif txt == v3:
-                self.var.dim = self.grid_defaults[2]
-                self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
+                self.var.dim = self.grid_defaults[2].split("x")
+                # self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
             elif txt == v4:
                 print("hidden button")
             else:
