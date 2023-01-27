@@ -1,3 +1,4 @@
+import pandas
 from PySide6 import QtWidgets, QtCore, QtQuick, QtGui
 from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap
@@ -70,6 +71,9 @@ class TargetArea(QWidget):
         self.rendered = True
         self.init = 1
         self.position = None
+        self.prev_vid_num = -1
+        self.video_list = pandas.DataFrame(columns=["Video Number", "Location", "FOV"])
+        # self.video_list.columns =
 
     # def heightForWidth(self, width):
     #     return width
@@ -93,6 +97,10 @@ class TargetArea(QWidget):
         # need to get the number of horz and vert lines each time in case the dimensions have changed
         self.horz_lines = int(self.var.dim[0])
         self.vert_lines = int(self.var.dim[1])
+
+        tmp = self.var.current_fov.split(" ")
+        h_fov = float(tmp[0])
+        v_fov = float(tmp[2])
 
         painter = QPainter(self)
         painter.setBrush(QColor(75, 75, 75))
@@ -179,6 +187,39 @@ class TargetArea(QWidget):
 
             painter.setPen(Qt.black)
 
+        # adds video list entry to pandas dataframe video list to keep track of taken videos
+        if self.var.video_list_entry:
+            if self.var.video_list_entry[0] != self.prev_vid_num:
+                self.video_list.loc[len(self.video_list.index)] = self.var.video_list_entry
+                self.prev_vid_num = self.var.video_list_entry[0]
+
+        # paints all the FOVs at the correct locations for all the videos in the video list
+        for index, row in self.video_list.iterrows():
+            # parse the location
+            locs = row['Location']
+            locs2 = locs.split(",")
+            locs3 = locs2[0].split("(")
+            locs4 = locs2[1].split(")")
+            x_loc = float(locs3[1])
+            y_loc = float(locs4[0])
+            x_loc = self.var.center_x_og_grid + x_loc * self.var.grid_mult
+            y_loc = self.var.center_y_og_grid - y_loc * self.var.grid_mult
+
+            # parse the FOV
+            fov = row['FOV']
+            fov2 = fov.split(" ")
+            x_fov = float(fov2[0])
+            y_fov = float(fov2[2])
+
+            # paint the recorded video locations with the correct FOV
+            painter.setBrush(Qt.NoBrush)
+            painter.setPen(Qt.blue)
+            painter.drawRect(x_loc - ((radii / self.horz_lines) * x_fov),
+                             y_loc - ((radii / self.vert_lines) * y_fov),
+                             ((radii / self.horz_lines) * x_fov) * 2, ((radii / self.vert_lines) * y_fov) * 2)
+            painter.setBrush(QColor(75, 75, 75))
+            painter.setPen(Qt.black)
+
         # used to set circle visible on  screen (from config file)
         if self.circle_vis == "1":
             painter.setPen(QPen(QColor(3, 175, 224), 2.5))
@@ -188,9 +229,6 @@ class TargetArea(QWidget):
             pass
         painter.setBrush(Qt.NoBrush)
         painter.setPen(Qt.green)
-        tmp = self.var.current_fov.split(" ")
-        h_fov = float(tmp[0])
-        v_fov = float(tmp[2])
         painter.drawRect(self.var.center_x_grid - ((radii/self.horz_lines) * h_fov), self.var.center_y_grid - ((radii/self.vert_lines) * v_fov), ((radii/self.horz_lines) * h_fov) * 2, ((radii/self.vert_lines) * v_fov) * 2)
         painter.setBrush(QColor(75, 75, 75))
         painter.setPen(Qt.black)

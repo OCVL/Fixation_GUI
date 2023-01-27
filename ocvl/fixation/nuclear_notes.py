@@ -125,7 +125,8 @@ class NuclearNotes(QtWidgets.QWidget):
             pass
         self.saveNotes()
         self.count = self.count+1
-        self.var.notes_entry = ""
+        # add video entry to the list to be stored for painting on grid
+        self.var.video_list_entry = [str(self.count), self.current_location, self.var.current_fov]
 
     @QtCore.Slot()
     def saveNotes(self):
