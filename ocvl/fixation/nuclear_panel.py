@@ -67,6 +67,7 @@ class TargetArea(QWidget):
         self.circle_vis = self.var.config.get("test", "fixation_circle_visible")
         self.horz_lines = int(self.var.dim[0])
         self.vert_lines = int(self.var.dim[1])
+        print(self.horz_lines)
         self.rendered = True
         self.init = 1
         self.position = None
