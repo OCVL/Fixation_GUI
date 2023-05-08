@@ -21,7 +21,8 @@ class NuclearNotes(QtWidgets.QWidget):
         super().__init__()
 
         self.var = var
-        self.notes_fname = 'test_file.xlsx'  # will need to use config file to get the convention and then fill in
+        self.notes_fname = 'test_notes.xlsx'  # will need to use config file to get the convention and then fill in
+        self.locations_fname = 'test_locations.xlsx'
         self.horizontal_table_headers = None
 
         self.layout = QtWidgets.QVBoxLayout(self)
@@ -59,6 +60,9 @@ class NuclearNotes(QtWidgets.QWidget):
         self.saveNotes()
         self.test = 0
         self.count = 0
+
+        # create pandas dataframe
+        self.loc_df = pd.DataFrame(columns=['v0.3', 'Location', 'Horizontal FOV', 'Vertical FOV'])
 
     def constructTable(self):
         """
@@ -124,6 +128,7 @@ class NuclearNotes(QtWidgets.QWidget):
         except AttributeError:
             pass
         self.saveNotes()
+        self.saveLocations()
         self.count = self.count+1
         # add video entry to the list to be stored for painting on grid
         self.var.video_list_entry = [str(self.count), self.current_location, self.var.current_fov]
@@ -135,21 +140,21 @@ class NuclearNotes(QtWidgets.QWidget):
         :return:
         """
         # create pandas dataframe
-        df = pd.DataFrame(columns=self.horizontal_table_headers)
+        self.df = pd.DataFrame(columns=self.horizontal_table_headers)
 
         # populate dataframe with the table information
         for col in range(self.table_widget.columnCount()):
             for row in range(self.table_widget.rowCount()):
                 try:
-                    df.at[row, self.horizontal_table_headers[col]] = str(self.table_widget.item(row, col).text())
+                    self.df.at[row, self.horizontal_table_headers[col]] = str(self.table_widget.item(row, col).text())
                 except AttributeError:
                     pass
 
         # flip dataframe indices so that it is in chronological order for the csv
         # https://stackoverflow.com/questions/20444087/right-way-to-reverse-a-pandas-dataframe
-        df = df.iloc[::-1]
-        # save the dataframe to an excel file
-        df.to_excel(self.notes_fname, index=False)
+        self.df = self.df.iloc[::-1]
+        # save the dataframe to an Excel file
+        self.df.to_excel(self.notes_fname, index=False)
 
         # code that was created to save notes to pdf - maybe can reuse for the upon exit/conversion script
         # # don't try to start saving notes to pdf if no videos have been taken yet
@@ -198,6 +203,36 @@ class NuclearNotes(QtWidgets.QWidget):
         #                             annotation.update(pdfrw.PdfDict(AP=''))
         # self.template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
         # pdfrw.PdfWriter().write('testNotesPdf.pdf', self.template_pdf)  # will need to have this not be hard coded later on!!!!!!!!!!!!!!!!!!
+
+    def saveLocations(self):
+        '''
+        Saves the locations csv file
+        :return:
+        '''
+        vid_num = []
+        loc = []
+        fov = []
+
+        vid_num = self.df.get('Video #')
+        vid_num = int(vid_num[0])
+        loc = self.df.get('Location')
+        loc = loc[0].replace('(', '').replace(')', '')
+        fov = self.df.get('FOV')
+        fov = fov[0].split(' ')
+        hfov = float(fov[0])
+        vfov = float(fov[2])
+
+        data = {
+            'v0.3': vid_num,
+            'Location': loc,
+            'Horizontal FOV': hfov,
+            'Vertical FOV': vfov
+        }
+
+        self.loc_df = self.loc_df.append(data, ignore_index=True)
+
+        # save the dataframe to an Excel file
+        self.loc_df.to_excel(self.locations_fname, index=False)
 
 
 class ReadOnlyDelegate(QStyledItemDelegate):
