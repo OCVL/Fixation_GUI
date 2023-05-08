@@ -71,24 +71,46 @@ class NuclearBase(QWidget):
         self.prev_x = self.var.x_val
         self.prev_y = self.var.y_val
 
-        if key == [QtCore.Qt.Key_Left]:
-            self.var.x_val = self.var.x_val - self.major_increment
-        elif key == [QtCore.Qt.Key_Up]:
-            self.var.y_val = self.var.y_val + self.major_increment
-        elif key == [QtCore.Qt.Key_Right]:
-            self.var.x_val = self.var.x_val + self.major_increment
-        elif key == [QtCore.Qt.Key_Down]:
-            self.var.y_val = self.var.y_val - self.major_increment
+        if self.var.device == 'MEAO':
+            if key == [QtCore.Qt.Key_Left]:
+                self.var.y_val = self.var.y_val + self.major_increment
+            elif key == [QtCore.Qt.Key_Up]:
+                self.var.x_val = self.var.x_val - self.major_increment
+            elif key == [QtCore.Qt.Key_Right]:
+                self.var.y_val = self.var.y_val - self.major_increment
+            elif key == [QtCore.Qt.Key_Down]:
+                self.var.x_val = self.var.x_val + self.major_increment
 
-        # shift + arrow for minor increment
-        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
-            self.var.x_val = self.var.x_val - self.minor_increment
-        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
-            self.var.y_val = self.var.y_val + self.minor_increment
-        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
-            self.var.x_val = self.var.x_val + self.minor_increment
-        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
-            self.var.y_val = self.var.y_val - self.minor_increment
+            # shift + arrow for minor increment
+            elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
+                self.var.y_val = self.var.y_val + self.minor_increment
+            elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
+                self.var.x_val = self.var.x_val - self.minor_increment
+            elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
+                self.var.y_val = self.var.y_val - self.minor_increment
+            elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
+                self.var.x_val = self.var.x_val + self.minor_increment
+
+        else:
+
+            if key == [QtCore.Qt.Key_Left]:
+                self.var.x_val = self.var.x_val - self.major_increment
+            elif key == [QtCore.Qt.Key_Up]:
+                self.var.y_val = self.var.y_val + self.major_increment
+            elif key == [QtCore.Qt.Key_Right]:
+                self.var.x_val = self.var.x_val + self.major_increment
+            elif key == [QtCore.Qt.Key_Down]:
+                self.var.y_val = self.var.y_val - self.major_increment
+
+            # shift + arrow for minor increment
+            elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
+                self.var.x_val = self.var.x_val - self.minor_increment
+            elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
+                self.var.y_val = self.var.y_val + self.minor_increment
+            elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
+                self.var.x_val = self.var.x_val + self.minor_increment
+            elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
+                self.var.y_val = self.var.y_val - self.minor_increment
 
 
         # call to function in nuclear_controls to update the coordinate text in the control panel
