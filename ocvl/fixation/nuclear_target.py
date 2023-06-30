@@ -19,7 +19,7 @@ class NuclearTarget(QWidget):
         monitors = QScreen.virtualSiblings(self.screen())
         monitor = monitors[display_monitor].availableGeometry()
         self.move(monitor.left(), monitor.top())
-        # self.showFullScreen()
+        self.showFullScreen()
 
         self.init = 1
         defaults = self.var.config.get("test", "fixation_default").split("/")

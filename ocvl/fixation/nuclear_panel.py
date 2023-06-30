@@ -120,7 +120,7 @@ class TargetArea(QWidget):
         self.var.center_y_grid = self.var.center_y_og_grid - self.var.y_val * self.var.grid_mult
 
         # updating the grid multiplier based on the size of the grid
-        self.var.grid_mult = (radii / (self.horz_lines - 1)) * 2
+        self.var.grid_mult = (radii / (self.horz_lines)) * 2
 
         # setting the position to the place the mouse clicked
         if self.position:
@@ -229,6 +229,7 @@ class TargetArea(QWidget):
             pass
         painter.setBrush(Qt.NoBrush)
         painter.setPen(Qt.green)
+        # second 2 are the size
         painter.drawRect(self.var.center_x_grid - ((radii/self.horz_lines) * h_fov), self.var.center_y_grid - ((radii/self.vert_lines) * v_fov), ((radii/self.horz_lines) * h_fov) * 2, ((radii/self.vert_lines) * v_fov) * 2)
         painter.setBrush(QColor(75, 75, 75))
         painter.setPen(Qt.black)
