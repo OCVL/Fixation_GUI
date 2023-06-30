@@ -27,13 +27,6 @@ class NuclearNotes(QtWidgets.QWidget):
 
         self.layout = QtWidgets.QVBoxLayout(self)
 
-        # fake record button to test adding more rows when a video is recorded
-        self.button = QtWidgets.QPushButton("FakeRecordButton")
-        self.layout.addWidget(self.button)
-        self.button.clicked.connect(self.addRow)
-
-        self.button.setFocusPolicy(Qt.NoFocus)
-
         # https://stackoverflow.com/questions/54612127/how-to-i-set-the-size-hint-for-a-qtablewidget-in-python
         # make the table and set it up to be formatted nicely
         self.table_widget = self.constructTable()
@@ -41,15 +34,17 @@ class NuclearNotes(QtWidgets.QWidget):
         self.table_widget.setAlternatingRowColors(True)
         # self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)  # made the columns equal width
         # Will need to make this adaptable in regards to having it fit whatever the headers are in the config file #905 is available
-        self.table_widget.setColumnWidth(0, 49)
-        self.table_widget.setColumnWidth(1, 51)
-        self.table_widget.setColumnWidth(2, 51)
-        self.table_widget.setColumnWidth(3, 464)
-        self.table_widget.setColumnWidth(4, 50)
-        self.table_widget.setColumnWidth(5, 60)
-        self.table_widget.setColumnWidth(6, 60)
-        self.table_widget.setColumnWidth(7, 60)
-        self.table_widget.setColumnWidth(8, 60)
+        # self.table_widget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        # self.table_widget.resizeColumnsToContents()
+        # self.table_widget.setColumnWidth(0, 49)
+        # self.table_widget.setColumnWidth(1, 51)
+        # self.table_widget.setColumnWidth(2, 51)
+        # self.table_widget.setColumnWidth(3, 464)
+        # self.table_widget.setColumnWidth(4, 50)
+        # self.table_widget.setColumnWidth(5, 60)
+        # self.table_widget.setColumnWidth(6, 60)
+        # self.table_widget.setColumnWidth(7, 60)
+        # self.table_widget.setColumnWidth(8, 60)
 
         self.layout.addWidget(self.table_widget, stretch=True)
 
@@ -60,6 +55,7 @@ class NuclearNotes(QtWidgets.QWidget):
         self.saveNotes()
         self.test = 0
         self.count = 0
+
 
         # create pandas dataframe
         self.loc_df = pd.DataFrame(columns=['v0.3', 'Location', 'Horizontal FOV', 'Vertical FOV'])
@@ -85,6 +81,16 @@ class NuclearNotes(QtWidgets.QWidget):
         table.setColumnCount(table_columns)
         table.setHorizontalHeaderLabels(
             self.horizontal_table_headers)
+        header = table.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(5, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(6, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(7, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(8, QHeaderView.ResizeMode.ResizeToContents)
 
         # delegate will be used to disable editing of columns
         delegate = ReadOnlyDelegate(self)
@@ -115,9 +121,9 @@ class NuclearNotes(QtWidgets.QWidget):
             self.table_widget.item(0, i).setTextAlignment(5)  # self.row_count
 
         # populating columns --simulation for now. will need to get this info from savior/grid later
-        self.var.current_fov = "1.0 x 1.0"
+        # self.var.current_fov = "1.0 x 1.0"
         self.current_location = "(" + str(self.var.x_val) + "," + str(self.var.y_val) + ")"
-        self.testPop = [str(self.count), self.current_location, self.var.current_fov, self.var.notes_entry]
+        self.testPop = [self.var.vid_num, self.current_location, self.var.current_fov, self.var.notes_entry]
         for i in range(len(self.testPop)):
             self.table_widget.item(0, i).setText(self.testPop[i])  # self.row_count
 
@@ -131,7 +137,7 @@ class NuclearNotes(QtWidgets.QWidget):
         self.saveLocations()
         self.count = self.count+1
         # add video entry to the list to be stored for painting on grid
-        self.var.video_list_entry = [str(self.count), self.current_location, self.var.current_fov]
+        self.var.video_list_entry = [self.var.vid_num, self.current_location, self.var.current_fov]
 
     @QtCore.Slot()
     def saveNotes(self):

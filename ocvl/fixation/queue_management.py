@@ -1,4 +1,4 @@
-from ocvl.fixation.nuclear_controls import Tabs
+
 
 class QueueMgmt():
 
@@ -21,9 +21,11 @@ class QueueMgmt():
                 if parsed[0] == self.FOV:
                     self.var.current_fov = parsed[1] + ' x ' + parsed[2][0:-1]
                     self.var.control_ref.target.updateFOVText()
-                    print("FOV")
-                    print(data)
+                    # print("FOV")
+                    # print(data)
                 elif parsed[0] == self.VIDNUM:
+                    self.var.vid_num = parsed[1][0:-1]
+                    self.var.notes_ref.target.addRow()
                     print("VIDNUM")
                     print(data)
                 else:
