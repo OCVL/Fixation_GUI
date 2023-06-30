@@ -589,32 +589,32 @@ class Tabs(QTabWidget):
         grid_vis_group.setLayout(grid_vis_layout)
         layout.addRow(grid_vis_group)
 
-        # Group for Savior Controls
-        savior_group = QGroupBox("Savior Control")
-        savior_layout = QFormLayout()
-
-        # get the FOVs from the config file to be added to the dropdown menu
-        self.FOV_menu = QComboBox()
-        self.var.savior_FOVs = self.var.config.get("test", "savior_FOVs").split("/")
-
-        # adds all the FOVs in the list
-        for x in self.var.savior_FOVs:
-            self.FOV_menu.addItem(x)
-
-        # sets the selection to the first one
-        self.FOV_menu.setCurrentIndex(0)
-
-        # Add the components to the savior layout
-        self.n_frames = QLineEdit()
-        savior_layout.addRow("Number of Frames:", self.n_frames)
-        savior_layout.addRow("Current FOV:", self.FOV_menu)
-        self.FOV_menu.setFocusPolicy(Qt.NoFocus)
-        self.n_frames.installEventFilter(self)
-
-        # Add the savior layout to the savior group and then add the group to the main layout as another row
-        savior_group.setLayout(savior_layout)
-        layout.addRow(savior_group)
-
+        # # Group for Savior Controls
+        # savior_group = QGroupBox("Savior Control")
+        # savior_layout = QFormLayout()
+        #
+        # # get the FOVs from the config file to be added to the dropdown menu
+        # self.FOV_menu = QComboBox()
+        # self.var.savior_FOVs = self.var.config.get("test", "savior_FOVs").split("/")
+        #
+        # # adds all the FOVs in the list
+        # for x in self.var.savior_FOVs:
+        #     self.FOV_menu.addItem(x)
+        #
+        # # sets the selection to the first one
+        # self.FOV_menu.setCurrentIndex(0)
+        #
+        # # Add the components to the savior layout
+        # self.n_frames = QLineEdit()
+        # savior_layout.addRow("Number of Frames:", self.n_frames)
+        # savior_layout.addRow("Current FOV:", self.FOV_menu)
+        # self.FOV_menu.setFocusPolicy(Qt.NoFocus)
+        # self.n_frames.installEventFilter(self)
+        #
+        # # Add the savior layout to the savior group and then add the group to the main layout as another row
+        # savior_group.setLayout(savior_layout)
+        # layout.addRow(savior_group)
+        
         # Sets the main layout of the tab
         self.tab2.setLayout(layout)
 
