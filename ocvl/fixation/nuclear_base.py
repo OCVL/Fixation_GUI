@@ -7,6 +7,9 @@ from ocvl.fixation.nuclear_panel import TargetArea
 from ocvl.fixation.initial_window import InitialDialog
 import variable_properties
 from ocvl.fixation.nuclear_target import NuclearTarget
+from ocvl.fixation.server import Server
+from ocvl.fixation.temp_client import Client
+import threading
 
 
 class NuclearBase(QWidget):
@@ -40,6 +43,16 @@ class NuclearBase(QWidget):
         increments = self.var.config.get("test", "major_minor_increments").split("/")
         self.major_increment = float(increments[0])
         self.minor_increment = float(increments[1])
+
+        # call the server host
+        self.x = threading.Thread(target=Server, args=(self.var,))
+        self.x.daemon = True
+        self.x.start()
+        # self.s = Server(self.var)
+
+        self.y = threading.Thread(target=Client)
+        self.y.daemon = True
+        self.y.start()
 
 
 
@@ -124,8 +137,8 @@ class NuclearBase(QWidget):
 
         # closes the secondary target screen
         self.w.close()
-
         event.accept()
+        sys.exit()
 
 
 if __name__ == "__main__":

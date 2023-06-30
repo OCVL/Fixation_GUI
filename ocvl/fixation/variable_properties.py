@@ -12,7 +12,7 @@ class Variables:
                  right_label=None, current_fov='1.0 x 1.0', shape=None, size=None, center_x=None, center_y=None,
                  center_x_og=None, center_y_og=None, target_vis=None, stimulus_imaging=None,
                  center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3,
-                 screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None, notes_entry="", video_list_entry=None):
+                 screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None, notes_entry="", video_list_entry=None, recvQ=None):
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
         self.y_val = y_val
@@ -45,6 +45,7 @@ class Variables:
         self.notes_ref = notes_ref
         self.notes_entry = notes_entry
         self.video_list_entry = video_list_entry
+        self.recvQ = recvQ
 
 
         # configuration file set up
@@ -302,6 +303,14 @@ class Variables:
     def set_video_list_entry(self, value):
         self._video_list_entry = value
 
+    # getter
+    def get_recvQ(self):
+        return self._recvQ
+
+    # setter
+    def set_recvQ(self, value):
+        self._recvQ = value
+
     # creating property objects
     # sourced from tabs
     animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
@@ -336,6 +345,7 @@ class Variables:
     notes_ref = QtCore.Property(bool, get_notes_ref, set_notes_ref)
     notes_entry = QtCore.Property(bool, get_notes_entry, set_notes_entry)
     video_list_entry = QtCore.Property(bool, get_video_list_entry, set_video_list_entry)
+    recvQ = QtCore.Property(bool, get_recvQ, set_recvQ)
 
 
 
