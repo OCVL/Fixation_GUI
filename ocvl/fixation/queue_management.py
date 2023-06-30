@@ -1,15 +1,14 @@
+import numpy as np
 
-
-class QueueMgmt():
+class QueueMgmt:
 
     def __init__(self, var, parent=None):
         self.var = var
 
         self.FOV = "(0"
         self.VIDNUM = "(1"
-        self.
+        self.tmp_fov_list = []
         self.queue_mgmt()
-
 
     def queue_mgmt(self):
 
@@ -22,9 +21,16 @@ class QueueMgmt():
                 if parsed[0] == self.FOV:
                     self.var.current_fov = parsed[1] + ' x ' + parsed[2][0:-1]
                     self.var.control_ref.target.updateFOVText()
-                    self.var.fov_list.append
-                    # print("FOV")
-                    # print(data)
+                    tmp = parsed[1] + ' x ' + parsed[2][0:-1]
+                    self.tmp_fov_list.append(tmp)
+
+                    if tmp in self.tmp_fov_list:
+                        print("Already in List")
+                    else:
+                        print("Adding new FOV to list")
+                    self.var.control_ref.target.fov_list.addItem(tmp)
+                    self.var.control_ref.target.fov_list.removeDuplicates()
+
                 elif parsed[0] == self.VIDNUM:
                     self.var.vid_num = parsed[1][0:-1]
                     self.var.notes_ref.target.addRow()

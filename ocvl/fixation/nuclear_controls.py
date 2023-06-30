@@ -1,5 +1,5 @@
 from tkinter import filedialog
-
+import numpy as np
 import PySide6
 from PySide6 import QtWidgets, QtGui, QtCore
 import sys
@@ -679,7 +679,9 @@ class Tabs(QTabWidget):
         info_layout.addRow("Subject ID:", QLabel(self.var.sub_id))
         info_layout.addRow("Device:", QLabel(self.var.device))
         info_layout.addRow(QLabel(""))
-        info_layout.addRow("FOV:", QLabel(self.var.current_fov))
+        self.fov_list = QListWidget()
+
+        info_layout.addRow("FOV:", self.fov_list)
         info_layout.addRow(QLabel(""))
         info_layout.addRow(QLabel("Document Save Location:"))
         info_layout.addRow(QLabel(self.var.save_loc))
