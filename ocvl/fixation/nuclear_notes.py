@@ -32,19 +32,6 @@ class NuclearNotes(QtWidgets.QWidget):
         self.table_widget = self.constructTable()
         self.table_widget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustIgnored)
         self.table_widget.setAlternatingRowColors(True)
-        # self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)  # made the columns equal width
-        # Will need to make this adaptable in regards to having it fit whatever the headers are in the config file #905 is available
-        # self.table_widget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        # self.table_widget.resizeColumnsToContents()
-        # self.table_widget.setColumnWidth(0, 49)
-        # self.table_widget.setColumnWidth(1, 51)
-        # self.table_widget.setColumnWidth(2, 51)
-        # self.table_widget.setColumnWidth(3, 464)
-        # self.table_widget.setColumnWidth(4, 50)
-        # self.table_widget.setColumnWidth(5, 60)
-        # self.table_widget.setColumnWidth(6, 60)
-        # self.table_widget.setColumnWidth(7, 60)
-        # self.table_widget.setColumnWidth(8, 60)
 
         self.layout.addWidget(self.table_widget, stretch=True)
 

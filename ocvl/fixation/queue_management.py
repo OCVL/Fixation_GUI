@@ -7,6 +7,7 @@ class QueueMgmt():
 
         self.FOV = "(0"
         self.VIDNUM = "(1"
+        self.
         self.queue_mgmt()
 
 
@@ -21,6 +22,7 @@ class QueueMgmt():
                 if parsed[0] == self.FOV:
                     self.var.current_fov = parsed[1] + ' x ' + parsed[2][0:-1]
                     self.var.control_ref.target.updateFOVText()
+                    self.var.fov_list.append
                     # print("FOV")
                     # print(data)
                 elif parsed[0] == self.VIDNUM:

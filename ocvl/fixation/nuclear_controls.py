@@ -614,7 +614,7 @@ class Tabs(QTabWidget):
         # # Add the savior layout to the savior group and then add the group to the main layout as another row
         # savior_group.setLayout(savior_layout)
         # layout.addRow(savior_group)
-        
+
         # Sets the main layout of the tab
         self.tab2.setLayout(layout)
 
