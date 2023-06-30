@@ -407,11 +407,18 @@ class Tabs(QTabWidget):
         # Info group
         info_group = QGroupBox("Info")
         info_layout = QVBoxLayout()
+        fov_layout = QGridLayout()
 
         # add the information we want
         info_layout.addWidget(QLabel("Subject ID: " + self.var.sub_id))
         info_layout.addWidget(QLabel("Eye: " + self.var.eye))
-        info_layout.addWidget(QLabel("FOV: " + self.var.current_fov))
+        fov_layout.addWidget(QLabel("FOV: "), 0, 0)
+        self.info_fov = QLineEdit(self.var.current_fov)
+        self.info_fov.setReadOnly(True)
+        self.info_fov.setFrame(False)
+        fov_layout.addWidget(self.info_fov, 0, 1)
+        info_layout.addLayout(fov_layout)
+
 
         # Add the info layout to the group and then the group to the main layout as another row
         info_group.setLayout(info_layout)
@@ -1154,6 +1161,14 @@ class Tabs(QTabWidget):
         """
         self.horz.setText(str(round(self.var.x_val, 2)))
         self.vert.setText(str(round(self.var.y_val, 2)))
+
+    def updateFOVText(self):
+        """
+        Update the FOV text in the info box (called when the FOV queue data comes in)
+        :return:
+        """
+        self.info_fov.setText(self.var.current_fov)
+
 
     def textChanged(self):
         """

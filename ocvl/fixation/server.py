@@ -32,19 +32,20 @@ class Server():
                     data = conn.recv(1024)
                     # print(sys.getsizeof(data))
                     if data:
-                        print(f"Received {data!r}")  # prints what was recieved here from the client
-                        parsed = data.split(b",")
-                        print(parsed[0])
-                        # extract data from message
-                        if parsed[0] == FOV:
-                            self.var.recvQ.put(data.decode())
-                            # recvQ.put((parsed[1].decode(), parsed[2].decode()))
-                            print(self.var.recvQ.get())
-                        elif parsed[0] == VIDNUM:
-                            self.var.recvQ.put(data.decode())
-                            print(self.var.recvQ.get())
-                        else:
-                            print("Shit hit the fan")
+                        self.var.recvQ.put(data.decode())
+                        # # print(f"Received {data!r}")  # prints what was recieved here from the client
+                        # parsed = data.split(b",")
+                        # # print(parsed[0])
+                        # # extract data from message
+                        # if parsed[0] == FOV:
+                        #     self.var.recvQ.put(data.decode())
+                        #     # recvQ.put((parsed[1].decode(), parsed[2].decode()))
+                        #     # print(self.var.recvQ.get())
+                        # elif parsed[0] == VIDNUM:
+                        #     self.var.recvQ.put(data.decode())
+                        #     # print(self.var.recvQ.get())
+                        # else:
+                        #     print("Shit hit the fan")
                         conn.sendall(data)  # sends message it recieved back to the client
 
                     if sys.getsizeof(data) == 33:  # 33 is 0 bytes (what is received when the client dies/is closed)

@@ -9,6 +9,7 @@ import variable_properties
 from ocvl.fixation.nuclear_target import NuclearTarget
 from ocvl.fixation.server import Server
 from ocvl.fixation.temp_client import Client
+from ocvl.fixation.queue_management import QueueMgmt
 import threading
 
 
@@ -44,15 +45,21 @@ class NuclearBase(QWidget):
         self.major_increment = float(increments[0])
         self.minor_increment = float(increments[1])
 
-        # call the server host
+        # call the server host on a new thread
         self.x = threading.Thread(target=Server, args=(self.var,))
         self.x.daemon = True
         self.x.start()
-        # self.s = Server(self.var)
 
+        # thread for the client - test savior -- comment out for actual use; testing purposes only
         self.y = threading.Thread(target=Client)
         self.y.daemon = True
         self.y.start()
+
+        self.z = threading.Thread(target=QueueMgmt, args=(self.var,))
+        self.z.daemon = True
+        self.z.start()
+
+
 
 
 
