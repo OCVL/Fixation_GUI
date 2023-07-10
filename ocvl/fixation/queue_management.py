@@ -1,4 +1,7 @@
+import PySide6
 import numpy as np
+from PySide6.QtGui import Qt
+
 
 class QueueMgmt:
 
@@ -23,13 +26,8 @@ class QueueMgmt:
                     self.var.control_ref.target.updateFOVText()
                     tmp = parsed[1] + ' x ' + parsed[2][0:-1]
                     self.tmp_fov_list.append(tmp)
-
-                    if tmp in self.tmp_fov_list:
-                        print("Already in List")
-                    else:
-                        print("Adding new FOV to list")
-                    self.var.control_ref.target.fov_list.addItem(tmp)
-                    self.var.control_ref.target.fov_list.removeDuplicates()
+                    if not self.var.control_ref.target.fov_list.findItems(tmp, Qt.MatchFixedString | Qt.MatchCaseSensitive):  # edit: corrected
+                        self.var.control_ref.target.fov_list.addItem(tmp)
 
                 elif parsed[0] == self.VIDNUM:
                     self.var.vid_num = parsed[1][0:-1]
