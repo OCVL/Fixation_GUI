@@ -1,5 +1,8 @@
 import sys
+
+import PySide6
 from PySide6 import QtCore, QtWidgets
+from PySide6.QtCore import QEvent
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea, QTableWidgetItem)
 import pandas as pd
@@ -32,7 +35,8 @@ class NuclearNotes(QtWidgets.QWidget):
         self.table_widget = self.constructTable()
         self.table_widget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustIgnored)
         self.table_widget.setAlternatingRowColors(True)
-
+        # Added so that the notes table doesn't interfere with the location moving
+        self.table_widget.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.layout.addWidget(self.table_widget, stretch=True)
 
         # start notes saving
