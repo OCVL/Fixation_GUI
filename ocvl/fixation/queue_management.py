@@ -24,14 +24,16 @@ class QueueMgmt:
                 if parsed[0] == self.FOV:
                     self.var.current_fov = parsed[1] + ' x ' + parsed[2][0:-1]
                     self.var.control_ref.target.updateFOVText()
-                    tmp = parsed[1] + ' x ' + parsed[2][0:-1]
-                    self.tmp_fov_list.append(tmp)
-                    if not self.var.control_ref.target.fov_list.findItems(tmp, Qt.MatchFixedString | Qt.MatchCaseSensitive):  # edit: corrected
-                        self.var.control_ref.target.fov_list.addItem(tmp)
+                    self.tmp = parsed[1] + ' x ' + parsed[2][0:-1]
+                    self.tmp_fov_list.append(self.tmp)
 
                 elif parsed[0] == self.VIDNUM:
                     self.var.vid_num = parsed[1][0:-1]
                     self.var.notes_ref.target.addRow()
+                    if not self.var.control_ref.target.fov_list.findItems(self.tmp, Qt.MatchFixedString | Qt.MatchCaseSensitive):  # edit: corrected
+                        self.var.control_ref.target.fov_list.addItem(self.tmp)
+
+
                     print("VIDNUM")
                     print(data)
                 else:
