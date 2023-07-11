@@ -244,16 +244,24 @@ class TargetArea(QWidget):
             pixmap.save("test.png", "PNG", -1)
             self.rendered = True
 
-        painter.setPen(Qt.green)
+        painter.setPen(Qt.white)
         font = QtGui.QFont()
         font.setPointSize(10)
         painter.setFont(font)
         painter.drawText((rect.width() / 2)-22, 10, 'Superior')
         painter.drawText((rect.width() / 2)-22, (radii * 2) - 2, 'Inferior')
-        painter.rotate(45)
-        painter.drawText(100, 100, self.var.left_label)
-        painter.drawText(800, 100, self.var.right_label)
-        painter.rotate(-45)
+        # painter.drawText(rect.width() / 2 - radii, (rect.height() / 2) -20, "N")
+        # painter.drawText(rect.width() / 2 - radii, (rect.height() / 2) -10, "a")
+        # painter.drawText(rect.width() / 2 - radii, (rect.height() / 2), "s")
+        # painter.drawText(rect.width() / 2 - radii, (rect.height() / 2) +10, "a")
+        # painter.drawText(rect.width() / 2 - radii, (rect.height() / 2) +20, "l")
+        # rect.width() / 2 - radii, rect.height() / 2 - radii, radii * 2, radii * 2
+        painter.rotate(90)
+        painter.drawText((rect.height() / 2)-20, -((rect.width() / 2)+ radii - 10), self.var.right_label)
+        painter.rotate(-90)
+        painter.rotate(-90)
+        painter.drawText(-((rect.height() / 2)+20), ((rect.width() / 2)- radii + 10), self.var.left_label)
+        painter.rotate(90)
         painter.setPen(Qt.black)
 
 
