@@ -92,9 +92,10 @@ class Tabs(QTabWidget):
         # Set the position of the tabs to be on the right
         self.setTabPosition(QTabWidget.East)
         self.setTabShape(QTabWidget.Triangular)
-        # need to figure out how to resize these appropriately when size of window changes
-        self.setMaximumWidth(350)
-        self.setMaximumHeight(700)
+        # with these lines commented out the panel is able to resize when the window size changes
+        # self.setMaximumWidth(350)
+        # self.setMaximumHeight(700)
+
 
         # Add the tabs generated to the parent window
         self.addTab(self.tab1, "GUI Configuration")
