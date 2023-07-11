@@ -58,11 +58,13 @@ class TargetArea(QWidget):
 
         self.var = var
 
-        # Set up labels; Anatomical view is default
+        # Set up label text
         if self.var.eye == 'OS':
-            self.var.label_or = False
+            self.var.left_label = "Nasal"
+            self.var.right_label = "Temporal"
         else:
-            self.var.label_or = True
+            self.var.left_label = "Temporal"
+            self.var.right_label = "Nasal"
 
         self.grid_size = self.var.config.get("test", "grid_size")
         self.circle_vis = self.var.config.get("test", "fixation_circle_visible")
@@ -78,10 +80,6 @@ class TargetArea(QWidget):
     # def heightForWidth(self, width):
     #     return width
 
-    def labels(self):
-        left_label = QLabel(self.var.left_label)
-        right_label = QLabel(self.var.right_label)
-
     def mouseReleaseEvent(self, event):
         self.position = event.pos()
 
@@ -93,6 +91,8 @@ class TargetArea(QWidget):
         :param arg__0:
         :return:
         """
+
+
 
         # need to get the number of horz and vert lines each time in case the dimensions have changed
         self.horz_lines = int(self.var.dim[0])
@@ -107,6 +107,8 @@ class TargetArea(QWidget):
         painter.setRenderHint(QPainter.Antialiasing, True)
 
         rect = painter.window()
+
+
 
         # sets up the size of the circle based on the window size
         radii = np.minimum(rect.width(), rect.height()) / 2
@@ -241,6 +243,20 @@ class TargetArea(QWidget):
             self.render(pixmap)
             pixmap.save("test.png", "PNG", -1)
             self.rendered = True
+
+        painter.setPen(Qt.green)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        painter.setFont(font)
+        painter.drawText((rect.width() / 2)-22, 10, 'Superior')
+        painter.drawText((rect.width() / 2)-22, (radii * 2) - 2, 'Inferior')
+        painter.rotate(45)
+        painter.drawText(100, 100, self.var.left_label)
+        painter.drawText(800, 100, self.var.right_label)
+        painter.rotate(-45)
+        painter.setPen(Qt.black)
+
+
 
         self.update()
 
