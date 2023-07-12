@@ -61,11 +61,6 @@ class Tabs(QTabWidget):
         self.square_out = None
         self.s_cross = None
         self.cross = None
-        self.color_display_label = None
-        self.color_name_label = None
-        self.color_layout = None
-        self.graphic = None
-        self.color_label = None
         self.label_size = None
         self.test_label = None
         self.size_bar = None
@@ -293,17 +288,9 @@ class Tabs(QTabWidget):
         # Color wheel for selecting the color of the target
         color_button = QPushButton("Select Color")
         target_cal_layout.addWidget(color_button)
-        color_display = QHBoxLayout()
-        self.color_name_label = QLabel("")
-        self.color_display_label = QLabel()
         color_button.clicked.connect(self.onPressColor)
 
         color_button.setFocusPolicy(Qt.NoFocus)
-
-        # Add all the Color related widgets to their layout
-        color_display.addWidget(self.color_name_label)
-        color_display.addWidget(self.color_display_label)
-        target_cal_layout.addLayout(color_display)
 
         # Generate the scroll bar for the size of the fixation target
         self.size_bar = QSlider(Qt.Horizontal)
@@ -874,19 +861,6 @@ class Tabs(QTabWidget):
         color = QColorDialog.getColor()  # Might want to make a class variable to change the color of the fixation target to the one selected
         self.var.custom_color = color
         if color.isValid():
-            self.color_name_label.setText("Current Color selected: " + str(color.name()))
-            self.color_display_label.setGeometry(100, 100, 200, 60)
-            self.color_display_label.setStyleSheet("QLabel""{"
-                                                   "border : 5px solid black;"
-                                                   "background-color: color;"
-                                                   "}")
-            # setting graphic effect to the label
-            self.graphic = QGraphicsColorizeEffect()
-            # setting color to the graphic
-            self.graphic.setColor(color)
-            # setting graphic to the label
-            self.color_display_label.setGraphicsEffect(self.graphic)
-
             self.drawTargets()
 
     """

@@ -27,7 +27,7 @@ class Client():
                         data = s.recv(1024)
                         # print(f"Received {data!r}")
                     message += 1
-                    time.sleep(1)
+                    time.sleep(8)
                     if message > 5:
                         s.close()
                         break
