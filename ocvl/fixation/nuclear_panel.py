@@ -118,8 +118,12 @@ class TargetArea(QWidget):
         self.var.center_y_og_grid = rect.height() / 2
 
         # updating the current location on the grid (accounts for the size changing as well)
-        self.var.center_x_grid = self.var.center_x_og_grid + self.var.x_val * self.var.grid_mult
-        self.var.center_y_grid = self.var.center_y_og_grid - self.var.y_val * self.var.grid_mult
+        if self.var.ref_point:
+            self.var.center_x_grid = self.var.center_x_og_grid + (self.var.x_val - self.var.x_ref) * self.var.grid_mult
+            self.var.center_y_grid = self.var.center_y_og_grid - (self.var.y_val - self.var.y_ref) * self.var.grid_mult
+        else:
+            self.var.center_x_grid = self.var.center_x_og_grid + self.var.x_val * self.var.grid_mult
+            self.var.center_y_grid = self.var.center_y_og_grid - self.var.y_val * self.var.grid_mult
 
         # updating the grid multiplier based on the size of the grid
         self.var.grid_mult = (radii / self.horz_lines) * 2

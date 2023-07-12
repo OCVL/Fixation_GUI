@@ -18,6 +18,8 @@ class Tabs(QTabWidget):
         Initialization of the class variables
         """
         super(Tabs, self).__init__(parent)
+        self.temp_x = None
+        self.temp_y = None
         self.none_selected = None
         self.var = var
 
@@ -1075,10 +1077,16 @@ class Tabs(QTabWidget):
         match txt:
             case "Set Reference Point":
                 # Add a label to display what was selected as the current reference point
-                self.ref_pt_label.setText("Reference Point (x,y)")
+                self.ref_pt_label.setText("Reference Point (" + str(round(self.var.x_val, 2)) + "," + str(round(self.var.y_val, 2)) + ")")
                 self.ref_pt_button.setText("Clear Reference Point")
+                # set reference point to true and set the ref point values
+                self.var.ref_point = True
+                self.var.x_ref = self.var.x_val
+                self.var.y_ref = self.var.y_val
             case "Clear Reference Point":
                 self.ref_pt_button.setText("Set Reference Point")
+                self.ref_pt_label.setText("")
+                self.var.ref_point = False
             case _:
                 print("Something went wrong!")
 

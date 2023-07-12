@@ -13,7 +13,7 @@ class Variables:
                  center_x_og=None, center_y_og=None, target_vis=None, stimulus_imaging=None,
                  center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3,
                  screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None, notes_entry="", video_list_entry=None,
-                 recvQ=None, vid_num=None, fov_list=[]):
+                 recvQ=None, vid_num=None, fov_list=[], ref_point=False, x_ref= None, y_ref=None):
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
         self.y_val = y_val
@@ -49,6 +49,9 @@ class Variables:
         self.recvQ = recvQ
         self.vid_num = vid_num
         self.fov_list = fov_list
+        self.ref_point = ref_point
+        self.x_ref = x_ref
+        self.y_ref = y_ref
 
 
         # configuration file set up
@@ -330,6 +333,30 @@ class Variables:
     def set_fov_list(self, value):
         self._fov_list = value
 
+    # getter
+    def get_ref_point(self):
+        return self._ref_point
+
+    # setter
+    def set_ref_point(self, value):
+        self._ref_point = value
+
+    # getter
+    def get_x_ref(self):
+        return self._x_ref
+
+    # setter
+    def set_x_ref(self, value):
+        self._x_ref = value
+
+    # getter
+    def get_y_ref(self):
+        return self._y_ref
+
+    # setter
+    def set_y_ref(self, value):
+        self._y_ref = value
+
     # creating property objects
     # sourced from tabs
     animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
@@ -367,6 +394,9 @@ class Variables:
     recvQ = QtCore.Property(bool, get_recvQ, set_recvQ)
     vid_num = QtCore.Property(bool, get_vid_num, set_vid_num)
     fov_list = QtCore.Property(bool, get_fov_list, set_fov_list)
+    ref_point = QtCore.Property(bool, get_ref_point, set_ref_point)
+    x_ref = QtCore.Property(bool, get_x_ref, set_x_ref)
+    y_ref = QtCore.Property(bool, get_y_ref, set_y_ref)
 
 
 if __name__ == "__main__":

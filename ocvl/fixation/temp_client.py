@@ -12,7 +12,7 @@ class Client():
         PORT = 65432  # The port used by the server
         message = 0
         time_out = 2
-        packet = [b"(0,2.0,2.0)", b"(1,0)", b"(0,1.0,1.0)"]
+        packet = [b"(0,2.0,2.0)"]
         # b"(0,2.0,2.0)", b"(1,0)", b"(0,1.0,1.0)", b"(1,1)", b"(0,2.0,2.0)", b"(0,3.0,3.0)"
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -27,7 +27,7 @@ class Client():
                         data = s.recv(1024)
                         # print(f"Received {data!r}")
                     message += 1
-                    time.sleep(8)
+                    time.sleep(5)
                     if message > 5:
                         s.close()
                         break
