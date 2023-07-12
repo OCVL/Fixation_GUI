@@ -362,6 +362,7 @@ class Tabs(QTabWidget):
         target_cal_layout.addWidget(QLabel(""))
         target_cal_layout.addLayout(fix_shape_main)
         target_cal_layout.addWidget(self.test_label)
+        self.test_label.setText("Current Target: " + self.var.shape)
 
         # Add the fixation target stuff to the main layout and then add the group to the main layout as another row
         target_config_group.setLayout(target_cal_layout)
@@ -820,31 +821,31 @@ class Tabs(QTabWidget):
             case "Large Crosshair":
                 # Will be changed to what each shape will look like in the future
                 self.var.shape = txt
-                self.test_label.setText("You pressed the button called: " + txt)
+                self.test_label.setText("Current Target: " + txt)
             case "Small Crosshair":
                 # Will be changed to what each shape will look like in the future
                 self.var.shape = txt
-                self.test_label.setText("You pressed the button called: " + txt)
+                self.test_label.setText("Current Target: " + txt)
             case "Maltese Cross":
                 # Will be changed to what each shape will look like in the future
                 self.var.shape = txt
-                self.test_label.setText("You pressed the button called: " + txt)
+                self.test_label.setText("Current Target: " + txt)
             case "Square Outline":
                 # Will be changed to what each shape will look like in the future
                 self.var.shape = txt
-                self.test_label.setText("You pressed the button called: " + txt)
+                self.test_label.setText("Current Target: " + txt)
             case "Square":
                 # Will be changed to what each shape will look like in the future
                 self.var.shape = txt
-                self.test_label.setText("You pressed the button called: " + txt)
+                self.test_label.setText("Current Target: " + txt)
             case "Circle":
                 # Will be changed to what each shape will look like in the future
                 self.var.shape = txt
-                self.test_label.setText("You pressed the button called: " + txt)
+                self.test_label.setText("Current Target: " + txt)
             case "Twinkle":
                 # Will be changed to what each shape will look like in the future
                 self.var.shape = txt
-                self.test_label.setText("You pressed the button called: " + txt)
+                self.test_label.setText("Current Target: " + txt)
 
     def sizeChange(self):
         """
