@@ -10,19 +10,17 @@ from ocvl.fixation.initial_window import InitialDialog
 import variable_properties
 from ocvl.fixation.nuclear_target import NuclearTarget
 from ocvl.fixation.server import Server
-from ocvl.fixation.temp_client import Client
+from ocvl.fixation.client import Client
 from ocvl.fixation.queue_management import QueueMgmt
 import threading
 
 
 class NuclearBase(QWidget):
-    def __init__(self, var=None):
+    def __init__(self, source=0):
         super().__init__()
 
         # get the instance of the variables class to pass to everything
         self.var = variable_properties.Variables()
-        # self.var = pickle.loads(var)
-        # self.var = var
         # create the initial dialog window
         dlg = InitialDialog(self.var)
         dlg.exec()
@@ -48,11 +46,12 @@ class NuclearBase(QWidget):
         self.major_increment = float(increments[0])
         self.minor_increment = float(increments[1])
 
-        # call the server host on a new thread
-        # self.x = threading.Thread(target=Server, args=(self.var,))
-        # self.x.daemon = True
-        # self.x.start()
-        #
+        if source == 1:
+            # call the server host on a new thread if started through nuclear base
+            self.x = threading.Thread(target=Server)
+            self.x.daemon = True
+            self.x.start()
+
         # thread for the client - test savior -- comment out for actual use; testing purposes only
         print("hiiii")
         self.y = threading.Thread(target=Client, args=(self.var,))
@@ -154,7 +153,7 @@ class NuclearBase(QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
-    base = NuclearBase()
+    base = NuclearBase(1)
     # base.resize(1000, 500)
     base.show()
     base.setFocusPolicy(Qt.StrongFocus)

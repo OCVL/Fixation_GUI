@@ -12,17 +12,12 @@ import platform
 from queue import Queue
 import socket
 
-import select
-import variable_properties
-import pickle
 
 
 class FixGUIServer:
     def __init__(self, recvQueue=None):
         # get the instance of the variables class to pass to everything
 
-        # self.var = variable_properties.Variables()
-        # self.var.recvQ = recvQueue
         logging.basicConfig(filename='fixGUIServer.log', level=logging.DEBUG)
         thispath = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 

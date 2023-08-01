@@ -1,56 +1,67 @@
+import socket
 import sys
+import time
 from queue import Queue
 
-class Server():
-    def __init__(self, var, parent=None):
-        self.var = var
-        self.server()
-    def server(self):
-        # echo-server.py
+class Server:
+    def __init__(self):
 
-        import socket
+
+        self.server()
+
+    def server(self):
+        print("in the server")
 
         HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
         PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
-        time_out = 2
-        FOV = b"(0"
-        VIDNUM = b"(1"
+        m = 0
+        packet = [b"(0,2.0,2.0)", b"(1,0)"]
+        # b"(0,2.0,2.0)", b"(1,0)", b"(0,1.0,1.0)", b"(1,1)", b"(0,2.0,2.0)", b"(0,3.0,3.0)"
 
-        print("in the server")
+        # instantiate a socket object
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print('socket instantiated')
 
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind((HOST, PORT))
-            s.listen()
-            conn, addr = s.accept()
-            s.setblocking(False)
+        # bind the socket
+        sock.bind((HOST, PORT))
+        print('socket binded')
 
-            with conn:
-                print(f"Connected by {addr}")
-                while True:
-                    # ready = select.select([s], [], [], time_out)
-                    # if ready[0]:
-                    data = conn.recv(1024)
-                    # print(sys.getsizeof(data))
-                    if data:
-                        self.var.recvQ.put(data.decode())
-                        # # print(f"Received {data!r}")  # prints what was recieved here from the client
-                        # parsed = data.split(b",")
-                        # # print(parsed[0])
-                        # # extract data from message
-                        # if parsed[0] == FOV:
-                        #     self.var.recvQ.put(data.decode())
-                        #     # recvQ.put((parsed[1].decode(), parsed[2].decode()))
-                        #     # print(self.var.recvQ.get())
-                        # elif parsed[0] == VIDNUM:
-                        #     self.var.recvQ.put(data.decode())
-                        #     # print(self.var.recvQ.get())
-                        # else:
-                        #     print("Shit hit the fan")
-                        conn.sendall(data)  # sends message it recieved back to the client
+        # start the socket listening
+        sock.listen()
+        print('socket now listening')
 
-                    if sys.getsizeof(data) == 33:  # 33 is 0 bytes (what is received when the client dies/is closed)
-                        s.close()
-                        break
+        # accept the socket response from the client, and get the connection object
+        conn, addr = sock.accept()  # Note: execution waits here until the client calls sock.connect()
+        print('socket accepted, got connection object')
+
+        myCounter = 0
+        while True:
+            if m < len(packet):
+                message = (packet[m])
+                print('sending')
+                self.sendTextViaSocket(message, conn)
+                m += 1
+                time.sleep(3)
+                if m > len(packet)-1:
+                    sock.close()
+                    break
+
+    def sendTextViaSocket(self, message, sock):
+        ACK_TEXT = 'text_received'
+
+        # send the data via the socket to the server
+        sock.sendall(message)
+
+        # receive acknowledgment from the server
+        encodedAckText = sock.recv(1024)
+        ackText = encodedAckText.decode('utf-8')
+
+        # log if acknowledgment was successful
+        if ackText == ACK_TEXT:
+            print('server acknowledged reception of text')
+        else:
+            print('error: server has sent back ' + ackText)
 
 if __name__ == "__main__":
-    server()
+    print('hi')
+    # server()

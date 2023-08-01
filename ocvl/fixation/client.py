@@ -34,8 +34,6 @@ class Client():
                 connectionSuccessful = True
             except:
                 pass
-            # end try
-        # end while
 
         socks = [sock]
         while True:
