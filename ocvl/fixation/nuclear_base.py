@@ -55,7 +55,7 @@ class NuclearBase(QWidget):
         #
         # thread for the client - test savior -- comment out for actual use; testing purposes only
         print("hiiii")
-        self.y = threading.Thread(target=Client)
+        self.y = threading.Thread(target=Client, args=(self.var,))
         self.y.daemon = True
         self.y.start()
         #
