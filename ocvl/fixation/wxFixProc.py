@@ -11,11 +11,12 @@ import socket
 import platform
 from queue import Queue
 import socket
+# from multiprocessing import Queue
 
 
 
 class FixGUIServer:
-    def __init__(self, recvQueue=None):
+    def __init__(self, sendQueue=None):
         # get the instance of the variables class to pass to everything
 
         logging.basicConfig(filename='fixGUIServer.log', level=logging.DEBUG)
@@ -36,7 +37,7 @@ class FixGUIServer:
 
 
         # self.server = Server()
-        self.serverThread = threading.Thread(target=Server)
+        self.serverThread = threading.Thread(target=Server, args=(sendQueue,))
         # self.serverThread.daemon = True
         self.serverThread.start()
 
@@ -44,13 +45,11 @@ class FixGUIServer:
 
 
 class Server:
-    def __init__(self):
+    def __init__(self, sendQueue):
 
+        self._sendQueue = sendQueue
 
-        self.server()
-
-    def server(self):
-        print("in the server")
+        print("in the server class")
 
         HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
         PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
@@ -86,6 +85,7 @@ class Server:
                     sock.close()
                     break
 
+
     def sendTextViaSocket(self, message, sock):
         ACK_TEXT = 'text_received'
 
@@ -107,5 +107,14 @@ if __name__ == '__main__':
 
     testQ = Queue()
 
+    FOV = 0
+    VIDNUM = 1
+
     server = FixGUIServer(testQ)
+
+    print("Starting test packets...")
+    testQ.put((FOV, 1.00, 1.00))
+    time.sleep(5)
+    testQ.put((VIDNUM, '0000'))
+
 
