@@ -2,9 +2,14 @@
 import time
 import socket
 import select
+import variable_properties
+
 
 class Client():
-    def __init__(self, parent=None):
+    def __init__(self):
+        # get the instance of the variables class to pass to everything
+        # self.var = variable_properties.Variables()
+        # self.var.recvQ = recvQueue
         self.client()
     def client(self):
         print("in the client")
@@ -12,7 +17,7 @@ class Client():
         PORT = 65432  # The port used by the server
         message = 0
         time_out = 2
-        packet = [b"(0,2.0,2.0)"]
+        packet = [b"(0,2.0,2.0)", b"(1,0)"]
         # b"(0,2.0,2.0)", b"(1,0)", b"(0,1.0,1.0)", b"(1,1)", b"(0,2.0,2.0)", b"(0,3.0,3.0)"
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -27,7 +32,7 @@ class Client():
                         data = s.recv(1024)
                         # print(f"Received {data!r}")
                     message += 1
-                    time.sleep(5)
+                    time.sleep(3)
                     if message > 5:
                         s.close()
                         break

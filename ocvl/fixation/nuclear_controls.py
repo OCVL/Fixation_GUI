@@ -903,6 +903,7 @@ class Tabs(QTabWidget):
             ("image", ".jpg"),
             ("image", ".tif")])
         print(image_path)
+        self.var.image_path = image_path
         self.image_label.setText(str(image_path))
 
     """

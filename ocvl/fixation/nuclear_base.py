@@ -1,4 +1,6 @@
 import sys
+from queue import Queue
+
 from PySide6 import QtWidgets, QtCore
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget
@@ -14,12 +16,13 @@ import threading
 
 
 class NuclearBase(QWidget):
-    def __init__(self):
+    def __init__(self, var=None):
         super().__init__()
 
         # get the instance of the variables class to pass to everything
         self.var = variable_properties.Variables()
-
+        # self.var = pickle.loads(var)
+        # self.var = var
         # create the initial dialog window
         dlg = InitialDialog(self.var)
         dlg.exec()
@@ -46,15 +49,16 @@ class NuclearBase(QWidget):
         self.minor_increment = float(increments[1])
 
         # call the server host on a new thread
-        self.x = threading.Thread(target=Server, args=(self.var,))
-        self.x.daemon = True
-        self.x.start()
-
+        # self.x = threading.Thread(target=Server, args=(self.var,))
+        # self.x.daemon = True
+        # self.x.start()
+        #
         # thread for the client - test savior -- comment out for actual use; testing purposes only
+        print("hiiii")
         self.y = threading.Thread(target=Client)
         self.y.daemon = True
         self.y.start()
-
+        #
         self.z = threading.Thread(target=QueueMgmt, args=(self.var,))
         self.z.daemon = True
         self.z.start()

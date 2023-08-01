@@ -1,7 +1,7 @@
 import pandas
 from PySide6 import QtWidgets, QtCore, QtQuick, QtGui
 from PySide6.QtCore import QPoint, QRect
-from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap
+from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap, QImage
 from PySide6.QtWidgets import QWidget, QLabel, QSizePolicy
 import numpy as np
 from ocvl.fixation.nuclear_controls import Tabs
@@ -225,6 +225,11 @@ class TargetArea(QWidget):
                              ((radii / self.horz_lines) * x_fov) * 2, ((radii / self.vert_lines) * y_fov) * 2)
             painter.setBrush(QColor(75, 75, 75))
             painter.setPen(Qt.black)
+
+        if self.var.image_path is not None:
+            # pxmp = QPixmap().loadFromData(self.var.image_path)
+            # painter.drawPixmap(rect, pxmp)
+            painter.drawImage(QRect(100, 50, 100, 100), QImage(self.var.image_path))
 
         # used to set circle visible on  screen (from config file)
         if self.circle_vis == "1":

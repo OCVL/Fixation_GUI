@@ -13,7 +13,7 @@ class Variables:
                  center_x_og=None, center_y_og=None, target_vis=None, stimulus_imaging=None,
                  center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3,
                  screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None, notes_entry="", video_list_entry=None,
-                 recvQ=None, vid_num=None, fov_list=[], ref_point=False, x_ref= None, y_ref=None):
+                 recvQ=None, vid_num=None, fov_list=[], ref_point=False, x_ref= None, y_ref=None, image_path=None):
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
         self.y_val = y_val
@@ -52,6 +52,7 @@ class Variables:
         self.ref_point = ref_point
         self.x_ref = x_ref
         self.y_ref = y_ref
+        self.image_path = image_path
 
 
         # configuration file set up
@@ -357,6 +358,14 @@ class Variables:
     def set_y_ref(self, value):
         self._y_ref = value
 
+    # getter
+    def get_image_path(self):
+        return self._image_path
+
+    # setter
+    def set_image_path(self, value):
+        self._image_path = value
+
     # creating property objects
     # sourced from tabs
     animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
@@ -397,6 +406,7 @@ class Variables:
     ref_point = QtCore.Property(bool, get_ref_point, set_ref_point)
     x_ref = QtCore.Property(bool, get_x_ref, set_x_ref)
     y_ref = QtCore.Property(bool, get_y_ref, set_y_ref)
+    image_path = QtCore.Property(bool, get_image_path, set_image_path)
 
 
 if __name__ == "__main__":
