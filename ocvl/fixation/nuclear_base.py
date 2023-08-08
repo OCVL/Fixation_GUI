@@ -29,6 +29,7 @@ class NuclearBase(QWidget):
         # put if statement here to know if we need this to start up from info from the config file (animal land doesn't need the secondary display)
         self.w = NuclearTarget(self.var)
         self.w.show()
+        self.w.close()  # close the fixation target for animal ao
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.j = NuclearDisplay(self.var)
@@ -52,15 +53,15 @@ class NuclearBase(QWidget):
             self.x.daemon = True
             self.x.start()
 
-        # thread for the client - test savior -- comment out for actual use; testing purposes only
-        print("hiiii")
-        self.y = threading.Thread(target=Client, args=(self.var,))
-        self.y.daemon = True
-        self.y.start()
-        #
-        self.z = threading.Thread(target=QueueMgmt, args=(self.var,))
-        self.z.daemon = True
-        self.z.start()
+        # # thread for the client - test savior -- comment out for actual use; testing purposes only
+        # print("hiiii")
+        # self.y = threading.Thread(target=Client, args=(self.var,))
+        # self.y.daemon = True
+        # self.y.start()
+        # #
+        # self.z = threading.Thread(target=QueueMgmt, args=(self.var,))
+        # self.z.daemon = True
+        # self.z.start()
 
 
 

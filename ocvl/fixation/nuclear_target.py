@@ -19,7 +19,7 @@ class NuclearTarget(QWidget):
         monitors = QScreen.virtualSiblings(self.screen())
         monitor = monitors[display_monitor].availableGeometry()
         self.move(monitor.left(), monitor.top())
-        self.showFullScreen()
+        # self.showFullScreen()
 
         self.init = 1
         defaults = self.var.config.get("test", "fixation_default").split("/")
@@ -41,12 +41,15 @@ class NuclearTarget(QWidget):
 
 
 
+
     def paintEvent(self, arg__0):
         '''
 
         :param arg__0:
         :return:
         '''
+
+
 
         painter = QPainter(self)
         painter.setBrush(QColor(0, 0, 0))

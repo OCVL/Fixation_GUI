@@ -30,6 +30,11 @@ class NuclearNotes(QtWidgets.QWidget):
 
         self.layout = QtWidgets.QVBoxLayout(self)
 
+        # fake record button to test adding more rows when a video is recorded
+        self.button = QtWidgets.QPushButton("Mark Location")
+        self.layout.addWidget(self.button)
+        self.button.clicked.connect(self.addRow)
+
         # https://stackoverflow.com/questions/54612127/how-to-i-set-the-size-hint-for-a-qtablewidget-in-python
         # make the table and set it up to be formatted nicely
         self.table_widget = self.constructTable()
@@ -82,6 +87,11 @@ class NuclearNotes(QtWidgets.QWidget):
         header.setSectionResizeMode(6, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(7, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(8, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(9, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(10, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(11, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(12, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(13, QHeaderView.ResizeMode.ResizeToContents)
 
         # delegate will be used to disable editing of columns
         delegate = ReadOnlyDelegate(self)
@@ -99,6 +109,10 @@ class NuclearNotes(QtWidgets.QWidget):
         Adds a row to the notes table
         :return:
         """
+        self.button.clearFocus()
+
+        self.var.vid_num = self.var.vid_num + 1  # added to increment without being connected to savior
+
         # https: // stackoverflow.com / questions / 6957943 / how - to - add - new - row - to - existing - qtablewidget
         self.row_count = self.table_widget.rowCount()
         self.table_widget.insertRow(0)  # self.row_count
@@ -114,7 +128,7 @@ class NuclearNotes(QtWidgets.QWidget):
         # populating columns --simulation for now. will need to get this info from savior/grid later
         # self.var.current_fov = "1.0 x 1.0"
         self.current_location = "(" + str(self.var.x_val) + "," + str(self.var.y_val) + ")"
-        self.testPop = [self.var.vid_num, self.current_location, self.var.current_fov, self.var.notes_entry]
+        self.testPop = [str(self.var.vid_num), self.current_location, self.var.current_fov, self.var.notes_entry]
         for i in range(len(self.testPop)):
             self.table_widget.item(0, i).setText(self.testPop[i])  # self.row_count
 
@@ -226,7 +240,8 @@ class NuclearNotes(QtWidgets.QWidget):
             'Vertical FOV': vfov
         }
 
-        self.loc_df = self.loc_df.append(data, ignore_index=True)
+        # self.loc_df = self.loc_df.append(data, ignore_index=True)
+        self.loc_df[len(self.loc_df)] = data  # added to replace commented out line above since append is depreciated
 
         # save the dataframe to an Excel file
         self.loc_df.to_excel(self.locations_fname, index=False)
