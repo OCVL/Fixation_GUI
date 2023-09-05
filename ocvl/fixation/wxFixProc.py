@@ -11,7 +11,7 @@ import socket
 import platform
 from queue import Queue
 import socket
-# from multiprocessing import Queue
+
 
 
 
@@ -34,28 +34,22 @@ class FixGUIServer:
         self.mainGUI = subprocess.Popen([py3path, guipath])
         time.sleep(2)
 
-
-
-        # self.server = Server()
-        self.serverThread = threading.Thread(target=Server, args=(sendQueue,))
+        self.serverThread = threading.Thread(target=Server, args=(sendQueue, self))
         # self.serverThread.daemon = True
         self.serverThread.start()
 
 
 
-
 class Server:
-    def __init__(self, sendQueue):
+    def __init__(self, sendQueue, FixGUIServerRef):
 
         self._sendQueue = sendQueue
+        self._fixGuiServerRef = FixGUIServerRef
 
         print("in the server class")
 
         HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
         PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
-        m = 0
-        packet = [b"(0,2.0,2.0)", b"(1,0)"]
-        # b"(0,2.0,2.0)", b"(1,0)", b"(0,1.0,1.0)", b"(1,1)", b"(0,2.0,2.0)", b"(0,3.0,3.0)"
 
         # instantiate a socket object
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -75,15 +69,18 @@ class Server:
 
         myCounter = 0
         while True:
-            if m < len(packet):
-                message = (packet[m])
+
+            # if the main gui subprocesses was killed, close the socket, break the loop, and end. There will be a short delay before socket is closed
+            if self._fixGuiServerRef.mainGUI.poll() is not None:
+                sock.close()
+                break
+            elif sendQueue.qsize() > 0:
+                message = sendQueue.get()
+
+                print(message)
                 print('sending')
                 self.sendTextViaSocket(message, conn)
-                m += 1
-                time.sleep(3)
-                if m > len(packet)-1:
-                    sock.close()
-                    break
+                # time.sleep(3)
 
 
     def sendTextViaSocket(self, message, sock):
@@ -113,8 +110,8 @@ if __name__ == '__main__':
     server = FixGUIServer(testQ)
 
     print("Starting test packets...")
-    testQ.put((FOV, 1.00, 1.00))
-    time.sleep(5)
-    testQ.put((VIDNUM, '0000'))
+    testQ.put(b"(0,1.0,1.0)")
+    time.sleep(10)
+    testQ.put(b"(1,0)")
 
 

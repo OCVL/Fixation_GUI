@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a0b3cf8-dc52-4a7d-ac1c-a9c198de7599" name="Default Changelist" comment="-Added the ability to press F4 on the fixation target and have it start a record on the host application.">
+      <change beforePath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/test.png" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/test.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/test_locations.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/test_locations.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/test_notes.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/test_notes.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,13 +41,13 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/6794grieshj/Documents/GitHub/Fixation_GUI&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.idesettings.debugger.python&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
   <component name="PyDebuggerOptionsProvider">
     <option name="mySupportQtDebugging" value="false" />
   </component>
-  <component name="RunManager" selected="Python.nuclear_base">
+  <component name="RunManager" selected="Python.wxFixProc3">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -68,6 +69,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="echo-server" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Fixation_GUI" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\6794grieshj\Documents\GitHub\Fixation_GUI\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../TCPIP_test" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../TCPIP_test/echo-server.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="nuclear_base" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Fixation_GUI" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -81,27 +103,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="nuclear_controls" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\6794grieshj\Documents\GitHub\Fixation_GUI\venv\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -173,6 +174,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="wxFixProc3" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Fixation_GUI" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -235,17 +257,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.nuclear_base" />
+      <item itemvalue="Python.wxFixProc3" />
+      <item itemvalue="Python.echo-server" />
       <item itemvalue="Python.server" />
       <item itemvalue="Python.test properties" />
       <item itemvalue="Python.nuclear_notes" />
-      <item itemvalue="Python.nuclear_controls" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.wxFixProc3" />
+        <item itemvalue="Python.echo-server" />
         <item itemvalue="Python.server" />
         <item itemvalue="Python.test properties" />
         <item itemvalue="Python.nuclear_notes" />
-        <item itemvalue="Python.nuclear_controls" />
       </list>
     </recent_temporary>
   </component>
@@ -275,13 +299,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py</url>
-          <line>118</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py</url>
-          <line>232</line>
-          <option name="timeStamp" value="4" />
+          <line>121</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
