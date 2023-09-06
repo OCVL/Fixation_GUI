@@ -646,21 +646,21 @@ class Tabs(QTabWidget):
         # Set up the main layout for the tab
         layout = QFormLayout()
 
-        # Protocol Advance group and its layout
-        save_grid_group = QGroupBox("Save Grid Display")
-        save_grid_layout = QVBoxLayout()
-
-        # Save current grid push button
-        self.grid_display_save = QPushButton()
-        self.grid_display_save.setText("Save Current Grid Display")
-
-        # Connect to the slot and add to main layout
-        self.grid_display_save.clicked.connect(self.saveGrid)
-        save_grid_layout.addWidget(self.grid_display_save)
-
-        # Add the save grid layout to its group and then add the group to the main layout as another row
-        save_grid_group.setLayout(save_grid_layout)
-        layout.addRow(save_grid_group)
+        # # Protocol Advance group and its layout
+        # save_grid_group = QGroupBox("Save Grid Display")
+        # save_grid_layout = QVBoxLayout()
+        #
+        # # Save current grid push button
+        # self.grid_display_save = QPushButton()
+        # self.grid_display_save.setText("Save Current Grid Display")
+        #
+        # # Connect to the slot and add to main layout
+        # self.grid_display_save.clicked.connect(self.saveGrid)
+        # save_grid_layout.addWidget(self.grid_display_save)
+        #
+        # # Add the save grid layout to its group and then add the group to the main layout as another row
+        # save_grid_group.setLayout(save_grid_layout)
+        # layout.addRow(save_grid_group)
 
         # Add the Nuclear info to the final review tab
         info_group = QGroupBox("Session Information")
@@ -1105,13 +1105,13 @@ class Tabs(QTabWidget):
                 self.var.label_or = not self.var.label_or
             print(self.var.label_or)
 
-    def saveGrid(self):
-        """
-        Slot for the save grid display button
-        :return:
-        """
-        button = self.sender()
-        print(button.text())
+    # def saveGrid(self):
+    #     """
+    #     Slot for the save grid display button
+    #     :return:
+    #     """
+    #     button = self.sender()
+    #     print(button.text())
 
     def checkBoxResponse(self):
         """
