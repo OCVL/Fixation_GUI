@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 
 import PySide6
 from PySide6 import QtCore, QtWidgets
@@ -24,10 +25,16 @@ class NuclearNotes(QtWidgets.QWidget):
         super().__init__()
 
         self.var = var
-        locations_csv_naming = self.var.config.get("test", "locations_csv_naming")
-        self.locations_fname = (self.var.save_loc + '/' + locations_csv_naming)
-        print(self.locations_fname)
-        self.notes_fname = 'test_notes.xlsx'  # will need to use config file to get the convention and then fill in
+
+        # getting the name of the device from the config file
+        device_name = self.var.config.get("test", "device")
+        # getting the base for the saving/naming conventions for the files
+        base_name = (self.var.save_loc + '/' + self.var.sub_id + "_" + datetime.today().strftime('%Y%m%d') + '_' + self.var.eye + '_' + device_name + '_')
+
+        # setting the save location and names for the notes and locations file
+        self.notes_fname = (base_name + "Notes.xlsx")
+        self.locations_fname = (base_name + "Locations.csv")
+
         self.horizontal_table_headers = None
 
         self.layout = QtWidgets.QVBoxLayout(self)
