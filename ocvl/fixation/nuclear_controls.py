@@ -4,7 +4,7 @@ import PySide6
 from PySide6 import QtWidgets, QtGui, QtCore
 import sys
 from PySide6.QtGui import *
-from PySide6.QtCore import Qt, QSize, QPointF, QEvent
+from PySide6.QtCore import Qt, QSize, QPointF, QEvent, QRegularExpression
 from PySide6.QtWidgets import *
 
 
@@ -442,8 +442,14 @@ class Tabs(QTabWidget):
 
         # User input target control
         loc_layout = QHBoxLayout()
+
         self.horz = QLineEdit()
         self.vert = QLineEdit()
+
+        # added to ensure nothing other than a float number is able to be typed into the text boxes
+        self.horz.setValidator(QDoubleValidator(-100.0, 100.0, 2, notation=QtGui.QDoubleValidator.StandardNotation))
+        self.vert.setValidator(QDoubleValidator(-100.0, 100.0, 2, notation=QtGui.QDoubleValidator.StandardNotation))
+
         self.horz.installEventFilter(self)
         self.vert.installEventFilter(self)
 

@@ -114,9 +114,13 @@ if __name__ == '__main__':
     testQ.put(b"(0,1.0,1.0)")
     time.sleep(3)
     testQ.put(b"(1,0)")
-    # time.sleep(3)
-    # testQ.put(b"(0,2.0,2.0)")
-    # time.sleep(3)
-    # testQ.put(b"(1,1)")
+    time.sleep(3)
+    testQ.put(b"(0,2.0,2.0)")
+    time.sleep(3)
+    testQ.put(b"(1,1)")
+    time.sleep(3)
+    testQ.put(b"(0,1.0,1.0)")
+    time.sleep(3)
+    testQ.put(b"(1,2)")
 
 
