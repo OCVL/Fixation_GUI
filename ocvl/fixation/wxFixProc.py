@@ -109,7 +109,7 @@ if __name__ == '__main__':
     VIDNUM = 1
 
     server = FixGUIServer(testQ)
-
+    time.sleep(20)
     print("Starting test packets...")
     testQ.put(b"(0,1.0,1.0)")
     time.sleep(3)

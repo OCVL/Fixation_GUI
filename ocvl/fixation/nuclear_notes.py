@@ -24,8 +24,10 @@ class NuclearNotes(QtWidgets.QWidget):
         super().__init__()
 
         self.var = var
+        locations_csv_naming = self.var.config.get("test", "locations_csv_naming")
+        self.locations_fname = (self.var.save_loc + '/' + locations_csv_naming)
+        print(self.locations_fname)
         self.notes_fname = 'test_notes.xlsx'  # will need to use config file to get the convention and then fill in
-        self.locations_fname = 'test_locations.csv'
         self.horizontal_table_headers = None
 
         self.layout = QtWidgets.QVBoxLayout(self)
