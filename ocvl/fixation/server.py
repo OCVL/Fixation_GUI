@@ -1,7 +1,5 @@
 import socket
-import sys
 import time
-from queue import Queue
 
 class Server:
     def __init__(self):

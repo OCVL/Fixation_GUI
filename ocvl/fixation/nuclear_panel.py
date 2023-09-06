@@ -1,5 +1,4 @@
 from datetime import datetime
-
 import pandas
 from PySide6 import QtWidgets, QtCore, QtQuick, QtGui
 from PySide6.QtCore import QPoint, QRect
@@ -305,7 +304,6 @@ class TargetRighty(QWidget):
 
     def paintEvent(self, arg__0):
         pass
-
 
 class TargetBottom(QWidget):
     """

@@ -1,5 +1,3 @@
-import PySide6
-import numpy as np
 from PySide6.QtGui import Qt
 
 
@@ -10,7 +8,6 @@ class QueueMgmt:
 
         self.FOV = "(0"
         self.VIDNUM = "(1"
-        self.tmp_fov_list = []
         self.queue_mgmt()
 
     def queue_mgmt(self):
@@ -25,17 +22,12 @@ class QueueMgmt:
                     self.var.current_fov = parsed[1] + ' x ' + parsed[2][0:-1]
                     self.var.control_ref.target.updateFOVText()
                     self.tmp = parsed[1] + ' x ' + parsed[2][0:-1]
-                    self.tmp_fov_list.append(self.tmp)
 
                 elif parsed[0] == self.VIDNUM:
                     self.var.vid_num = parsed[1][0:-1]
                     self.var.notes_ref.target.addRow()
                     if not self.var.control_ref.target.fov_list.findItems(self.tmp, Qt.MatchFixedString | Qt.MatchCaseSensitive):  # edit: corrected
                         self.var.control_ref.target.fov_list.addItem(self.tmp)
-
-
-                    print("VIDNUM")
-                    print(data)
                 else:
                     print("Shit hit the fan")
 

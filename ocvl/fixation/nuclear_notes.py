@@ -1,13 +1,11 @@
 import sys
 from datetime import datetime
-
-import PySide6
 from PySide6 import QtCore, QtWidgets
-from PySide6.QtCore import QEvent
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea, QTableWidgetItem)
 import pandas as pd
 import pdfrw
+from pandas import concat
 
 ANNOT_KEY = '/Annots'
 ANNOT_FIELD_KEY = '/T'
@@ -15,8 +13,6 @@ ANNOT_VAL_KEY = '/V'
 ANNOT_RECT_KEY = '/Rect'
 SUBTYPE_KEY = '/Subtype'
 WIDGET_SUBTYPE_KEY = '/Widget'
-
-
 class NuclearNotes(QtWidgets.QWidget):
     """
     Class for the notes panel
@@ -228,14 +224,18 @@ class NuclearNotes(QtWidgets.QWidget):
         hfov = float(fov[0])
         vfov = float(fov[2])
 
-        data = {
+        data = [{
             'v0.3': vid_num,
             'Location': loc,
             'Horizontal FOV': hfov,
             'Vertical FOV': vfov
-        }
+        }]
 
-        self.loc_df = self.loc_df.append(data, ignore_index=True)
+        # convert data dict to data frame so it can be concatenated
+        data = pd.DataFrame(data)
+
+        # concatenate the old dataframe with the new
+        self.loc_df = concat([self.loc_df.loc[:], data]).reset_index(drop=True)
 
         # save the dataframe to an Excel file
         self.loc_df.to_csv(self.locations_fname, index=False)

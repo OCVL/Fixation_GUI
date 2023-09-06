@@ -1,8 +1,5 @@
-# client.py
-import time
 import socket
 import select
-import variable_properties
 
 
 class Client():

@@ -17,8 +17,12 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="1">
+          <list size="5">
             <item index="0" class="java.lang.String" itemvalue="PySide6" />
+            <item index="1" class="java.lang.String" itemvalue="pandas" />
+            <item index="2" class="java.lang.String" itemvalue="opencv-contrib-python" />
+            <item index="3" class="java.lang.String" itemvalue="numpy" />
+            <item index="4" class="java.lang.String" itemvalue="pdfrw" />
           </list>
         </value>
       </option>
@@ -27,6 +31,13 @@
       <option name="ignoredErrors">
         <list>
           <option value="E501" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="ocvl.fixation.wxFixProc.Queue" />
         </list>
       </option>
     </inspection_tool>

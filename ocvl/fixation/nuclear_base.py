@@ -1,11 +1,8 @@
 import sys
-from queue import Queue
-
 from PySide6 import QtWidgets, QtCore
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget
 from ocvl.fixation.nuclear_panel import NuclearDisplay
-from ocvl.fixation.nuclear_panel import TargetArea
 from ocvl.fixation.initial_window import InitialDialog
 import variable_properties
 from ocvl.fixation.nuclear_target import NuclearTarget
@@ -46,14 +43,14 @@ class NuclearBase(QWidget):
         self.major_increment = float(increments[0])
         self.minor_increment = float(increments[1])
 
+        # only needed if nuclear base is being run not from fixproc/savior
         if source == 1:
             # call the server host on a new thread if started through nuclear base
             self.x = threading.Thread(target=Server)
             self.x.daemon = True
             self.x.start()
 
-        # thread for the client - test savior -- comment out for actual use; testing purposes only
-        print("hiiii")
+        # thread for the client
         self.y = threading.Thread(target=Client, args=(self.var,))
         self.y.daemon = True
         self.y.start()
@@ -153,7 +150,7 @@ class NuclearBase(QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
-    base = NuclearBase(1)
+    base = NuclearBase(0)
     # base.resize(1000, 500)
     base.show()
     base.setFocusPolicy(Qt.StrongFocus)

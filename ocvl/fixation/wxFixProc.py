@@ -1,18 +1,14 @@
-import asyncio
-import datetime
 import logging
 import os
 import subprocess
-import datetime
-import sys
 import threading
 import time
-import socket
 import platform
-from queue import Queue
 import socket
-
-
+# for python2.7
+from Queue import Queue
+# for python3
+# from queue import Queue
 
 
 class FixGUIServer:
@@ -60,7 +56,7 @@ class Server:
         print('socket binded')
 
         # start the socket listening
-        sock.listen()
+        sock.listen(1)
         print('socket now listening')
 
         # accept the socket response from the client, and get the connection object
@@ -109,7 +105,7 @@ if __name__ == '__main__':
     VIDNUM = 1
 
     server = FixGUIServer(testQ)
-    time.sleep(20)
+    time.sleep(2)
     print("Starting test packets...")
     testQ.put(b"(0,1.0,1.0)")
     time.sleep(3)

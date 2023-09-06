@@ -1,8 +1,6 @@
 import configparser
 import os
 from queue import Queue
-
-import pandas
 from PySide6 import QtCore, QtGui
 
 

@@ -1,5 +1,4 @@
 from tkinter import filedialog
-import numpy as np
 import PySide6
 from PySide6 import QtWidgets, QtGui, QtCore
 import sys

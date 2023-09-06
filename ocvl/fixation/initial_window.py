@@ -1,11 +1,9 @@
 import sys
 from tkinter import filedialog
 import os
-
 import PySide6
 from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QLineEdit, QComboBox, QDialogButtonBox, QFormLayout, \
     QHBoxLayout, QRadioButton, QVBoxLayout, QCheckBox
-from PySide6.QtGui import *
 
 
 class InitialDialog(QDialog):
