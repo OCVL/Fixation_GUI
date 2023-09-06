@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pandas
 from PySide6 import QtWidgets, QtCore, QtQuick, QtGui
 from PySide6.QtCore import QPoint, QRect
@@ -75,6 +77,13 @@ class TargetArea(QWidget):
         self.position = None
         self.prev_vid_num = -1
         self.video_list = pandas.DataFrame(columns=["Video Number", "Location", "FOV"])
+
+        # getting the name of the device from the config file
+        device_name = self.var.config.get("test", "device")
+        # getting the base for the saving/naming conventions for the files
+        self.grid_name = (self.var.save_loc + '/' + self.var.sub_id + '_' + datetime.today().strftime(
+            '%Y%m%d') + '_' + self.var.eye + '_' + device_name + '_' + 'Grid.png')
+
         # self.video_list.columns =
 
     # def heightForWidth(self, width):
@@ -250,7 +259,7 @@ class TargetArea(QWidget):
             self.rendered = False
             pixmap = QPixmap(self.size())
             self.render(pixmap)
-            pixmap.save("test.png", "PNG", -1)
+            pixmap.save(self.grid_name, "PNG", -1)
             self.rendered = True
 
         painter.setPen(Qt.white)
