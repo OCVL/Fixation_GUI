@@ -25,7 +25,7 @@ class NuclearNotes(QtWidgets.QWidget):
 
         self.var = var
         self.notes_fname = 'test_notes.xlsx'  # will need to use config file to get the convention and then fill in
-        self.locations_fname = 'test_locations.xlsx'
+        self.locations_fname = 'test_locations.csv'
         self.horizontal_table_headers = None
 
         self.layout = QtWidgets.QVBoxLayout(self)
@@ -229,7 +229,7 @@ class NuclearNotes(QtWidgets.QWidget):
         self.loc_df = self.loc_df.append(data, ignore_index=True)
 
         # save the dataframe to an Excel file
-        self.loc_df.to_excel(self.locations_fname, index=False)
+        self.loc_df.to_csv(self.locations_fname, index=False)
 
 
 class ReadOnlyDelegate(QStyledItemDelegate):

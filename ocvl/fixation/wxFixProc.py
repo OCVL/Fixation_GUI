@@ -104,6 +104,7 @@ if __name__ == '__main__':
 
     testQ = Queue()
 
+    # first item in tuple contains key to if the message is an FOV or Video number
     FOV = 0
     VIDNUM = 1
 
@@ -111,7 +112,11 @@ if __name__ == '__main__':
 
     print("Starting test packets...")
     testQ.put(b"(0,1.0,1.0)")
-    time.sleep(10)
+    time.sleep(3)
     testQ.put(b"(1,0)")
+    # time.sleep(3)
+    # testQ.put(b"(0,2.0,2.0)")
+    # time.sleep(3)
+    # testQ.put(b"(1,1)")
 
 
