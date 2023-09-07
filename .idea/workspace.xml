@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a0b3cf8-dc52-4a7d-ac1c-a9c198de7599" name="Default Changelist" comment="-Added the ability to press F4 on the fixation target and have it start a record on the host application.">
+      <change beforePath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/initial_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/initial_window.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/test_settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/test_settings.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" afterDir="false" />
@@ -49,7 +51,7 @@
   <component name="PyDebuggerOptionsProvider">
     <option name="mySupportQtDebugging" value="false" />
   </component>
-  <component name="RunManager" selected="Python.wxFixProc2">
+  <component name="RunManager" selected="Python.wxFixProc38">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -102,6 +104,27 @@
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
       <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="nuclear_base38" type="PythonConfigurationType" factoryName="Python">
+      <module name="Fixation_GUI" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\jgrieshop\Documents\GitHub\Fixation_GUI_NUCLEAR\venv38\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" />
@@ -218,6 +241,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="wxFixProc38" type="PythonConfigurationType" factoryName="Python">
+      <module name="Fixation_GUI" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\jgrieshop\Documents\GitHub\Fixation_GUI_NUCLEAR\venv38\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -280,7 +324,9 @@
     </configuration>
     <list>
       <item itemvalue="Python.nuclear_base" />
+      <item itemvalue="Python.nuclear_base38" />
       <item itemvalue="Python.wxFixProc2" />
+      <item itemvalue="Python.wxFixProc38" />
       <item itemvalue="Python.wxFixProc3" />
       <item itemvalue="Python.echo-server" />
       <item itemvalue="Python.server" />

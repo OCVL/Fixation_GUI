@@ -6,13 +6,13 @@ import time
 import platform
 import socket
 # for python2.7
-from Queue import Queue
+# from Queue import Queue
 # for python3
-# from queue import Queue
+from queue import Queue
 
 
 class FixGUIServer:
-    def __init__(self, sendQueue=None):
+    def __init__(self, sendQueue=None, recvQueue=None):
         # get the instance of the variables class to pass to everything
 
         logging.basicConfig(filename='fixGUIServer.log', level=logging.DEBUG)

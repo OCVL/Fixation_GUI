@@ -124,17 +124,15 @@ class InitialDialog(QDialog):
         """
         button = self.sender()
         txt = button.text()
-        match txt:
-            case "Yes":
-                if button.checkState() == PySide6.QtCore.Qt.CheckState.Unchecked:
-                    self.var.stimulus_imaging = False
-                    print(self.var.stimulus_imaging)
-                else:
-                    self.var.stimulus_imaging = True
-                    print(self.var.stimulus_imaging)
-            case _:
-                print("Something went wrong!")
-        print(txt)
+        if txt == "Yes":
+            if button.checkState() == PySide6.QtCore.Qt.CheckState.Unchecked:
+                self.var.stimulus_imaging = False
+                print(self.var.stimulus_imaging)
+            else:
+                self.var.stimulus_imaging = True
+                print(self.var.stimulus_imaging)
+        else:
+            print("Something went wrong!")
 
     def on_save_click(self):
         """

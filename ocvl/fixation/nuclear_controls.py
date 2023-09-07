@@ -824,35 +824,27 @@ class Tabs(QTabWidget):
         """
         button = self.sender()
         txt = str(button.text())
-        match txt:
-            case "Large Crosshair":
-                # Will be changed to what each shape will look like in the future
-                self.var.shape = txt
-                self.test_label.setText("Current Target: " + txt)
-            case "Small Crosshair":
-                # Will be changed to what each shape will look like in the future
-                self.var.shape = txt
-                self.test_label.setText("Current Target: " + txt)
-            case "Maltese Cross":
-                # Will be changed to what each shape will look like in the future
-                self.var.shape = txt
-                self.test_label.setText("Current Target: " + txt)
-            case "Square Outline":
-                # Will be changed to what each shape will look like in the future
-                self.var.shape = txt
-                self.test_label.setText("Current Target: " + txt)
-            case "Square":
-                # Will be changed to what each shape will look like in the future
-                self.var.shape = txt
-                self.test_label.setText("Current Target: " + txt)
-            case "Circle":
-                # Will be changed to what each shape will look like in the future
-                self.var.shape = txt
-                self.test_label.setText("Current Target: " + txt)
-            case "Twinkle":
-                # Will be changed to what each shape will look like in the future
-                self.var.shape = txt
-                self.test_label.setText("Current Target: " + txt)
+        if txt == "Large Crosshair":
+            self.var.shape = txt
+            self.test_label.setText("Current Target: " + txt)
+        elif txt == "Small Crosshair":
+            self.var.shape = txt
+            self.test_label.setText("Current Target: " + txt)
+        elif txt == "Maltese Cross":
+            self.var.shape = txt
+            self.test_label.setText("Current Target: " + txt)
+        elif txt == "Square Outline":
+            self.var.shape = txt
+            self.test_label.setText("Current Target: " + txt)
+        elif txt == "Square":
+            self.var.shape = txt
+            self.test_label.setText("Current Target: " + txt)
+        elif txt == "Circle":
+            self.var.shape = txt
+            self.test_label.setText("Current Target: " + txt)
+        elif txt == "Twinkle":
+            self.var.shape = txt
+            self.test_label.setText("Current Target: " + txt)
 
     def sizeChange(self):
         """
@@ -878,27 +870,25 @@ class Tabs(QTabWidget):
     def onPressCal(self):
         button = self.sender()
         txt = str(button.text())
-        match txt:
-            case "Start Image Calibration":
-                self.image_cal_button.setText("Select 1st Point on Image")
-            case "Select 1st Point on Image":
-                self.image_cal_button.setText("Select Corresponding Point (1st Point)")
-            case "Select Corresponding Point (1st Point)":
-                self.image_cal_button.setText("Select 2nd Point on Image")
-            case "Select 2nd Point on Image":
-                self.image_cal_button.setText("Select Corresponding Point (2nd Point)")
-            case "Select Corresponding Point (2nd Point)":
-                self.image_cal_button.setText("Select 3rd Point on Image")
-            case "Select 3rd Point on Image":
-                self.image_cal_button.setText("Select Corresponding Point (3rd Point)")
-            case "Select Corresponding Point (3rd Point)":
-                self.image_cal_button.setText("Start Calibration")
-            case "Start Calibration":
-                self.image_cal_button.setText("New Calibration")
-            case "New Calibration":
-                self.image_cal_button.setText("Start Image Calibration")
-            case _:
-                self.image_cal_button.setText("Something went wrong!!!!")
+        if txt == "Start Image Calibration":
+            self.image_cal_button.setText("Select 1st Point on Image")
+        elif txt == "Select 1st Point on Image":
+            self.image_cal_button.setText("Select Corresponding Point (1st Point)")
+        elif txt == "Select Corresponding Point (1st Point)":
+            self.image_cal_button.setText("Select 2nd Point on Image")
+        elif txt == "Select 2nd Point on Image":
+            self.image_cal_button.setText("Select Corresponding Point (2nd Point)")
+        elif txt == "Select Corresponding Point (2nd Point)":
+            self.image_cal_button.setText("Select 3rd Point on Image")
+        elif txt == "Select 3rd Point on Image":
+            self.image_cal_button.setText("Select Corresponding Point (3rd Point)")
+        elif txt == "Select Corresponding Point (3rd Point)":
+            self.image_cal_button.setText("Start Calibration")
+        elif txt == "Start Calibration":
+            self.image_cal_button.setText("New Calibration")
+        elif txt == "New Calibration":
+            self.image_cal_button.setText("Start Image Calibration")
+
 
     def onPressLoad(self):
         button = self.sender()
@@ -925,11 +915,10 @@ class Tabs(QTabWidget):
     def onPressAdvanceP(self):
         button = self.sender()
         txt = self.save_p_label.text()
-        match txt:
-            case "Advance in Protocol":
-                self.save_p_label.setText("")
-            case _:
-                self.save_p_label.setText("Advance in Protocol")
+        if txt =="Advance in Protocol":
+            self.save_p_label.setText("")
+        else:
+            self.save_p_label.setText("Advance in Protocol")
 
     def onPressQuickLocs(self):
         button = self.sender()
@@ -938,80 +927,79 @@ class Tabs(QTabWidget):
         h_fov = float(tmp[0])
         v_fov = float(tmp[2])
         # need to make sure these end up being in the correct locations
-        match txt:
-            case "TLC":
-                self.var.x_val = 0 - (h_fov / 4)
-                self.var.y_val = 0 + (v_fov / 4)
-                self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
-                self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
-                self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
-                self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
-                self.var.notes_entry = "TLC"
-            case "MTE":
-                self.var.x_val = 0
-                self.var.y_val = 0 + (v_fov / 4)
-                self.var.center_x = self.var.center_x_og
-                self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
-                self.var.center_x_grid = self.var.center_x_og_grid
-                self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
-                self.var.notes_entry = "MTE"
-            case "TRC":
-                self.var.x_val = 0 + (h_fov / 4)
-                self.var.y_val = 0 + (v_fov / 4)
-                self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
-                self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
-                self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
-                self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
-                self.var.notes_entry = "TRC"
-            case "MLE":
-                self.var.x_val = 0 - (h_fov / 4)
-                self.var.y_val = 0
-                self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
-                self.var.center_y = self.var.center_y_og
-                self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
-                self.var.center_y_grid = self.var.center_y_og_grid
-                self.var.notes_entry = "MLE"
-            case "CTR":
-                self.var.x_val = 0
-                self.var.y_val = 0
-                self.var.center_x = self.var.center_x_og
-                self.var.center_y = self.var.center_y_og
-                self.var.center_x_grid = self.var.center_x_og_grid
-                self.var.center_y_grid = self.var.center_y_og_grid
-            case "MRE":
-                self.var.x_val = 0 + (h_fov / 4)
-                self.var.y_val = 0
-                self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
-                self.var.center_y = self.var.center_y_og
-                self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
-                self.var.center_y_grid = self.var.center_y_og_grid
-                self.var.notes_entry = "MRE"
-            case "BLC":
-                self.var.x_val = 0 - (h_fov / 4)
-                self.var.y_val = 0 - (v_fov / 4)
-                self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
-                self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
-                self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
-                self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
-                self.var.notes_entry = "BLC"
-            case "MBE":
-                self.var.x_val = 0
-                self.var.y_val = 0 - (v_fov / 4)
-                self.var.center_x = self.var.center_x_og
-                self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
-                self.var.center_x_grid = self.var.center_x_og_grid
-                self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
-                self.var.notes_entry = "MBE"
-            case "BRC":
-                self.var.x_val = 0 + (h_fov / 4)
-                self.var.y_val = 0 - (v_fov / 4)
-                self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
-                self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
-                self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
-                self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
-                self.var.notes_entry = "BRC"
-            case _:
-                print("Something went wrong!")
+        if txt =="TLC":
+            self.var.x_val = 0 - (h_fov / 4)
+            self.var.y_val = 0 + (v_fov / 4)
+            self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
+            self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
+            self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
+            self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
+            self.var.notes_entry = "TLC"
+        elif txt == "MTE":
+            self.var.x_val = 0
+            self.var.y_val = 0 + (v_fov / 4)
+            self.var.center_x = self.var.center_x_og
+            self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
+            self.var.center_x_grid = self.var.center_x_og_grid
+            self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
+            self.var.notes_entry = "MTE"
+        elif txt == "TRC":
+            self.var.x_val = 0 + (h_fov / 4)
+            self.var.y_val = 0 + (v_fov / 4)
+            self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
+            self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
+            self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
+            self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
+            self.var.notes_entry = "TRC"
+        elif txt == "MLE":
+            self.var.x_val = 0 - (h_fov / 4)
+            self.var.y_val = 0
+            self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
+            self.var.center_y = self.var.center_y_og
+            self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
+            self.var.center_y_grid = self.var.center_y_og_grid
+            self.var.notes_entry = "MLE"
+        elif txt == "CTR":
+            self.var.x_val = 0
+            self.var.y_val = 0
+            self.var.center_x = self.var.center_x_og
+            self.var.center_y = self.var.center_y_og
+            self.var.center_x_grid = self.var.center_x_og_grid
+            self.var.center_y_grid = self.var.center_y_og_grid
+        elif txt == "MRE":
+            self.var.x_val = 0 + (h_fov / 4)
+            self.var.y_val = 0
+            self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
+            self.var.center_y = self.var.center_y_og
+            self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
+            self.var.center_y_grid = self.var.center_y_og_grid
+            self.var.notes_entry = "MRE"
+        elif txt == "BLC":
+            self.var.x_val = 0 - (h_fov / 4)
+            self.var.y_val = 0 - (v_fov / 4)
+            self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
+            self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
+            self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
+            self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
+            self.var.notes_entry = "BLC"
+        elif txt == "MBE":
+            self.var.x_val = 0
+            self.var.y_val = 0 - (v_fov / 4)
+            self.var.center_x = self.var.center_x_og
+            self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
+            self.var.center_x_grid = self.var.center_x_og_grid
+            self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
+            self.var.notes_entry = "MBE"
+        elif txt == "BRC":
+            self.var.x_val = 0 + (h_fov / 4)
+            self.var.y_val = 0 - (v_fov / 4)
+            self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
+            self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
+            self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
+            self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
+            self.var.notes_entry = "BRC"
+        else:
+            print("Something went wrong!")
 
         # call to update the coordinates in the horz and vert text boxes
         self.updateCoordText()
@@ -1080,21 +1068,20 @@ class Tabs(QTabWidget):
         """
         button = self.sender()
         txt = str(button.text())
-        match txt:
-            case "Set Reference Point":
-                # Add a label to display what was selected as the current reference point
-                self.ref_pt_label.setText("Reference Point (" + str(round(self.var.x_val, 2)) + "," + str(round(self.var.y_val, 2)) + ")")
-                self.ref_pt_button.setText("Clear Reference Point")
-                # set reference point to true and set the ref point values
-                self.var.ref_point = True
-                self.var.x_ref = self.var.x_val
-                self.var.y_ref = self.var.y_val
-            case "Clear Reference Point":
-                self.ref_pt_button.setText("Set Reference Point")
-                self.ref_pt_label.setText("")
-                self.var.ref_point = False
-            case _:
-                print("Something went wrong!")
+        if txt == "Set Reference Point":
+            # Add a label to display what was selected as the current reference point
+            self.ref_pt_label.setText("Reference Point (" + str(round(self.var.x_val, 2)) + "," + str(round(self.var.y_val, 2)) + ")")
+            self.ref_pt_button.setText("Clear Reference Point")
+            # set reference point to true and set the ref point values
+            self.var.ref_point = True
+            self.var.x_ref = self.var.x_val
+            self.var.y_ref = self.var.y_val
+        elif txt == "Clear Reference Point":
+            self.ref_pt_button.setText("Set Reference Point")
+            self.ref_pt_label.setText("")
+            self.var.ref_point = False
+        else:
+            print("Something went wrong!")
 
     def viewChange(self):
         """
@@ -1125,24 +1112,22 @@ class Tabs(QTabWidget):
         """
         button = self.sender()
         txt = button.text()
-        match txt:
-            case "Target Animation":
-                print(button.checkState())
-            case "Target Visible":
-                if button.checkState() == PySide6.QtCore.Qt.CheckState.Unchecked:
-                    self.var.target_vis = False
-                    print(self.var.target_vis)
-                else:
-                    self.var.target_vis = True
-            case "Grid Visible":
-                if button.checkState() == PySide6.QtCore.Qt.CheckState.Unchecked:
-                    self.var.grid_vis = False
-                    print(self.var.grid_vis)
-                else:
-                    self.var.grid_vis = True
-            case _:
-                print("Something went wrong!")
-        print(txt)
+        if txt == "Target Animation":
+            print(button.checkState())
+        elif txt == "Target Visible":
+            if button.checkState() == PySide6.QtCore.Qt.CheckState.Unchecked:
+                self.var.target_vis = False
+                print(self.var.target_vis)
+            else:
+                self.var.target_vis = True
+        elif txt == "Grid Visible":
+            if button.checkState() == PySide6.QtCore.Qt.CheckState.Unchecked:
+                self.var.grid_vis = False
+                print(self.var.grid_vis)
+            else:
+                self.var.grid_vis = True
+        else:
+            print("Something went wrong!")
 
 
     def updateCoordText(self):
