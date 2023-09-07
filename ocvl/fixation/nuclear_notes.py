@@ -1,11 +1,13 @@
 import sys
 from datetime import datetime
 from PySide6 import QtCore, QtWidgets
+from PySide6.QtCore import QEvent
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (QTableWidget,QStyledItemDelegate, QHeaderView, QAbstractScrollArea, QTableWidgetItem)
 import pandas as pd
 import pdfrw
 from pandas import concat
+
 
 ANNOT_KEY = '/Annots'
 ANNOT_FIELD_KEY = '/T'
@@ -38,6 +40,7 @@ class NuclearNotes(QtWidgets.QWidget):
         # https://stackoverflow.com/questions/54612127/how-to-i-set-the-size-hint-for-a-qtablewidget-in-python
         # make the table and set it up to be formatted nicely
         self.table_widget = self.constructTable()
+        self.table_widget.installEventFilter(self)
         self.table_widget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustIgnored)
         self.table_widget.setAlternatingRowColors(True)
         # Added so that the notes table doesn't interfere with the location moving
@@ -98,6 +101,22 @@ class NuclearNotes(QtWidgets.QWidget):
 
         return table
 
+    def eventFilter(self, source, event, keyboard=None):
+        """
+        clears the focus on the text boxe when up/down arrow keys are pressed
+        :param source: the source of the event
+        :param event: the event
+        :return:
+        """
+
+        if (event.type() == QtCore.QEvent.KeyPress and
+                    event.key() in (QtCore.Qt.Key_Up, QtCore.Qt.Key_Down)):
+            # this is the only order I've gotten it to work decently
+            self.table_widget.focusPreviousChild()
+            self.table_widget.clearFocus()
+
+        return super().eventFilter(source, event)
+
     @QtCore.Slot()
     def addRow(self):
         """
@@ -116,8 +135,7 @@ class NuclearNotes(QtWidgets.QWidget):
             self.table_widget.setItem(0, i, item)  # self.row_count
             self.table_widget.item(0, i).setTextAlignment(5)  # self.row_count
 
-        # populating columns --simulation for now. will need to get this info from savior/grid later
-        # self.var.current_fov = "1.0 x 1.0"
+
         self.current_location = "(" + str(self.var.x_val) + "," + str(self.var.y_val) + ")"
         self.testPop = [self.var.vid_num, self.current_location, self.var.current_fov, self.var.notes_entry]
         for i in range(len(self.testPop)):

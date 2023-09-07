@@ -1183,50 +1183,8 @@ class Tabs(QTabWidget):
         :param event: the event
         :return:
         """
-        if source == self.horz and event.type() == QEvent.Type.KeyPress:
-            if event.key() == (QtCore.Qt.Key_Up):
-                self.horz.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Down):
-                self.horz.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Left):
-                self.horz.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Right):
-                self.horz.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Enter):
-                self.horz.clearFocus()
-        if source == self.vert and event.type() == QEvent.Type.KeyPress:
-            if event.key() == (QtCore.Qt.Key_Up):
-                self.vert.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Down):
-                self.vert.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Left):
-                self.vert.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Right):
-                self.vert.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Enter):
-                self.vert.clearFocus()
-        if source == self.animation_speed and event.type() == QEvent.Type.KeyPress:
-            if event.key() == (QtCore.Qt.Key_Up):
-                self.animation_speed.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Down):
-                self.animation_speed.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Left):
-                self.animation_speed.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Right):
-                self.animation_speed.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Enter):
-                self.animation_speed.clearFocus()
-        if source == self.n_frames and event.type() == QEvent.Type.KeyPress:
-            if event.key() == (QtCore.Qt.Key_Up):
-                self.n_frames.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Down):
-                self.n_frames.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Left):
-                self.n_frames.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Right):
-                self.n_frames.clearFocus()
-            elif event.key() == (QtCore.Qt.Key_Enter):
-                self.n_frames.clearFocus()
+        if event.type() == QEvent.Type.KeyPress and event.key() in (QtCore.Qt.Key_Up, QtCore.Qt.Key_Down, QtCore.Qt.Key_Left, QtCore.Qt.Key_Right):
+            source.clearFocus()
         return super().eventFilter(source, event)
 
 

@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a0b3cf8-dc52-4a7d-ac1c-a9c198de7599" name="Default Changelist" comment="-Added the ability to press F4 on the fixation target and have it start a record on the host application.">
-      <change beforePath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/queue_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/queue_management.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/test_settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/test_settings.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" afterDir="false" />
     </list>
