@@ -6,8 +6,8 @@ class QueueMgmt:
     def __init__(self, var, parent=None):
         self.var = var
 
-        self.FOV = "(0"
-        self.VIDNUM = "(1"
+        self.FOV = "(1"
+        self.VIDNUM = "(0"
         self.queue_mgmt()
 
     def queue_mgmt(self):

@@ -13,7 +13,7 @@ class Server:
         HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
         PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
         m = 0
-        packet = [b"(0,2.0,2.0)", b"(1,0)"]
+        packet = [b"(1,2.0,2.0)", b"(1,0)"]
         # b"(0,2.0,2.0)", b"(1,0)", b"(0,1.0,1.0)", b"(1,1)", b"(0,2.0,2.0)", b"(0,3.0,3.0)"
 
         # instantiate a socket object

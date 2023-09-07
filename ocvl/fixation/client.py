@@ -13,8 +13,8 @@ class Client():
         print("in the client")
         HOST = "127.0.0.1"  # The server's hostname or IP address
         PORT = 65432  # The port used by the server
-        FOV = b"(0"
-        VIDNUM = b"(1"
+        FOV = b"(1"
+        VIDNUM = b"(0"
 
 
         # instantiate a socket object
