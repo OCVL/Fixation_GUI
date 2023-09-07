@@ -19,7 +19,7 @@ class NuclearTarget(QWidget):
         monitors = QScreen.virtualSiblings(self.screen())
         monitor = monitors[display_monitor].availableGeometry()
         self.move(monitor.left(), monitor.top())
-        self.showFullScreen()
+        # self.showFullScreen()
 
         self.init = 1
         defaults = self.var.config.get("test", "fixation_default").split("/")
@@ -76,75 +76,73 @@ class NuclearTarget(QWidget):
             self.var.center_x = self.var.center_x_og + self.var.x_val * self.var.screen_ppd
             self.var.center_y = self.var.center_y_og - self.var.y_val * self.var.screen_ppd
 
-            match self.var.shape:
-                case "Large Crosshair":
-                    # vertical line of crosshair
-                    painter.drawRect(self.var.center_x-(self.var.size/2), 0, self.var.size, rect.height())
-                    # horizontal line of crosshair
-                    painter.drawRect(0, self.var.center_y-(self.var.size/2), rect.width(), self.var.size)
+            if self.var.shape == "Large Crosshair":
+                # vertical line of crosshair
+                painter.drawRect(self.var.center_x-(self.var.size/2), 0, self.var.size, rect.height())
+                # horizontal line of crosshair
+                painter.drawRect(0, self.var.center_y-(self.var.size/2), rect.width(), self.var.size)
 
-                case "Small Crosshair":
-                    # vertical line of crosshair
-                    painter.drawRect(self.var.center_x-(self.var.size/2), self.var.center_y - ((self.var.size * 5)/2), self.var.size, self.var.size * 5)
-                    # horizontal line of crosshair
-                    painter.drawRect(self.var.center_x - ((self.var.size * 5)/2), self.var.center_y-(self.var.size/2), self.var.size * 5, self.var.size)
+            elif self.var.shape == "Small Crosshair":
+                # vertical line of crosshair
+                painter.drawRect(self.var.center_x-(self.var.size/2), self.var.center_y - ((self.var.size * 5)/2), self.var.size, self.var.size * 5)
+                # horizontal line of crosshair
+                painter.drawRect(self.var.center_x - ((self.var.size * 5)/2), self.var.center_y-(self.var.size/2), self.var.size * 5, self.var.size)
 
-                case "Maltese Cross":
-                    pen = QtGui.QPen(self.var.custom_color, self.var.size*0.35)
-                    painter.setPen(pen)
-                    painter.drawLine(self.var.center_x+(self.var.size*0.8), self.var.center_y+(self.var.size*1.6), self.var.center_x-(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
-                    painter.drawLine(self.var.center_x-(self.var.size*0.8), self.var.center_y+(self.var.size*1.6), self.var.center_x+(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
-                    painter.drawLine(self.var.center_x+(self.var.size*1.6), self.var.center_y+(self.var.size*0.8), self.var.center_x-(self.var.size*1.6), self.var.center_y-(self.var.size*0.8))
-                    painter.drawLine(self.var.center_x+(self.var.size*1.6), self.var.center_y-(self.var.size*0.8), self.var.center_x-(self.var.size*1.6), self.var.center_y+(self.var.size*0.8))
-                    painter.drawLine(self.var.center_x, self.var.center_y+self.var.size, self.var.center_x+(self.var.size*0.8), self.var.center_y+(self.var.size*1.6))
-                    painter.drawLine(self.var.center_x, self.var.center_y+self.var.size, self.var.center_x-(self.var.size*0.8), self.var.center_y+(self.var.size*1.6))
-                    painter.drawLine(self.var.center_x, self.var.center_y-self.var.size, self.var.center_x+(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
-                    painter.drawLine(self.var.center_x, self.var.center_y-self.var.size, self.var.center_x-(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
-                    painter.drawLine(self.var.center_x+self.var.size, self.var.center_y, self.var.center_x+(self.var.size*1.6), self.var.center_y-(self.var.size*0.8))
-                    painter.drawLine(self.var.center_x+self.var.size, self.var.center_y, self.var.center_x+(self.var.size*1.6), self.var.center_y+(self.var.size*0.8))
-                    painter.drawLine(self.var.center_x-self.var.size, self.var.center_y, self.var.center_x-(self.var.size*1.6), self.var.center_y-(self.var.size*0.8))
-                    painter.drawLine(self.var.center_x-self.var.size, self.var.center_y, self.var.center_x-(self.var.size*1.6), self.var.center_y+(self.var.size*0.8))
-                    painter.setPen(self.var.custom_color)
-                case "Square":
-                    painter.drawRect(self.var.center_x - self.var.size, self.var.center_y - self.var.size, self.var.size * 2, self.var.size * 2)
-                case "Circle":
-                    center = QPointF(self.var.center_x, self.var.center_y)
-                    painter.drawEllipse(center, self.var.size, self.var.size)
-                case "Twinkle":
-                    pen = QtGui.QPen(self.var.custom_color, self.var.size * 0.4)
-                    painter.setPen(pen)
-                    # draw the parts of the shape that always stay the same
-                    painter.drawLine(self.var.center_x + (self.var.size*0.6), self.var.center_y, self.var.center_x - (self.var.size*0.6), self.var.center_y)
-                    painter.drawLine(self.var.center_x, self.var.center_y + (self.var.size*0.6), self.var.center_x, self.var.center_y - (self.var.size*0.6))
-                    painter.drawLine(self.var.center_x + self.var.size, self.var.center_y + self.var.size, self.var.center_x - self.var.size, self.var.center_y - self.var.size)
-                    painter.drawLine(self.var.center_x - self.var.size, self.var.center_y + self.var.size, self.var.center_x + self.var.size, self.var.center_y - self.var.size)
+            elif self.var.shape == "Maltese Cross":
+                pen = QtGui.QPen(self.var.custom_color, self.var.size*0.35)
+                painter.setPen(pen)
+                painter.drawLine(self.var.center_x+(self.var.size*0.8), self.var.center_y+(self.var.size*1.6), self.var.center_x-(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
+                painter.drawLine(self.var.center_x-(self.var.size*0.8), self.var.center_y+(self.var.size*1.6), self.var.center_x+(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
+                painter.drawLine(self.var.center_x+(self.var.size*1.6), self.var.center_y+(self.var.size*0.8), self.var.center_x-(self.var.size*1.6), self.var.center_y-(self.var.size*0.8))
+                painter.drawLine(self.var.center_x+(self.var.size*1.6), self.var.center_y-(self.var.size*0.8), self.var.center_x-(self.var.size*1.6), self.var.center_y+(self.var.size*0.8))
+                painter.drawLine(self.var.center_x, self.var.center_y+self.var.size, self.var.center_x+(self.var.size*0.8), self.var.center_y+(self.var.size*1.6))
+                painter.drawLine(self.var.center_x, self.var.center_y+self.var.size, self.var.center_x-(self.var.size*0.8), self.var.center_y+(self.var.size*1.6))
+                painter.drawLine(self.var.center_x, self.var.center_y-self.var.size, self.var.center_x+(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
+                painter.drawLine(self.var.center_x, self.var.center_y-self.var.size, self.var.center_x-(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
+                painter.drawLine(self.var.center_x+self.var.size, self.var.center_y, self.var.center_x+(self.var.size*1.6), self.var.center_y-(self.var.size*0.8))
+                painter.drawLine(self.var.center_x+self.var.size, self.var.center_y, self.var.center_x+(self.var.size*1.6), self.var.center_y+(self.var.size*0.8))
+                painter.drawLine(self.var.center_x-self.var.size, self.var.center_y, self.var.center_x-(self.var.size*1.6), self.var.center_y-(self.var.size*0.8))
+                painter.drawLine(self.var.center_x-self.var.size, self.var.center_y, self.var.center_x-(self.var.size*1.6), self.var.center_y+(self.var.size*0.8))
+                painter.setPen(self.var.custom_color)
+            elif self.var.shape == "Square":
+                painter.drawRect(self.var.center_x - self.var.size, self.var.center_y - self.var.size, self.var.size * 2, self.var.size * 2)
+            elif self.var.shape == "Circle":
+                center = QPointF(self.var.center_x, self.var.center_y)
+                painter.drawEllipse(center, self.var.size, self.var.size)
+            elif self.var.shape == "Twinkle":
+                pen = QtGui.QPen(self.var.custom_color, self.var.size * 0.4)
+                painter.setPen(pen)
+                # draw the parts of the shape that always stay the same
+                painter.drawLine(self.var.center_x + (self.var.size*0.6), self.var.center_y, self.var.center_x - (self.var.size*0.6), self.var.center_y)
+                painter.drawLine(self.var.center_x, self.var.center_y + (self.var.size*0.6), self.var.center_x, self.var.center_y - (self.var.size*0.6))
+                painter.drawLine(self.var.center_x + self.var.size, self.var.center_y + self.var.size, self.var.center_x - self.var.size, self.var.center_y - self.var.size)
+                painter.drawLine(self.var.center_x - self.var.size, self.var.center_y + self.var.size, self.var.center_x + self.var.size, self.var.center_y - self.var.size)
 
-                    # this is necessary so it doesn't change too fast
-                    if self.count == 2:
-                        if self.rand_num == 1:
-                            self.rand_num = 2
-                        elif self.rand_num == 2:
-                            self.rand_num = 3
-                        elif self.rand_num == 3:
-                            self.rand_num = 4
-                        elif self.rand_num == 4:
-                            self.rand_num = 1
-                        # self.rand_num = random.choice(self.list1)
-                        # # while loop so that there are no numbers in a row.
-                        # while self.rand_num == self.prev:
-                        #     self.rand_num = random.choice(self.list1)
-                        self.count = 0
+                # this is necessary so it doesn't change too fast
+                if self.count == 2:
+                    if self.rand_num == 1:
+                        self.rand_num = 2
+                    elif self.rand_num == 2:
+                        self.rand_num = 3
+                    elif self.rand_num == 3:
+                        self.rand_num = 4
+                    elif self.rand_num == 4:
+                        self.rand_num = 1
+                    # self.rand_num = random.choice(self.list1)
+                    # # while loop so that there are no numbers in a row.
+                    # while self.rand_num == self.prev:
+                    #     self.rand_num = random.choice(self.list1)
+                    self.count = 0
 
                     # draw the parts of the shape that change (currently drawn or not)
-                    match self.rand_num:
-                        case 1:
-                            painter.drawLine(self.var.center_x + (self.var.size*1.4), self.var.center_y, self.var.center_x + (self.var.size*1.4), self.var.center_y)
-                        case 2:
-                            painter.drawLine(self.var.center_x, self.var.center_y + (self.var.size * 1.4), self.var.center_x, self.var.center_y + (self.var.size * 1.4))
-                        case 3:
-                            painter.drawLine(self.var.center_x - (self.var.size * 1.4), self.var.center_y, self.var.center_x - (self.var.size * 1.4), self.var.center_y)
-                        case 4:
-                            painter.drawLine(self.var.center_x, self.var.center_y - (self.var.size*1.4), self.var.center_x, self.var.center_y - (self.var.size*1.4))
+                    if self.rand_num == 1:
+                        painter.drawLine(self.var.center_x + (self.var.size*1.4), self.var.center_y, self.var.center_x + (self.var.size*1.4), self.var.center_y)
+                    elif self.rand_num == 2:
+                        painter.drawLine(self.var.center_x, self.var.center_y + (self.var.size * 1.4), self.var.center_x, self.var.center_y + (self.var.size * 1.4))
+                    elif self.rand_num == 3:
+                        painter.drawLine(self.var.center_x - (self.var.size * 1.4), self.var.center_y, self.var.center_x - (self.var.size * 1.4), self.var.center_y)
+                    elif self.rand_num == 4:
+                        painter.drawLine(self.var.center_x, self.var.center_y - (self.var.size*1.4), self.var.center_x, self.var.center_y - (self.var.size*1.4))
 
                     painter.setPen(self.var.custom_color)
                     # self.prev = self.rand_num
