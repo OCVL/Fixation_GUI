@@ -13,8 +13,8 @@ class Client():
         print("in the client")
         HOST = "127.0.0.1"  # The server's hostname or IP address
         PORT = 65432  # The port used by the server
-        FOV = b"(1"
-        VIDNUM = b"(0"
+        FOV = '1'
+        VIDNUM = '0'
 
 
         # instantiate a socket object
@@ -38,15 +38,16 @@ class Client():
             for sock in readySocks:
                 message = self.receiveTextViaSocket(sock)
                 if message:
+                    message = message.decode()
                     print("recieved data")
-                    parsed = message.split(b",")
+                    parsed = message.split(";")
                     # extract data from message
                     if parsed[0] == FOV:
-                        self.var.recvQ.put(message.decode())
+                        self.var.recvQ.put(message)
                     elif parsed[0] == VIDNUM:
-                        self.var.recvQ.put(message.decode())
+                        self.var.recvQ.put(message)
                     else:
-                        print("Shit hit the fan")
+                        print("Client Shit hit the fan")
                 print('received: ' + str(message))
 
     def receiveTextViaSocket(self, sock):

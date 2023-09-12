@@ -13,7 +13,7 @@ class Server:
         HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
         PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
         m = 0
-        packet = [b"(1,2.0,2.0)", b"(1,0)"]
+        packet = [(1,2.0,2.0), (0,0)]
         # b"(0,2.0,2.0)", b"(1,0)", b"(0,1.0,1.0)", b"(1,1)", b"(0,2.0,2.0)", b"(0,3.0,3.0)"
 
         # instantiate a socket object
@@ -36,8 +36,15 @@ class Server:
         while True:
             if m < len(packet):
                 message = (packet[m])
+
+                msg = ''
+                for data in message:
+                    msg += str(data) + ";"
+                msg = msg[:-1]
+                msg += "!"
+
                 print('sending')
-                self.sendTextViaSocket(message, conn)
+                self.sendTextViaSocket(msg.encode(), conn)
                 m += 1
                 time.sleep(3)
                 if m > len(packet)-1:

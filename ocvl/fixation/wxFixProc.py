@@ -72,19 +72,26 @@ class Server:
                 break
             elif sendQueue.qsize() > 0:
                 message = sendQueue.get()
+                msg = ''
+                for data in message:
+                    msg += str(data) + ";"
+                msg = msg[:-1]
+                msg += "!"
 
-                print(message)
-                print('sending')
-                self.sendTextViaSocket(message, conn)
+
+                print(msg)
+                print('sending bitch')
+                self.sendTextViaSocket(msg.encode(), conn)
                 # time.sleep(3)
 
 
     def sendTextViaSocket(self, message, sock):
         ACK_TEXT = 'text_received'
 
+        print("wtf")
         # send the data via the socket to the server
         sock.sendall(message)
-
+        print("ftw")
         # receive acknowledgment from the server
         encodedAckText = sock.recv(1024)
         ackText = encodedAckText.decode('utf-8')
@@ -107,9 +114,9 @@ if __name__ == '__main__':
     server = FixGUIServer(testQ)
     time.sleep(2)
     print("Starting test packets...")
-    testQ.put(b"(1,1.0,1.0)")
+    testQ.put((1, 1.0, 1.0))
     time.sleep(1)
-    testQ.put(b"(0,0)")
+    testQ.put((0, 0))
     # time.sleep(3)
     # testQ.put(b"(1,2.0,2.0)")
     # time.sleep(3)
