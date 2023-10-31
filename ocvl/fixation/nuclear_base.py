@@ -26,6 +26,7 @@ class NuclearBase(QWidget):
         # put if statement here to know if we need this to start up from info from the config file (animal land doesn't need the secondary display)
         self.w = NuclearTarget(self.var)
         self.w.show()
+        self.w.close() # close the fixation target for animal AO
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.j = NuclearDisplay(self.var)
@@ -51,13 +52,13 @@ class NuclearBase(QWidget):
             self.x.start()
 
         # thread for the client
-        self.y = threading.Thread(target=Client, args=(self.var,))
-        self.y.daemon = True
-        self.y.start()
-        #
-        self.z = threading.Thread(target=QueueMgmt, args=(self.var,))
-        self.z.daemon = True
-        self.z.start()
+        # self.y = threading.Thread(target=Client, args=(self.var,))
+        # self.y.daemon = True
+        # self.y.start()
+        # #
+        # self.z = threading.Thread(target=QueueMgmt, args=(self.var,))
+        # self.z.daemon = True
+        # self.z.start()
 
 
 
@@ -110,6 +111,8 @@ class NuclearBase(QWidget):
                 self.var.y_val = self.var.y_val - self.minor_increment
             elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
                 self.var.x_val = self.var.x_val + self.minor_increment
+            elif key == [QtCore.Qt.Key_F4]:  # added F4 shortcut to mark location
+                self.var.notes_ref.target.addRow()
 
         else:
 
@@ -131,6 +134,8 @@ class NuclearBase(QWidget):
                 self.var.x_val = self.var.x_val + self.minor_increment
             elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
                 self.var.y_val = self.var.y_val - self.minor_increment
+            elif key == [QtCore.Qt.Key_F4]:  # added F4 shortcut to mark location
+                self.var.notes_ref.target.addRow()
 
 
         # call to function in nuclear_controls to update the coordinate text in the control panel

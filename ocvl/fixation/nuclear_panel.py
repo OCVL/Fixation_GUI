@@ -7,6 +7,7 @@ from PySide6.QtWidgets import QWidget, QLabel, QSizePolicy
 import numpy as np
 from ocvl.fixation.nuclear_controls import Tabs
 from ocvl.fixation.nuclear_notes import NuclearNotes
+from PIL import Image
 
 
 class NuclearDisplay(QWidget):
@@ -116,8 +117,6 @@ class TargetArea(QWidget):
 
         rect = painter.window()
 
-
-
         # sets up the size of the circle based on the window size
         radii = np.minimum(rect.width(), rect.height()) / 2
 
@@ -163,6 +162,12 @@ class TargetArea(QWidget):
         # spacing of lines
         spacing = (radii * 2) / num_of_lines
         painter.drawRect(rect.width() / 2 - radii, rect.height() / 2 - radii, radii * 2, radii * 2)
+
+        # display background image
+        if self.var.image_path is not None:
+            pxmp = QPixmap(self.var.image_path[0])
+            painter.drawPixmap(rect, pxmp)
+
         if self.var.grid_vis:
             # Generating the steps for painting the lines in different colors
             horz_steps = np.linspace(rect.width() / 2 - radii, rect.width() / 2 + radii, self.horz_lines)
@@ -234,10 +239,6 @@ class TargetArea(QWidget):
             painter.setBrush(QColor(75, 75, 75))
             painter.setPen(Qt.black)
 
-        if self.var.image_path is not None:
-            # pxmp = QPixmap().loadFromData(self.var.image_path)
-            # painter.drawPixmap(rect, pxmp)
-            painter.drawImage(QRect(100, 50, 100, 100), QImage(self.var.image_path))
 
         # used to set circle visible on  screen (from config file)
         if self.circle_vis == "1":

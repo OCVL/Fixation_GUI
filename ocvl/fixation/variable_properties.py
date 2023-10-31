@@ -8,11 +8,11 @@ from PySide6 import QtCore, QtGui
 class Variables:
     def __init__(self, animation_speed_val=None, x_val=0, y_val=0, dim=None, savior_FOVs=None, \
                  custom_color=None, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
-                 right_label=None, current_fov='0.0 x 0.0', shape=None, size=None, center_x=None, center_y=None,
+                 right_label=None, current_fov='2.0 x 2.0', shape=None, size=None, center_x=None, center_y=None,
                  center_x_og=None, center_y_og=None, target_vis=None, stimulus_imaging=None,
                  center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3,
                  screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None, notes_entry="", video_list_entry=None,
-                 recvQ=Queue(), vid_num=None, fov_list=[], ref_point=False, x_ref= None, y_ref=None, image_path=None):
+                 recvQ=Queue(), vid_num=-1, fov_list=[], ref_point=False, x_ref= None, y_ref=None, image_path=None):
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
         self.y_val = y_val
