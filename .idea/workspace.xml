@@ -5,12 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a0b3cf8-dc52-4a7d-ac1c-a9c198de7599" name="Default Changelist" comment="-Added the ability to press F4 on the fixation target and have it start a record on the host application.">
+      <change beforePath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Fixation_GUI.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/queue_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/queue_management.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/test_settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/test_settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/.idea/fixationgui.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/AOSLO_Electronic_Notes_Template_v1.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/AOSLO_Electronic_Notes_Template_v2.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/LightCrafter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/LocSpin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/PreferencesDialog.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/ViewPane.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/controlPanel.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/paneWidgets.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/plannerMode.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/protocolPane.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/settingsload.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/testImage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/wxFixGUI.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fixationgui/wxFixProc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.bash" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.bat" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +60,9 @@
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
   <component name="ProjectId" id="2FSRdvRf8ckYoVbz7Xz9Fabyc9v" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -40,17 +70,30 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.nuclear_base.executor": "Debug",
+    "Python.nuclear_base38.executor": "Debug",
+    "Python.wxFixProc38.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "meao__dev",
+    "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/jgrieshop/Documents/GitHub/Fixation_GUI_NUCLEAR/ocvl/fixation/nuclear_base.py",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="PyDebuggerOptionsProvider">
     <option name="mySupportQtDebugging" value="false" />
   </component>
-  <component name="RunManager" selected="Python.wxFixProc38">
+  <component name="RunManager">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -62,6 +105,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -71,29 +115,9 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="echo-server" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="nuclear_base" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\6794grieshj\Documents\GitHub\Fixation_GUI\venv\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../TCPIP_test" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../TCPIP_test/echo-server.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="nuclear_base" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="Fixation_GUI" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -104,154 +128,8 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="nuclear_base38" type="PythonConfigurationType" factoryName="Python">
-      <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\jgrieshop\Documents\GitHub\Fixation_GUI_NUCLEAR\venv38\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="nuclear_notes" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\6794grieshj\Documents\GitHub\Fixation_GUI\venv\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="server" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\6794grieshj\Documents\GitHub\Fixation_GUI\ocvl\fixation\server.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test properties" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/test properties.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="wxFixProc2" type="PythonConfigurationType" factoryName="Python">
-      <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\jgrieshop\Documents\GitHub\Fixation_GUI_NUCLEAR\venv27\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="wxFixProc3" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="wxFixProc38" type="PythonConfigurationType" factoryName="Python">
-      <module name="Fixation_GUI" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\jgrieshop\Documents\GitHub\Fixation_GUI_NUCLEAR\venv38\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocvl/fixation" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocvl/fixation/wxFixProc.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -261,6 +139,7 @@
       <method v="2" />
     </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -268,9 +147,11 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="docs" factoryName="Docutils task">
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -287,6 +168,7 @@
       <method v="2" />
     </configuration>
     <configuration default="true" type="docs" factoryName="Sphinx task">
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -303,6 +185,7 @@
       <method v="2" />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -311,6 +194,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
@@ -320,26 +204,19 @@
       <option name="USE_PATTERN" value="false" />
       <method v="2" />
     </configuration>
-    <list>
-      <item itemvalue="Python.nuclear_base" />
-      <item itemvalue="Python.nuclear_base38" />
-      <item itemvalue="Python.wxFixProc2" />
-      <item itemvalue="Python.wxFixProc38" />
-      <item itemvalue="Python.wxFixProc3" />
-      <item itemvalue="Python.echo-server" />
-      <item itemvalue="Python.server" />
-      <item itemvalue="Python.test properties" />
-      <item itemvalue="Python.nuclear_notes" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.wxFixProc3" />
-        <item itemvalue="Python.echo-server" />
-        <item itemvalue="Python.server" />
-        <item itemvalue="Python.test properties" />
-        <item itemvalue="Python.nuclear_notes" />
+        <item itemvalue="Python.nuclear_base" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-PY-252.23892.515" />
+        <option value="bundled-python-sdk-7e47963ff851-f0eec537fc84-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.23892.515" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -348,8 +225,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1664483591457</updated>
+      <workItem from="1775589379344" duration="3309000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -366,11 +247,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py</url>
-          <line>129</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/ocvl/fixation/client.py</url>
           <line>44</line>
           <option name="timeStamp" value="13" />
@@ -382,5 +258,10 @@
         <watch expression="self.video_list" language="Python" />
       </configuration>
     </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Fixation_GUI$wxFixProc38.coverage" NAME="wxFixProc38 Coverage Results" MODIFIED="1775589511214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
+    <SUITE FILE_PATH="coverage/Fixation_GUI$nuclear_base.coverage" NAME="nuclear_base Coverage Results" MODIFIED="1775591178601" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
+    <SUITE FILE_PATH="coverage/Fixation_GUI$nuclear_base38.coverage" NAME="nuclear_base38 Coverage Results" MODIFIED="1775590988646" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
   </component>
 </project>

@@ -112,18 +112,5 @@ if __name__ == '__main__':
     VIDNUM = 0
 
     server = FixGUIServer(testQ)
-    time.sleep(2)
-    print("Starting test packets...")
-    testQ.put((1, 1.0, 1.0))
-    time.sleep(1)
-    testQ.put((0, 0))
-    # time.sleep(3)
-    # testQ.put(b"(1,2.0,2.0)")
-    # time.sleep(3)
-    # testQ.put(b"(0,1)")
-    # time.sleep(3)
-    # testQ.put(b"(1,1.0,1.0)")
-    # time.sleep(3)
-    # testQ.put(b"(0,2)")
 
 

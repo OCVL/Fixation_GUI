@@ -1,25 +1,26 @@
 from PySide6 import QtGui
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
-from PySide6.QtCore import Qt, QPoint, QPointF
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QGraphicsItem, QGraphicsScene, QGraphicsView
+from PySide6.QtCore import Qt, QPoint, QPointF, QRectF
 from PySide6.QtGui import QScreen, QPainter, QColor, QPen, QPixmap, QBrush
 import random
 
 
-class NuclearTarget(QWidget):
+class NuclearTarget(QGraphicsView):
 
     # maybe want to put this in the config file
     # The number of ppd of the screen we'll be projecting to (e.g. Lightcrafter, Projector, etc).
     SCREEN_PPD = 20
+    scene = QGraphicsScene()
 
     def __init__(self, var):
-        super().__init__()
+        super().__init__(self.scene)
+
         self.var = var
         display_monitor = 0
         #send it to a different monitor and make full screen
         monitors = QScreen.virtualSiblings(self.screen())
         monitor = monitors[display_monitor].availableGeometry()
         self.move(monitor.left(), monitor.top())
-        # self.showFullScreen()
 
         self.init = 1
         defaults = self.var.config.get("test", "fixation_default").split("/")
@@ -39,16 +40,39 @@ class NuclearTarget(QWidget):
         self.var.center_x = QPainter(self).window().width() / 2
         self.var.center_y = QPainter(self).window().height() / 2
 
+        self.scene
 
 
-    def paintEvent(self, arg__0):
-        '''
+class MalteseCross(QGraphicsItem):
 
-        :param arg__0:
-        :return:
-        '''
+    def __init__(self, size=5):
+        super().__init__()
 
-        painter = QPainter(self)
+        self.size = 5
+
+    def boundingRect(self):
+        return QRectF(0, 0, 100, 100)
+
+    def paint(self, painter, option, widget):
+
+        pen = QtGui.QPen(self.custom_color, self.size * 0.35)
+        painter.setPen(pen)
+        painter.drawLine(-self.size * 0.8, self.size * 1.6, self.size * 0.8,  self.size * 1.6)
+        painter.drawLine( -self.size * 0.8,  self.size * 1.6, self.size * 0.8,  -self.size * 1.6)
+        painter.drawLine( self.size * 1.6,  self.size * 0.8, -self.size * 1.6,  -self.size * 0.8)
+        painter.drawLine( self.size * 1.6,  -self.size * 0.8, -self.size * 1.6,  self.size * 0.8)
+        painter.drawLine( 0, self.size,  self.size * 0.8, self.size * 1.6)
+        painter.drawLine( 0, self.size,  -self.size * 0.8, self.size * 1.6)
+        painter.drawLine( 0, -self.size,  self.size * 0.8, -self.size * 1.6)
+        painter.drawLine( 0, -self.size,  -self.size * 0.8, -self.size * 1.6)
+        painter.drawLine( 0, self.size,  self.size * 1.6, -self.size * 0.8)
+        painter.drawLine( 0, self.size,  self.size * 1.6, self.size * 0.8)
+        painter.drawLine( 0, -self.size,  -self.size * 1.6, -self.size * 0.8)
+        painter.drawLine( 0, -self.size,  -self.size * 1.6, self.size * 0.8)
+
+class CrossHair(QGraphicsItem):
+
+
         painter.setBrush(QColor(0, 0, 0))
         painter.setRenderHint(QPainter.Antialiasing, True)
 
@@ -89,21 +113,7 @@ class NuclearTarget(QWidget):
                 painter.drawRect(self.var.center_x - ((self.var.size * 5)/2), self.var.center_y-(self.var.size/2), self.var.size * 5, self.var.size)
 
             elif self.var.shape == "Maltese Cross":
-                pen = QtGui.QPen(self.var.custom_color, self.var.size*0.35)
-                painter.setPen(pen)
-                painter.drawLine(self.var.center_x+(self.var.size*0.8), self.var.center_y+(self.var.size*1.6), self.var.center_x-(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
-                painter.drawLine(self.var.center_x-(self.var.size*0.8), self.var.center_y+(self.var.size*1.6), self.var.center_x+(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
-                painter.drawLine(self.var.center_x+(self.var.size*1.6), self.var.center_y+(self.var.size*0.8), self.var.center_x-(self.var.size*1.6), self.var.center_y-(self.var.size*0.8))
-                painter.drawLine(self.var.center_x+(self.var.size*1.6), self.var.center_y-(self.var.size*0.8), self.var.center_x-(self.var.size*1.6), self.var.center_y+(self.var.size*0.8))
-                painter.drawLine(self.var.center_x, self.var.center_y+self.var.size, self.var.center_x+(self.var.size*0.8), self.var.center_y+(self.var.size*1.6))
-                painter.drawLine(self.var.center_x, self.var.center_y+self.var.size, self.var.center_x-(self.var.size*0.8), self.var.center_y+(self.var.size*1.6))
-                painter.drawLine(self.var.center_x, self.var.center_y-self.var.size, self.var.center_x+(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
-                painter.drawLine(self.var.center_x, self.var.center_y-self.var.size, self.var.center_x-(self.var.size*0.8), self.var.center_y-(self.var.size*1.6))
-                painter.drawLine(self.var.center_x+self.var.size, self.var.center_y, self.var.center_x+(self.var.size*1.6), self.var.center_y-(self.var.size*0.8))
-                painter.drawLine(self.var.center_x+self.var.size, self.var.center_y, self.var.center_x+(self.var.size*1.6), self.var.center_y+(self.var.size*0.8))
-                painter.drawLine(self.var.center_x-self.var.size, self.var.center_y, self.var.center_x-(self.var.size*1.6), self.var.center_y-(self.var.size*0.8))
-                painter.drawLine(self.var.center_x-self.var.size, self.var.center_y, self.var.center_x-(self.var.size*1.6), self.var.center_y+(self.var.size*0.8))
-                painter.setPen(self.var.custom_color)
+
             elif self.var.shape == "Square":
                 painter.drawRect(self.var.center_x - self.var.size, self.var.center_y - self.var.size, self.var.size * 2, self.var.size * 2)
             elif self.var.shape == "Circle":

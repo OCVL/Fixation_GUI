@@ -6,7 +6,6 @@ from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap, QImage
 from PySide6.QtWidgets import QWidget, QLabel, QSizePolicy
 import numpy as np
 from ocvl.fixation.nuclear_controls import Tabs
-from ocvl.fixation.nuclear_notes import NuclearNotes
 
 
 class NuclearDisplay(QWidget):
@@ -18,8 +17,6 @@ class NuclearDisplay(QWidget):
         # setting up GUI panels
         self.righty = TargetRighty(self.var)
         self.var.control_ref = self.righty
-        self.bottom = TargetBottom(self.var)
-        self.var.notes_ref = self.bottom
 
         # Get the dims from the Configuration tabs
         self.var.dim = self.var.dim.split("x")
@@ -33,7 +30,6 @@ class NuclearDisplay(QWidget):
 
         # adding layouts to grid
         self.grid_layout.addLayout(self.layout2, 0, 0)
-        self.grid_layout.addWidget(self.bottom, 2, 0, 2, 1)
 
     @QtCore.Slot()
     def updateTarget(self):
@@ -51,9 +47,6 @@ class TargetArea(QWidget):
 
     def __init__(self, var):
         super().__init__()
-        # policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        # policy.setHeightForWidth(True)
-        # self.setSizePolicy(policy)
 
         self.setMinimumSize(700, 700)
 
@@ -77,20 +70,8 @@ class TargetArea(QWidget):
         self.prev_vid_num = -1
         self.video_list = pandas.DataFrame(columns=["Video Number", "Location", "FOV"])
 
-        # getting the name of the device from the config file
-        device_name = self.var.config.get("test", "device")
-        # getting the base for the saving/naming conventions for the files
-        self.grid_name = (self.var.save_loc + '/' + self.var.sub_id + '_' + datetime.today().strftime(
-            '%Y%m%d') + '_' + self.var.eye + '_' + device_name + '_' + 'Grid.png')
-
-        # self.video_list.columns =
-
-    # def heightForWidth(self, width):
-    #     return width
-
     def mouseReleaseEvent(self, event):
         self.position = event.pos()
-
 
     def paintEvent(self, arg__0):
         """
@@ -99,9 +80,6 @@ class TargetArea(QWidget):
         :param arg__0:
         :return:
         """
-
-
-
         # need to get the number of horz and vert lines each time in case the dimensions have changed
         self.horz_lines = int(self.var.dim[0])
         self.vert_lines = int(self.var.dim[1])
@@ -115,8 +93,6 @@ class TargetArea(QWidget):
         painter.setRenderHint(QPainter.Antialiasing, True)
 
         rect = painter.window()
-
-
 
         # sets up the size of the circle based on the window size
         radii = np.minimum(rect.width(), rect.height()) / 2
@@ -254,12 +230,12 @@ class TargetArea(QWidget):
         painter.setPen(Qt.black)
 
         # https://stackoverflow.com/questions/24927869/how-to-save-qwidget-as-image-automatically
-        if self.rendered:
-            self.rendered = False
-            pixmap = QPixmap(self.size())
-            self.render(pixmap)
-            pixmap.save(self.grid_name, "PNG", -1)
-            self.rendered = True
+        # if self.rendered:
+        #     self.rendered = False
+        #     pixmap = QPixmap(self.size())
+        #     self.render(pixmap)
+        #     pixmap.save(self.grid_name, "PNG", -1)
+        #     self.rendered = True
 
         painter.setPen(Qt.white)
         font = QtGui.QFont()
@@ -281,9 +257,7 @@ class TargetArea(QWidget):
         painter.rotate(90)
         painter.setPen(Qt.black)
 
-
-
-        self.update()
+       # self.update()
 
 
 
@@ -298,24 +272,6 @@ class TargetRighty(QWidget):
         self.var = var
         # calls the control panel
         self.target = Tabs(self.var)
-
-        self.layout = QtWidgets.QHBoxLayout(self)
-        self.layout.addWidget(self.target)
-
-    def paintEvent(self, arg__0):
-        pass
-
-class TargetBottom(QWidget):
-    """
-    Class for the bottom panel of the window
-    """
-
-    def __init__(self, var):
-        super().__init__()
-
-        self.var = var
-        # calls the notes panel
-        self.target = NuclearNotes(self.var)
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)

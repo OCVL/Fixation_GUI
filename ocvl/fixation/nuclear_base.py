@@ -18,9 +18,6 @@ class NuclearBase(QWidget):
 
         # get the instance of the variables class to pass to everything
         self.var = variable_properties.Variables()
-        # create the initial dialog window
-        dlg = InitialDialog(self.var)
-        dlg.exec()
 
         # call to make a new window
         # put if statement here to know if we need this to start up from info from the config file (animal land doesn't need the secondary display)
@@ -42,25 +39,6 @@ class NuclearBase(QWidget):
         increments = self.var.config.get("test", "major_minor_increments").split("/")
         self.major_increment = float(increments[0])
         self.minor_increment = float(increments[1])
-
-        # only needed if nuclear base is being run not from fixproc/savior
-        if source == 1:
-            # call the server host on a new thread if started through nuclear base
-            self.x = threading.Thread(target=Server)
-            self.x.daemon = True
-            self.x.start()
-
-        # thread for the client
-        self.y = threading.Thread(target=Client, args=(self.var,))
-        self.y.daemon = True
-        self.y.start()
-        #
-        self.z = threading.Thread(target=QueueMgmt, args=(self.var,))
-        self.z.daemon = True
-        self.z.start()
-
-
-
 
 
     def keyPressEvent(self, eventQKeyEvent):
