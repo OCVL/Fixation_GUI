@@ -1,19 +1,14 @@
 import sys
 from PySide6 import QtWidgets, QtCore
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import  QMainWindow
 from ocvl.fixation.nuclear_panel import NuclearDisplay
-from ocvl.fixation.initial_window import InitialDialog
 import variable_properties
 from ocvl.fixation.nuclear_target import NuclearTarget
-from ocvl.fixation.server import Server
-from ocvl.fixation.client import Client
-from ocvl.fixation.queue_management import QueueMgmt
-import threading
 
 
-class NuclearBase(QWidget):
-    def __init__(self, source=0):
+class NuclearBase(QMainWindow):
+    def __init__(self):
         super().__init__()
 
         # get the instance of the variables class to pass to everything
@@ -26,7 +21,7 @@ class NuclearBase(QWidget):
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.j = NuclearDisplay(self.var)
-        self.layout.addWidget(self.j)
+        self.setCentralWidget(self.j)
 
         self.keylist = []
         self.firstrelease = None
@@ -128,7 +123,7 @@ class NuclearBase(QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
-    base = NuclearBase(0)
+    base = NuclearBase()
     # base.resize(1000, 500)
     base.show()
     base.setFocusPolicy(Qt.StrongFocus)

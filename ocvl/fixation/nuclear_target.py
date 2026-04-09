@@ -1,8 +1,135 @@
+from enum import StrEnum
+
 from PySide6 import QtGui
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QGraphicsItem, QGraphicsScene, QGraphicsView
-from PySide6.QtCore import Qt, QPoint, QPointF, QRectF
-from PySide6.QtGui import QScreen, QPainter, QColor, QPen, QPixmap, QBrush
-import random
+from PySide6.QtWidgets import  QGraphicsItem, QGraphicsScene, QGraphicsView
+from PySide6.QtCore import QRectF, QLineF
+from PySide6.QtGui import QScreen, QPainter, QColor, QPainterPath
+
+class TargetTypes(StrEnum):
+    MALTESE_CROSS = "Maltese Cross",
+    CROSSHAIR = "Crosshair",
+    BULLSEYE = "Bullseye"
+
+class Target(QGraphicsItem):
+    def __init__(self, name, size=5, thickness=1, color=QColor("white")):
+        super().__init__()
+        self._name = name
+        self.size = size
+        self.thickness = thickness
+        self.color = color
+
+    def setColor(self, color):
+        self.color = color
+
+    def setThickness(self, thickness):
+        self.thickness = thickness
+
+    def setSize(self, newsize):
+        self.size = newsize
+
+    def getName(self):
+        return self._name
+
+
+class MalteseCross(Target):
+    def __init__(self, size=5, thickness=1, color=QColor("white")):
+        super().__init__(TargetTypes.MALTESE_CROSS, size, thickness, color)
+
+        self.path_to_draw = QPainterPath()
+
+        self.path_to_draw.moveTo(-self.size * 0.8, self.size * 1.6)
+        self.path_to_draw.lineTo(self.size * 0.8, self.size * 1.6)
+        self.path_to_draw.moveTo(-self.size * 0.8, self.size * 1.6)
+        self.path_to_draw.lineTo(self.size * 0.8, -self.size * 1.6)
+        self.path_to_draw.moveTo(self.size * 1.6, self.size * 0.8)
+        self.path_to_draw.lineTo(-self.size * 1.6, -self.size * 0.8)
+        self.path_to_draw.moveTo(self.size * 1.6, -self.size * 0.8)
+        self.path_to_draw.lineTo(-self.size * 1.6, self.size * 0.8)
+        self.path_to_draw.moveTo(0, self.size)
+        self.path_to_draw.lineTo(self.size * 0.8, self.size * 1.6),
+        self.path_to_draw.moveTo(0, self.size)
+        self.path_to_draw.lineTo(-self.size * 0.8, self.size * 1.6)
+        self.path_to_draw.moveTo(0, -self.size)
+        self.path_to_draw.lineTo(self.size * 0.8, -self.size * 1.6)
+        self.path_to_draw.moveTo(0, -self.size)
+        self.path_to_draw.lineTo(-self.size * 0.8, -self.size * 1.6)
+        self.path_to_draw.moveTo(0, self.size)
+        self.path_to_draw.lineTo(self.size * 1.6, -self.size * 0.8),
+        self.path_to_draw.moveTo(0, self.size)
+        self.path_to_draw.lineTo(self.size * 1.6, self.size * 0.8),
+        self.path_to_draw.moveTo(0, -self.size)
+        self.path_to_draw.lineTo(-self.size * 1.6, -self.size * 0.8)
+        self.path_to_draw.moveTo(0, -self.size)
+        self.path_to_draw.lineTo(-self.size * 1.6, self.size * 0.8)
+
+    def setSize(self, newsize):
+        self.size = newsize
+        self.path_to_draw = QPainterPath()
+
+        self.path_to_draw.moveTo(-self.size * 0.8, self.size * 1.6)
+        self.path_to_draw.lineTo(self.size * 0.8,  self.size * 1.6)
+        self.path_to_draw.moveTo(-self.size * 0.8,  self.size * 1.6)
+        self.path_to_draw.lineTo( self.size * 0.8,  -self.size * 1.6)
+        self.path_to_draw.moveTo( self.size * 1.6,  self.size * 0.8)
+        self.path_to_draw.lineTo( -self.size * 1.6,  -self.size * 0.8)
+        self.path_to_draw.moveTo( self.size * 1.6,  -self.size * 0.8)
+        self.path_to_draw.lineTo( -self.size * 1.6,  self.size * 0.8)
+        self.path_to_draw.moveTo( 0, self.size)
+        self.path_to_draw.lineTo( self.size * 0.8, self.size * 1.6),
+        self.path_to_draw.moveTo( 0, self.size)
+        self.path_to_draw.lineTo( -self.size * 0.8, self.size * 1.6)
+        self.path_to_draw.moveTo( 0, -self.size)
+        self.path_to_draw.lineTo( self.size * 0.8, -self.size * 1.6)
+        self.path_to_draw.moveTo( 0, -self.size)
+        self.path_to_draw.lineTo( -self.size * 0.8, -self.size * 1.6)
+        self.path_to_draw.moveTo( 0, self.size)
+        self.path_to_draw.lineTo(self.size * 1.6, -self.size * 0.8),
+        self.path_to_draw.moveTo( 0, self.size)
+        self.path_to_draw.lineTo(self.size * 1.6, self.size * 0.8),
+        self.path_to_draw.moveTo( 0, -self.size)
+        self.path_to_draw.lineTo(-self.size * 1.6, -self.size * 0.8)
+        self.path_to_draw.moveTo( 0, -self.size)
+        self.path_to_draw.lineTo( -self.size * 1.6, self.size * 0.8)
+
+    def boundingRect(self):
+        return QRectF(-self.size * 1.6, -self.size * 1.6, self.size * 1.6, self.size * 1.6)
+
+    def paint(self, painter, option, widget):
+        pen = QtGui.QPen(self.color, self.thickness * 0.35)
+        painter.setPen(pen)
+        painter.drawPath(self.path_to_draw)
+
+
+class CrossHair(Target):
+
+    def __init__(self, size=5, thickness=1, color=QColor("white")):
+        super().__init__(TargetTypes.CROSSHAIR, size, thickness, color)
+
+        self.path_to_draw = QPainterPath()
+
+        self.path_to_draw.moveTo(0, -self.size/2)
+        self.path_to_draw.lineTo(0, self.size/2)
+        self.path_to_draw.moveTo(-self.size/2, 0)
+        self.path_to_draw.lineTo(self.size/2, 0)
+
+    def setSize(self, newsize):
+        self.size = newsize
+        self.path_to_draw = QPainterPath()
+
+        self.path_to_draw = QPainterPath()
+
+        self.path_to_draw.moveTo(0, -self.size/2)
+        self.path_to_draw.lineTo(0, self.size/2)
+        self.path_to_draw.moveTo(-self.size/2, 0)
+        self.path_to_draw.lineTo(self.size/2, 0)
+
+    def boundingRect(self):
+        return QRectF(-self.size/2, -self.size/2, self.size/2, self.size/2)
+
+    def paint(self, painter, option, widget):
+        pen = QtGui.QPen(self.color, self.thickness * 0.35)
+        painter.setPen(pen)
+        painter.drawPath(self.path_to_draw)
 
 
 class NuclearTarget(QGraphicsView):
@@ -10,10 +137,13 @@ class NuclearTarget(QGraphicsView):
     # maybe want to put this in the config file
     # The number of ppd of the screen we'll be projecting to (e.g. Lightcrafter, Projector, etc).
     SCREEN_PPD = 20
-    scene = QGraphicsScene()
 
     def __init__(self, var):
-        super().__init__(self.scene)
+        super().__init__()
+
+        self.scene = QGraphicsScene()
+
+        self.setScene(self.scene)
 
         self.var = var
         display_monitor = 0
@@ -29,135 +159,26 @@ class NuclearTarget(QGraphicsView):
             self.var.target_vis = True
         else:
             self.var.target_vis = False
-        self.var.custom_color = QtGui.QColor(defaults[1])
-        self.var.size = int(defaults[2])
-        self.var.shape = defaults[3]
-        self.list1 = [1, 2, 3, 4]
-        # self.rand_num = random.choice(self.list1)
-        self.rand_num = 1
-        # self.prev = 1
-        self.count = 0
+
         self.var.center_x = QPainter(self).window().width() / 2
         self.var.center_y = QPainter(self).window().height() / 2
 
-        self.scene
+        self.targets = [CrossHair(size=self.var.size, thickness=self.var.thickness, color=self.var.custom_color),
+                        MalteseCross(size=self.var.size, thickness=self.var.thickness, color=self.var.custom_color)]
 
+        self.current_shape = None
+        self.setTarget(self.var.shape)
+        self.setFrameStyle(0)
 
-class MalteseCross(QGraphicsItem):
+    def setTarget(self, target_name) -> Target:
 
-    def __init__(self, size=5):
-        super().__init__()
+        self.scene.removeItem(self.current_shape)
 
-        self.size = 5
+        for target in self.targets:
+            if target_name == target.getName():
+                self.current_shape = target
+                self.scene.addItem(target)
 
-    def boundingRect(self):
-        return QRectF(0, 0, 100, 100)
+                return target
 
-    def paint(self, painter, option, widget):
-
-        pen = QtGui.QPen(self.custom_color, self.size * 0.35)
-        painter.setPen(pen)
-        painter.drawLine(-self.size * 0.8, self.size * 1.6, self.size * 0.8,  self.size * 1.6)
-        painter.drawLine( -self.size * 0.8,  self.size * 1.6, self.size * 0.8,  -self.size * 1.6)
-        painter.drawLine( self.size * 1.6,  self.size * 0.8, -self.size * 1.6,  -self.size * 0.8)
-        painter.drawLine( self.size * 1.6,  -self.size * 0.8, -self.size * 1.6,  self.size * 0.8)
-        painter.drawLine( 0, self.size,  self.size * 0.8, self.size * 1.6)
-        painter.drawLine( 0, self.size,  -self.size * 0.8, self.size * 1.6)
-        painter.drawLine( 0, -self.size,  self.size * 0.8, -self.size * 1.6)
-        painter.drawLine( 0, -self.size,  -self.size * 0.8, -self.size * 1.6)
-        painter.drawLine( 0, self.size,  self.size * 1.6, -self.size * 0.8)
-        painter.drawLine( 0, self.size,  self.size * 1.6, self.size * 0.8)
-        painter.drawLine( 0, -self.size,  -self.size * 1.6, -self.size * 0.8)
-        painter.drawLine( 0, -self.size,  -self.size * 1.6, self.size * 0.8)
-
-class CrossHair(QGraphicsItem):
-
-
-        painter.setBrush(QColor(0, 0, 0))
-        painter.setRenderHint(QPainter.Antialiasing, True)
-
-        rect = painter.window()
-
-        # filling the background with black
-        painter.drawRect(0, 0, rect.width(), rect.height())
-
-        # if GUI has checkbox checked for target visible
-        if self.var.target_vis:
-            # set color of target
-            # need to set the pen and brush so there is no undesirable outline of the drawn items
-            painter.setPen(self.var.custom_color)
-            painter.setBrush(self.var.custom_color)
-
-            if self.init == 1:
-                # set it to the middle of the screen with this
-                self.var.center_x = rect.width()/2
-                self.var.center_y = rect.height()/2
-                self.var.center_x_og = rect.width() / 2
-                self.var.center_y_og = rect.height() / 2
-                self.init = 0
-
-            # updating the current target location
-            self.var.center_x = self.var.center_x_og + self.var.x_val * self.var.screen_ppd
-            self.var.center_y = self.var.center_y_og - self.var.y_val * self.var.screen_ppd
-
-            if self.var.shape == "Large Crosshair":
-                # vertical line of crosshair
-                painter.drawRect(self.var.center_x-(self.var.size/2), 0, self.var.size, rect.height())
-                # horizontal line of crosshair
-                painter.drawRect(0, self.var.center_y-(self.var.size/2), rect.width(), self.var.size)
-
-            elif self.var.shape == "Small Crosshair":
-                # vertical line of crosshair
-                painter.drawRect(self.var.center_x-(self.var.size/2), self.var.center_y - ((self.var.size * 5)/2), self.var.size, self.var.size * 5)
-                # horizontal line of crosshair
-                painter.drawRect(self.var.center_x - ((self.var.size * 5)/2), self.var.center_y-(self.var.size/2), self.var.size * 5, self.var.size)
-
-            elif self.var.shape == "Maltese Cross":
-
-            elif self.var.shape == "Square":
-                painter.drawRect(self.var.center_x - self.var.size, self.var.center_y - self.var.size, self.var.size * 2, self.var.size * 2)
-            elif self.var.shape == "Circle":
-                center = QPointF(self.var.center_x, self.var.center_y)
-                painter.drawEllipse(center, self.var.size, self.var.size)
-            elif self.var.shape == "Twinkle":
-                pen = QtGui.QPen(self.var.custom_color, self.var.size * 0.4)
-                painter.setPen(pen)
-                # draw the parts of the shape that always stay the same
-                painter.drawLine(self.var.center_x + (self.var.size*0.6), self.var.center_y, self.var.center_x - (self.var.size*0.6), self.var.center_y)
-                painter.drawLine(self.var.center_x, self.var.center_y + (self.var.size*0.6), self.var.center_x, self.var.center_y - (self.var.size*0.6))
-                painter.drawLine(self.var.center_x + self.var.size, self.var.center_y + self.var.size, self.var.center_x - self.var.size, self.var.center_y - self.var.size)
-                painter.drawLine(self.var.center_x - self.var.size, self.var.center_y + self.var.size, self.var.center_x + self.var.size, self.var.center_y - self.var.size)
-
-                # this is necessary so it doesn't change too fast
-                if self.count == 2:
-                    if self.rand_num == 1:
-                        self.rand_num = 2
-                    elif self.rand_num == 2:
-                        self.rand_num = 3
-                    elif self.rand_num == 3:
-                        self.rand_num = 4
-                    elif self.rand_num == 4:
-                        self.rand_num = 1
-                    # self.rand_num = random.choice(self.list1)
-                    # # while loop so that there are no numbers in a row.
-                    # while self.rand_num == self.prev:
-                    #     self.rand_num = random.choice(self.list1)
-                    self.count = 0
-
-                    # draw the parts of the shape that change (currently drawn or not)
-                    if self.rand_num == 1:
-                        painter.drawLine(self.var.center_x + (self.var.size*1.4), self.var.center_y, self.var.center_x + (self.var.size*1.4), self.var.center_y)
-                    elif self.rand_num == 2:
-                        painter.drawLine(self.var.center_x, self.var.center_y + (self.var.size * 1.4), self.var.center_x, self.var.center_y + (self.var.size * 1.4))
-                    elif self.rand_num == 3:
-                        painter.drawLine(self.var.center_x - (self.var.size * 1.4), self.var.center_y, self.var.center_x - (self.var.size * 1.4), self.var.center_y)
-                    elif self.rand_num == 4:
-                        painter.drawLine(self.var.center_x, self.var.center_y - (self.var.size*1.4), self.var.center_x, self.var.center_y - (self.var.size*1.4))
-
-                    painter.setPen(self.var.custom_color)
-                    # self.prev = self.rand_num
-                    self.count = self.count + 1
-
-        self.update()
-
-
+        return CrossHair()
