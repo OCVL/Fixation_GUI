@@ -6,6 +6,9 @@ from PySide6.QtGui import *
 from PySide6.QtCore import Qt, QSize, QPointF, QEvent, QRegularExpression
 from PySide6.QtWidgets import *
 
+from ocvl.fixation.nuclear_target import MalteseCross, CrossHair, TargetTypes
+from ocvl.fixation.targets import TargetFactory
+
 
 class Tabs(QTabWidget):
     """
@@ -17,6 +20,7 @@ class Tabs(QTabWidget):
         Initialization of the class variables
         """
         super(Tabs, self).__init__(parent)
+        self.targetbuttons = {}
         self.temp_x = None
         self.temp_y = None
         self.none_selected = None
@@ -56,7 +60,7 @@ class Tabs(QTabWidget):
         self.save_p_button = None
         self.image_label = None
         self.twinkle = None
-        self.circle = None
+        self.bullseye = None
         self.square = None
         self.m_cross = None
         self.square_out = None
@@ -299,7 +303,7 @@ class Tabs(QTabWidget):
         self.size_bar.setFocusPolicy(Qt.NoFocus)
         self.label_size = QLabel()
         self.size_bar.setMinimum(1)
-        self.size_bar.setMaximum(20)
+        self.size_bar.setMaximum(100)
         self.size_bar.setValue(self.var.size)
         self.size_bar.setTickPosition(QSlider.TicksBelow)
         self.size_bar.setTickInterval(1)
@@ -310,60 +314,32 @@ class Tabs(QTabWidget):
         target_cal_layout.addWidget(self.label_size)
         target_cal_layout.addWidget(self.size_bar)
 
+        # Adding the buttons to the shape layouts
+        fix_shape_main = QVBoxLayout()
+        fix_shape1 = QHBoxLayout()
+        self.target_buttongroup = QButtonGroup()
+
         # Push Buttons to be used for target shape
-        self.cross = QPushButton("Large Crosshair")
-        self.s_cross = QPushButton("Small Crosshair")
-        self.m_cross = QPushButton("Maltese Cross")
-        self.square_out = QPushButton("Square Outline")
-        self.square = QPushButton("Square")
-        self.circle = QPushButton("Circle")
-        self.twinkle = QPushButton("Twinkle")
-        self.test_label = QLabel("")
+        for target in TargetTypes:
+            self.targetbuttons[target] = QPushButton()
+            self.targetbuttons[target].setObjectName(target)
+            self.targetbuttons[target].setFixedSize(QSize(48, 48))
+            self.targetbuttons[target].setFocusPolicy(Qt.NoFocus)
+            self.targetbuttons[target].setCheckable(True)
+            self.targetbuttons[target].clicked.connect(self.onClick)
+            self.target_buttongroup.addButton(self.targetbuttons[target])
 
-        # Change the shape of the buttons to be squares
-        buttonSize = 40
-        self.cross.setFixedSize(QSize(buttonSize, buttonSize))
-        self.s_cross.setFixedSize(QSize(buttonSize, buttonSize))
-        self.m_cross.setFixedSize(QSize(buttonSize, buttonSize))
-        self.square_out.setFixedSize(QSize(buttonSize, buttonSize))
-        self.square.setFixedSize(QSize(buttonSize, buttonSize))
-        self.circle.setFixedSize(QSize(buttonSize, buttonSize))
-        self.twinkle.setFixedSize(QSize(buttonSize, buttonSize))
-
-        self.cross.setFocusPolicy(Qt.NoFocus)
-        self.s_cross.setFocusPolicy(Qt.NoFocus)
-        self.m_cross.setFocusPolicy(Qt.NoFocus)
-        self.square.setFocusPolicy(Qt.NoFocus)
-        self.circle.setFocusPolicy(Qt.NoFocus)
-        self.twinkle.setFocusPolicy(Qt.NoFocus)
+            fix_shape1.addWidget(self.targetbuttons[target])
 
         # Call the functions to draw the different targets
         self.drawTargets()
 
-        # Adding the radio buttons to the shape layouts
-        fix_shape_main = QVBoxLayout()
-        fix_shape1 = QHBoxLayout()
-        fix_shape1.addWidget(self.cross)
-        fix_shape1.addWidget(self.s_cross)
-        fix_shape1.addWidget(self.m_cross)
-        fix_shape1.addWidget(self.square)
-        fix_shape1.addWidget(self.circle)
-        fix_shape1.addWidget(self.twinkle)
         fix_shape_main.addLayout(fix_shape1)
-
-        # What will happen when a specific radio button is called
-        self.cross.clicked.connect(self.onClick)
-        self.s_cross.clicked.connect(self.onClick)
-        self.m_cross.clicked.connect(self.onClick)
-        self.square.clicked.connect(self.onClick)
-        self.circle.clicked.connect(self.onClick)
-        self.twinkle.clicked.connect(self.onClick)
 
         # Add the components to the target cl layout
         target_cal_layout.addWidget(QLabel(""))
         target_cal_layout.addLayout(fix_shape_main)
-        target_cal_layout.addWidget(self.test_label)
-        self.test_label.setText("Current Target: " + self.var.shape)
+
 
         # Add the fixation target stuff to the main layout and then add the group to the main layout as another row
         target_config_group.setLayout(target_cal_layout)
@@ -696,124 +672,24 @@ class Tabs(QTabWidget):
         """
         Function that calls each function in charge of drawing on the fixation target to be selected
         """
-        # Call the functions to draw the different targets
-        self.drawCross()
-        self.drawSmallCross()
-        self.drawSquare()
-        self.drawSquareOutline()
-        self.drawCircle()
-        self.drawTwinkle()
-        self.drawMaltcross()
+        for target_type, button in self.targetbuttons.items():
 
-    def drawCross(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 15)
-        painter.setPen(pen)
-        painter.drawLine(10, 50, 90, 50)
-        painter.drawLine(50, 10, 50, 90)
-        painter.end()
-        self.cross.setIcon(canvas)
-        self.cross.setIconSize(QSize(32, 32))
-        self.cross.setStyleSheet("text-align: left;")
+            canvas = QtGui.QPixmap(QSize(64, 64))
+            canvas.fill(Qt.black)
+            painter = QPainter(canvas)
+            painter.setTransform(QTransform.fromTranslate(32, 32))
 
-    def drawSmallCross(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 15)
-        painter.setPen(pen)
-        painter.drawLine(35, 50, 65, 50)
-        painter.drawLine(50, 35, 50, 65)
-        painter.end()
-        self.s_cross.setIcon(canvas)
-        self.s_cross.setIconSize(QSize(32, 32))
-        self.s_cross.setStyleSheet("text-align: left;")
+            if button.isChecked():
+                targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=self.var.custom_color)
+                self.var.shape = targ
+            else:
+                targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=Qt.gray)
 
-    def drawSquare(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 15)
-        painter.setPen(pen)
-        painter.setBrush(self.var.custom_color)
-        painter.drawRect(15, 15, 70, 70)
-        painter.end()
-        self.square.setIcon(canvas)
-        self.square.setIconSize(QSize(32, 32))
-        self.square.setStyleSheet("text-align: left;")
+            targ.paint(painter, QStyleOptionGraphicsItem(), None)
+            painter.end()
 
-    def drawSquareOutline(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 15)
-        painter.setPen(pen)
-        painter.drawLine(20, 20, 20, 80)
-        painter.drawLine(20, 20, 80, 20)
-        painter.drawLine(80, 20, 80, 80)
-        painter.drawLine(20, 80, 80, 80)
-        painter.end()
-        self.square_out.setIcon(canvas)
-        self.square_out.setIconSize(QSize(32, 32))
-        self.square_out.setStyleSheet("text-align: left;")
-
-    def drawCircle(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 15)
-        painter.setPen(pen)
-        painter.setBrush(QtGui.QColor(self.var.custom_color))
-        center = QPointF(50, 50)
-        painter.drawEllipse(center, 35, 35)
-        painter.end()
-        self.circle.setIcon(canvas)
-        self.circle.setIconSize(QSize(32, 32))
-        self.circle.setStyleSheet("text-align: left;")
-
-    def drawTwinkle(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 10)
-        painter.setPen(pen)
-        painter.drawLine(35, 50, 65, 50)
-        painter.drawLine(15, 50, 15, 50)
-        painter.drawLine(85, 50, 85, 50)
-        painter.drawLine(50, 35, 50, 65)
-        painter.drawLine(50, 85, 50, 85)
-        painter.drawLine(50, 15, 50, 15)
-        painter.drawLine(25, 25, 75, 75)
-        painter.drawLine(75, 25, 25, 75)
-        painter.end()
-        self.twinkle.setIcon(canvas)
-        self.twinkle.setIconSize(QSize(32, 32))
-        self.twinkle.setStyleSheet("text-align: left;")
-
-    def drawMaltcross(self):
-        canvas = QtGui.QPixmap(QSize(100, 100))
-        canvas.fill(Qt.black)
-        painter = QtGui.QPainter(canvas)
-        pen = QtGui.QPen(self.var.custom_color, 10)
-        painter.setPen(pen)
-        painter.drawLine(30, 10, 70, 90)
-        painter.drawLine(70, 10, 30, 90)
-        painter.drawLine(10, 30, 90, 70)
-        painter.drawLine(10, 70, 90, 30)
-        painter.drawLine(50, 25, 30, 10)
-        painter.drawLine(50, 25, 70, 10)
-        painter.drawLine(50, 75, 30, 90)
-        painter.drawLine(50, 75, 70, 90)
-        painter.drawLine(25, 50, 10, 70)
-        painter.drawLine(25, 50, 10, 30)
-        painter.drawLine(75, 50, 90, 70)
-        painter.drawLine(75, 50, 90, 30)
-        painter.end()
-        self.m_cross.setIcon(canvas)
-        self.m_cross.setIconSize(QSize(32, 32))
-        self.m_cross.setStyleSheet("text-align: left;")
+            button.setIcon(canvas)
+            button.setIconSize(QSize(32, 32))
 
     """
     Slots that are used in the UI for fixationTargetControlTab
@@ -823,28 +699,10 @@ class Tabs(QTabWidget):
         Slot for the shape of the fixation target to be selected
         """
         button = self.sender()
-        txt = str(button.text())
-        if txt == "Large Crosshair":
-            self.var.shape = txt
-            self.test_label.setText("Current Target: " + txt)
-        elif txt == "Small Crosshair":
-            self.var.shape = txt
-            self.test_label.setText("Current Target: " + txt)
-        elif txt == "Maltese Cross":
-            self.var.shape = txt
-            self.test_label.setText("Current Target: " + txt)
-        elif txt == "Square Outline":
-            self.var.shape = txt
-            self.test_label.setText("Current Target: " + txt)
-        elif txt == "Square":
-            self.var.shape = txt
-            self.test_label.setText("Current Target: " + txt)
-        elif txt == "Circle":
-            self.var.shape = txt
-            self.test_label.setText("Current Target: " + txt)
-        elif txt == "Twinkle":
-            self.var.shape = txt
-            self.test_label.setText("Current Target: " + txt)
+
+        self.drawTargets()
+
+
 
     def sizeChange(self):
         """

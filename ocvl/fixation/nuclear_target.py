@@ -1,136 +1,7 @@
-from enum import StrEnum
 
-from PySide6 import QtGui
-from PySide6.QtWidgets import  QGraphicsItem, QGraphicsScene, QGraphicsView
-from PySide6.QtCore import QRectF, QLineF
-from PySide6.QtGui import QScreen, QPainter, QColor, QPainterPath
-
-class TargetTypes(StrEnum):
-    MALTESE_CROSS = "Maltese Cross",
-    CROSSHAIR = "Crosshair",
-    BULLSEYE = "Bullseye"
-
-class Target(QGraphicsItem):
-    def __init__(self, name, size=5, thickness=1, color=QColor("white")):
-        super().__init__()
-        self._name = name
-        self.size = size
-        self.thickness = thickness
-        self.color = color
-
-    def setColor(self, color):
-        self.color = color
-
-    def setThickness(self, thickness):
-        self.thickness = thickness
-
-    def setSize(self, newsize):
-        self.size = newsize
-
-    def getName(self):
-        return self._name
-
-
-class MalteseCross(Target):
-    def __init__(self, size=5, thickness=1, color=QColor("white")):
-        super().__init__(TargetTypes.MALTESE_CROSS, size, thickness, color)
-
-        self.path_to_draw = QPainterPath()
-
-        self.path_to_draw.moveTo(-self.size * 0.8, self.size * 1.6)
-        self.path_to_draw.lineTo(self.size * 0.8, self.size * 1.6)
-        self.path_to_draw.moveTo(-self.size * 0.8, self.size * 1.6)
-        self.path_to_draw.lineTo(self.size * 0.8, -self.size * 1.6)
-        self.path_to_draw.moveTo(self.size * 1.6, self.size * 0.8)
-        self.path_to_draw.lineTo(-self.size * 1.6, -self.size * 0.8)
-        self.path_to_draw.moveTo(self.size * 1.6, -self.size * 0.8)
-        self.path_to_draw.lineTo(-self.size * 1.6, self.size * 0.8)
-        self.path_to_draw.moveTo(0, self.size)
-        self.path_to_draw.lineTo(self.size * 0.8, self.size * 1.6),
-        self.path_to_draw.moveTo(0, self.size)
-        self.path_to_draw.lineTo(-self.size * 0.8, self.size * 1.6)
-        self.path_to_draw.moveTo(0, -self.size)
-        self.path_to_draw.lineTo(self.size * 0.8, -self.size * 1.6)
-        self.path_to_draw.moveTo(0, -self.size)
-        self.path_to_draw.lineTo(-self.size * 0.8, -self.size * 1.6)
-        self.path_to_draw.moveTo(0, self.size)
-        self.path_to_draw.lineTo(self.size * 1.6, -self.size * 0.8),
-        self.path_to_draw.moveTo(0, self.size)
-        self.path_to_draw.lineTo(self.size * 1.6, self.size * 0.8),
-        self.path_to_draw.moveTo(0, -self.size)
-        self.path_to_draw.lineTo(-self.size * 1.6, -self.size * 0.8)
-        self.path_to_draw.moveTo(0, -self.size)
-        self.path_to_draw.lineTo(-self.size * 1.6, self.size * 0.8)
-
-    def setSize(self, newsize):
-        self.size = newsize
-        self.path_to_draw = QPainterPath()
-
-        self.path_to_draw.moveTo(-self.size * 0.8, self.size * 1.6)
-        self.path_to_draw.lineTo(self.size * 0.8,  self.size * 1.6)
-        self.path_to_draw.moveTo(-self.size * 0.8,  self.size * 1.6)
-        self.path_to_draw.lineTo( self.size * 0.8,  -self.size * 1.6)
-        self.path_to_draw.moveTo( self.size * 1.6,  self.size * 0.8)
-        self.path_to_draw.lineTo( -self.size * 1.6,  -self.size * 0.8)
-        self.path_to_draw.moveTo( self.size * 1.6,  -self.size * 0.8)
-        self.path_to_draw.lineTo( -self.size * 1.6,  self.size * 0.8)
-        self.path_to_draw.moveTo( 0, self.size)
-        self.path_to_draw.lineTo( self.size * 0.8, self.size * 1.6),
-        self.path_to_draw.moveTo( 0, self.size)
-        self.path_to_draw.lineTo( -self.size * 0.8, self.size * 1.6)
-        self.path_to_draw.moveTo( 0, -self.size)
-        self.path_to_draw.lineTo( self.size * 0.8, -self.size * 1.6)
-        self.path_to_draw.moveTo( 0, -self.size)
-        self.path_to_draw.lineTo( -self.size * 0.8, -self.size * 1.6)
-        self.path_to_draw.moveTo( 0, self.size)
-        self.path_to_draw.lineTo(self.size * 1.6, -self.size * 0.8),
-        self.path_to_draw.moveTo( 0, self.size)
-        self.path_to_draw.lineTo(self.size * 1.6, self.size * 0.8),
-        self.path_to_draw.moveTo( 0, -self.size)
-        self.path_to_draw.lineTo(-self.size * 1.6, -self.size * 0.8)
-        self.path_to_draw.moveTo( 0, -self.size)
-        self.path_to_draw.lineTo( -self.size * 1.6, self.size * 0.8)
-
-    def boundingRect(self):
-        return QRectF(-self.size * 1.6, -self.size * 1.6, self.size * 1.6, self.size * 1.6)
-
-    def paint(self, painter, option, widget):
-        pen = QtGui.QPen(self.color, self.thickness * 0.35)
-        painter.setPen(pen)
-        painter.drawPath(self.path_to_draw)
-
-
-class CrossHair(Target):
-
-    def __init__(self, size=5, thickness=1, color=QColor("white")):
-        super().__init__(TargetTypes.CROSSHAIR, size, thickness, color)
-
-        self.path_to_draw = QPainterPath()
-
-        self.path_to_draw.moveTo(0, -self.size/2)
-        self.path_to_draw.lineTo(0, self.size/2)
-        self.path_to_draw.moveTo(-self.size/2, 0)
-        self.path_to_draw.lineTo(self.size/2, 0)
-
-    def setSize(self, newsize):
-        self.size = newsize
-        self.path_to_draw = QPainterPath()
-
-        self.path_to_draw = QPainterPath()
-
-        self.path_to_draw.moveTo(0, -self.size/2)
-        self.path_to_draw.lineTo(0, self.size/2)
-        self.path_to_draw.moveTo(-self.size/2, 0)
-        self.path_to_draw.lineTo(self.size/2, 0)
-
-    def boundingRect(self):
-        return QRectF(-self.size/2, -self.size/2, self.size/2, self.size/2)
-
-    def paint(self, painter, option, widget):
-        pen = QtGui.QPen(self.color, self.thickness * 0.35)
-        painter.setPen(pen)
-        painter.drawPath(self.path_to_draw)
-
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsView
+from PySide6.QtGui import QScreen, QPainter
+from ocvl.fixation.targets import *
 
 class NuclearTarget(QGraphicsView):
 
@@ -163,22 +34,18 @@ class NuclearTarget(QGraphicsView):
         self.var.center_x = QPainter(self).window().width() / 2
         self.var.center_y = QPainter(self).window().height() / 2
 
-        self.targets = [CrossHair(size=self.var.size, thickness=self.var.thickness, color=self.var.custom_color),
-                        MalteseCross(size=self.var.size, thickness=self.var.thickness, color=self.var.custom_color)]
-
-        self.current_shape = None
-        self.setTarget(self.var.shape)
+        self.current_target = self.var.shape
+        self.scene.addItem(self.current_target)
+        self.var.shapeChanged.connect(self.setTarget)
         self.setFrameStyle(0)
 
-    def setTarget(self, target_name) -> Target:
+    def setTarget(self, target: Target):
+        self.scene.clear()
+        self.viewport().update()
 
-        self.scene.removeItem(self.current_shape)
+        self.current_shape = target
 
-        for target in self.targets:
-            if target_name == target.getName():
-                self.current_shape = target
-                self.scene.addItem(target)
+        self.scene.addItem(target)
 
-                return target
+        return target
 
-        return CrossHair()

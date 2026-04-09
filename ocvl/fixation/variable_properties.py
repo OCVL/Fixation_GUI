@@ -2,20 +2,25 @@ import configparser
 import os
 from queue import Queue
 from PySide6 import QtCore, QtGui
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal, QObject
 
 from ocvl.fixation.nuclear_target import TargetTypes
+from ocvl.fixation.targets import CrossHair, Target
 
 
 # using property class
-class Variables:
+class Variables(QObject):
+    shapeChanged = Signal(Target)
+
     def __init__(self, animation_speed_val=None, x_val=0, y_val=0, dim=None, savior_FOVs=None, \
                  custom_color=Qt.white, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
-                 right_label=None, current_fov='0.0 x 0.0', shape=TargetTypes.CROSSHAIR, size=5, center_x=None, center_y=None,
+                 right_label=None, current_fov='0.0 x 0.0', shape=CrossHair(), size=32, thickness=5, center_x=None, center_y=None,
                  center_x_og=None, center_y_og=None, target_vis=True, stimulus_imaging=None,
                  center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3,
                  screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None, notes_entry="", video_list_entry=None,
                  recvQ=Queue(), vid_num=None, fov_list=[], ref_point=False, x_ref= None, y_ref=None, image_path=None):
+        super().__init__()
+
         self.animation_speed_val = animation_speed_val
         self.x_val = x_val
         self.y_val = y_val
@@ -31,6 +36,7 @@ class Variables:
         self.current_fov = current_fov
         self.shape = shape
         self.size = size
+        self.thickness = thickness
         self.center_x = center_x
         self.center_y = center_y
         self.center_x_og = center_x_og
@@ -181,6 +187,7 @@ class Variables:
     # setter
     def set_shape(self, value):
         self._shape = value
+        self.shapeChanged.emit(self._shape)
 
     # getter
     def get_size(self):
@@ -188,6 +195,14 @@ class Variables:
 
     # setter
     def set_size(self, value):
+        self._size = value
+
+    # getter
+    def get_thickness(self):
+        return self._size
+
+    # setter
+    def set_thickness(self, value):
         self._size = value
 
     # getter
@@ -383,12 +398,13 @@ class Variables:
     left_label = QtCore.Property(str, get_left_label, set_left_label)
     right_label = QtCore.Property(str, get_right_label, set_right_label)
     fov = QtCore.Property(bool, get_current_fov, set_current_fov)
-    shape = QtCore.Property(bool, get_shape, set_shape)
-    size = QtCore.Property(bool, get_size, set_size)
-    center_x = QtCore.Property(bool, get_center_x, set_center_x)
-    center_y = QtCore.Property(bool, get_center_y, set_center_y)
-    center_x_og = QtCore.Property(bool, get_center_x_og, set_center_x_og)
-    center_y_og = QtCore.Property(bool, get_center_y_og, set_center_y_og)
+    shape = QtCore.Property(Target, get_shape, set_shape, notify=shapeChanged)
+    size = QtCore.Property(float, get_size, set_size)
+    thickness = QtCore.Property(float, get_thickness, set_thickness)
+    center_x = QtCore.Property(float, get_center_x, set_center_x)
+    center_y = QtCore.Property(float, get_center_y, set_center_y)
+    center_x_og = QtCore.Property(float, get_center_x_og, set_center_x_og)
+    center_y_og = QtCore.Property(float, get_center_y_og, set_center_y_og)
     target_vis = QtCore.Property(bool, get_target_vis, set_target_vis)
     stimulus_imaging = QtCore.Property(bool, get_stimulus_imaging, set_stimulus_imaging)
     center_x_grid = QtCore.Property(bool, get_center_x_grid, set_center_x_grid)
@@ -396,7 +412,7 @@ class Variables:
     center_x_og_grid = QtCore.Property(bool, get_center_x_og_grid, set_center_x_og_grid)
     center_y_og_grid = QtCore.Property(bool, get_center_y_og_grid, set_center_y_og_grid)
     grid_mult = QtCore.Property(bool, get_grid_mult, set_grid_mult)
-    screen_ppd = QtCore.Property(bool, get_screen_ppd, set_screen_ppd)
+    screen_ppd = QtCore.Property(float, get_screen_ppd, set_screen_ppd)
     grid_vis = QtCore.Property(bool, get_grid_vis, set_grid_vis)
     control_ref = QtCore.Property(bool, get_control_ref, set_control_ref)
     notes_ref = QtCore.Property(bool, get_notes_ref, set_notes_ref)
