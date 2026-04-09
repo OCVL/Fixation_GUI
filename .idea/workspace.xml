@@ -6,8 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="2a0b3cf8-dc52-4a7d-ac1c-a9c198de7599" name="Default Changelist" comment="-Added the ability to press F4 on the fixation target and have it start a record on the host application.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_notes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/test_settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/test_settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/variable_properties.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/variable_properties.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -233,7 +238,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Fixation_GUI$wxFixProc38.coverage" NAME="wxFixProc38 Coverage Results" MODIFIED="1775589511214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
-    <SUITE FILE_PATH="coverage/Fixation_GUI$nuclear_base.coverage" NAME="nuclear_base Coverage Results" MODIFIED="1775762336487" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
+    <SUITE FILE_PATH="coverage/Fixation_GUI$nuclear_base.coverage" NAME="nuclear_base Coverage Results" MODIFIED="1775763581087" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
     <SUITE FILE_PATH="coverage/Fixation_GUI$nuclear_base38.coverage" NAME="nuclear_base38 Coverage Results" MODIFIED="1775590988646" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
   </component>
 </project>

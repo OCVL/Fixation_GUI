@@ -9,66 +9,43 @@ from ocvl.fixation.targets import CrossHair, Target
 
 
 # using property class
-class Variables(QObject):
+class StatusVariables(QObject):
     shapeChanged = Signal(Target)
     xChanged = Signal(float)
     yChanged = Signal(float)
 
-    def __init__(self, animation_speed_val=None, x_val=0, y_val=0, dim=None, savior_FOVs=None, \
-                 custom_color=Qt.white, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
-                 right_label=None, current_fov='0.0 x 0.0', shape=CrossHair(), size=32, thickness=5, center_x=None, center_y=None,
-                 center_x_og=None, center_y_og=None, target_vis=True, stimulus_imaging=None,
-                 center_x_grid=None, center_y_grid=None, center_x_og_grid=None, center_y_og_grid=None, grid_mult=23.3,
-                 screen_ppd=None, grid_vis=None, control_ref=None, notes_ref=None, notes_entry="", video_list_entry=None,
-                 recvQ=Queue(), vid_num=None, fov_list=[], ref_point=False, x_ref= None, y_ref=None, image_path=None):
+    def __init__(self, animation_speed=None, x_pos=0, y_pos=0, dim=None, \
+                 custom_color=Qt.white, eye='OX', device=None, current_fov=(0.0, 0.0), target_shape=CrossHair(),
+                 size=16, thickness=5, center_x=None, center_y=None,
+                 grid_center_x=None, grid_center_y=None, screen_ppd=None, grid_vis=None,
+                 x_ref= None, y_ref=None, image_path=None):
+
         super().__init__()
 
-        self.animation_speed_val = animation_speed_val
-        self.x_val = x_val
-        self.y_val = y_val
+        # In degrees of visual angle
+        self.x_pos = x_pos
+        self.y_pos = y_pos
         self.dim = dim
-        self.savior_FOVs = savior_FOVs
-        self.custom_color = custom_color
-        self.eye = eye
-        self.sub_id = sub_id
-        self.save_loc = save_loc
+
+        # Information (maybe) coming from elsewhere
         self.device = device
-        self.left_label = left_label
-        self.right_label = right_label
-        self.current_fov = current_fov
-        self.shape = shape
-        self.size = size
-        self.thickness = thickness
-        self.center_x = center_x
-        self.center_y = center_y
-        self.center_x_og = center_x_og
-        self.center_y_og = center_y_og
-        self.target_vis = target_vis
-        self.stimulus_imaging = stimulus_imaging
-        self.center_x_grid = center_x_grid
-        self.center_y_grid = center_y_grid
-        self.center_x_og_grid = center_x_og_grid
-        self.center_y_og_grid = center_y_og_grid
-        self.grid_mult = grid_mult
+        self.eye = eye
+        self.fov = current_fov
+
+        # Target variables
+        self.target_color = custom_color
+        self.target_shape = target_shape
+        self.target_size = size
+        self.target_thickness = thickness
+
+        # Grid (display) variables
+        self.grid_center_x = grid_center_x
+        self.grid_center_y = grid_center_y
+
+        # Grid to Target conversion variables
         self.screen_ppd = screen_ppd
-        self.grid_vis = grid_vis
-        self.control_ref = control_ref
-        self.notes_ref = notes_ref
-        self.notes_entry = notes_entry
-        self.video_list_entry = video_list_entry
-        self.recvQ = recvQ
-        self.vid_num = vid_num
-        self.fov_list = fov_list
-        self.ref_point = ref_point
-        self.x_ref = x_ref
-        self.y_ref = y_ref
-        self.image_path = image_path
 
-
-        # configuration file set up
-        self.config = configparser.ConfigParser()
-        self.config_name = os.getcwd() + "\\test_settings.ini"
-        self.config.read(self.config_name)
+        self.animation_speed = animation_speed
 
     # getter
     def get_stimulus_imaging(self):
@@ -111,14 +88,6 @@ class Variables(QObject):
     # setter
     def set_dim(self, value):
         self._dim = value
-
-    # getter
-    def get_savior_FOVs(self):
-        return self._savior_FOVs
-
-    # setter
-    def set_savior_FOVs(self, value):
-        self._savior_FOVs = value
 
     # getter
     def get_custom_color(self):
@@ -389,50 +358,27 @@ class Variables(QObject):
 
     # creating property objects
     # sourced from tabs
-    animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
-    x_val = QtCore.Property(int, get_x_val, set_x_val, notify=xChanged)
-    y_val = QtCore.Property(int, get_y_val, set_y_val, notify=yChanged)
+    animation_speed = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
+    x_pos = QtCore.Property(int, get_x_val, set_x_val, notify=xChanged)
+    y_pos = QtCore.Property(int, get_y_val, set_y_val, notify=yChanged)
     dim = QtCore.Property(str, get_dim, set_dim)
-    savior_FOVs = QtCore.Property(str, get_savior_FOVs, set_savior_FOVs)
-    custom_color = QtCore.Property(QtGui.QColor, get_custom_color, set_custom_color)  # QtGui.QColor('green')
+    target_color = QtCore.Property(QtGui.QColor, get_custom_color, set_custom_color)  # QtGui.QColor('green')
     eye = QtCore.Property(str, get_eye, set_eye)
-    sub_id = QtCore.Property(str, get_sub_id, set_sub_id)
-    save_loc = QtCore.Property(str, get_save_loc, set_save_loc)
-    device = QtCore.Property(str, get_device, set_device)
-    left_label = QtCore.Property(str, get_left_label, set_left_label)
-    right_label = QtCore.Property(str, get_right_label, set_right_label)
     fov = QtCore.Property(bool, get_current_fov, set_current_fov)
-    shape = QtCore.Property(Target, get_shape, set_shape, notify=shapeChanged)
-    size = QtCore.Property(float, get_size, set_size)
-    thickness = QtCore.Property(float, get_thickness, set_thickness)
-    center_x = QtCore.Property(float, get_center_x, set_center_x)
-    center_y = QtCore.Property(float, get_center_y, set_center_y)
-    center_x_og = QtCore.Property(float, get_center_x_og, set_center_x_og)
-    center_y_og = QtCore.Property(float, get_center_y_og, set_center_y_og)
-    target_vis = QtCore.Property(bool, get_target_vis, set_target_vis)
-    stimulus_imaging = QtCore.Property(bool, get_stimulus_imaging, set_stimulus_imaging)
-    center_x_grid = QtCore.Property(bool, get_center_x_grid, set_center_x_grid)
-    center_y_grid = QtCore.Property(bool, get_center_y_grid, set_center_y_grid)
-    center_x_og_grid = QtCore.Property(bool, get_center_x_og_grid, set_center_x_og_grid)
-    center_y_og_grid = QtCore.Property(bool, get_center_y_og_grid, set_center_y_og_grid)
-    grid_mult = QtCore.Property(bool, get_grid_mult, set_grid_mult)
+    target_shape = QtCore.Property(Target, get_shape, set_shape, notify=shapeChanged)
+    target_size = QtCore.Property(float, get_size, set_size)
+    target_thickness = QtCore.Property(float, get_thickness, set_thickness)
+
     screen_ppd = QtCore.Property(float, get_screen_ppd, set_screen_ppd)
-    grid_vis = QtCore.Property(bool, get_grid_vis, set_grid_vis)
-    control_ref = QtCore.Property(bool, get_control_ref, set_control_ref)
-    notes_ref = QtCore.Property(bool, get_notes_ref, set_notes_ref)
-    notes_entry = QtCore.Property(bool, get_notes_entry, set_notes_entry)
-    video_list_entry = QtCore.Property(bool, get_video_list_entry, set_video_list_entry)
-    recvQ = QtCore.Property(bool, get_recvQ, set_recvQ)
-    vid_num = QtCore.Property(bool, get_vid_num, set_vid_num)
     fov_list = QtCore.Property(bool, get_fov_list, set_fov_list)
     ref_point = QtCore.Property(bool, get_ref_point, set_ref_point)
     x_ref = QtCore.Property(bool, get_x_ref, set_x_ref)
     y_ref = QtCore.Property(bool, get_y_ref, set_y_ref)
-    image_path = QtCore.Property(bool, get_image_path, set_image_path)
+
 
 
 if __name__ == "__main__":
-    var = Variables()
+    var = StatusVariables()
     # test
     var.horz = 22.5
     print(var.horz)

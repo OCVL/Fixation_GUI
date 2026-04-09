@@ -66,8 +66,8 @@ class TargetArea(QGraphicsView):
             self.var.left_label = "Temporal"
             self.var.right_label = "Nasal"
 
-        self.grid_size = self.var.config.get("test", "grid_size")
-        self.circle_vis = self.var.config.get("test", "fixation_circle_visible")
+        self.grid_size = self.var.config.get( "grid_size")
+        self.circle_vis = self.var.config.get( "fixation_circle_visible")
         self.horz_lines = int(self.var.dim[0])
         self.vert_lines = int(self.var.dim[1])
         self.rendered = True
@@ -109,10 +109,10 @@ class TargetArea(QGraphicsView):
 
         # updating the current location on the grid (accounts for the size changing as well)
         if self.var.ref_point:
-            self.var.center_x_grid = self.var.center_x_og_grid + (self.var.x_val - self.var.x_ref) * self.var.grid_mult
+            self.var.center_x_grid = self.var.center_x_og_grid + (self.var.x_pos - self.var.x_ref) * self.var.grid_mult
             self.var.center_y_grid = self.var.center_y_og_grid - (self.var.y_val - self.var.y_ref) * self.var.grid_mult
         else:
-            self.var.center_x_grid = self.var.center_x_og_grid + self.var.x_val * self.var.grid_mult
+            self.var.center_x_grid = self.var.center_x_og_grid + self.var.x_pos * self.var.grid_mult
             self.var.center_y_grid = self.var.center_y_og_grid - self.var.y_val * self.var.grid_mult
 
         # updating the grid multiplier based on the size of the grid
@@ -120,7 +120,7 @@ class TargetArea(QGraphicsView):
 
         # setting the position to the place the mouse clicked
         if self.position:
-            self.var.x_val = -(self.var.center_x_og_grid - self.position.x()) / self.var.grid_mult
+            self.var.x_pos = -(self.var.center_x_og_grid - self.position.x()) / self.var.grid_mult
             self.var.y_val = (self.var.center_y_og_grid - self.position.y()) / self.var.grid_mult
             # call to update the x and y text boxes
             self.var.control_ref.target.updateCoordText()

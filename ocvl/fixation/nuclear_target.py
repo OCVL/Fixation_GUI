@@ -27,7 +27,7 @@ class NuclearTarget(QGraphicsView):
         self.move(monitor.left(), monitor.top())
 
         self.init = 1
-        defaults = self.var.config.get("test", "fixation_default").split("/")
+        defaults = self.var.config.get( "fixation_default").split("/")
 
         if defaults[0] == 'on':
             self.var.target_vis = True
@@ -37,11 +37,11 @@ class NuclearTarget(QGraphicsView):
         self.var.center_x_og = self.window().width() / 2
         self.var.center_y_og = self.window().height() / 2
 
-        self.var.center_x = self.var.center_x_og
-        self.var.center_y = self.var.center_y_og
+        self.var.target_center_x = self.var.center_x_og
+        self.var.target_center_y = self.var.center_y_og
 
-        self.current_target = self.var.shape
-        self.current_target.setTransform(QTransform.fromTranslate(self.var.center_x, self.var.center_y))
+        self.current_target = self.var.target_shape
+        self.current_target.setTransform(QTransform.fromTranslate(self.var.target_center_x, self.var.target_center_y))
         self.scene.addItem(self.current_target)
 
         self.var.shapeChanged.connect(self.setTarget)
@@ -57,8 +57,8 @@ class NuclearTarget(QGraphicsView):
 
         self.current_target = target
 
-        offset = QTransform.fromTranslate(self.var.center_x, self.var.center_y)
-        offset.translate(self.var.x_val, self.var.y_val)
+        offset = QTransform.fromTranslate(self.var.target_center_x, self.var.target_center_y)
+        offset.translate(self.var.x_pos, self.var.y_val)
 
         self.current_target.setTransform(offset)
         self.scene.addItem(self.current_target)
@@ -67,8 +67,8 @@ class NuclearTarget(QGraphicsView):
 
     def updateTransform(self):
 
-        offset = QTransform.fromTranslate(self.var.center_x, self.var.center_y)
-        offset.translate(self.var.x_val, self.var.y_val)
+        offset = QTransform.fromTranslate(self.var.target_center_x, self.var.target_center_y)
+        offset.translate(self.var.x_pos, self.var.y_val)
 
         self.current_target.setTransform(offset)
         self.viewport().update()

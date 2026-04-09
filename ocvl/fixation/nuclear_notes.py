@@ -52,7 +52,7 @@ class NuclearNotes(QtWidgets.QWidget):
         :return:
         """
         # https://stackoverflow.com/questions/4097139/reading-array-from-config-file-in-python
-        self.horizontal_table_headers = self.var.config.get("test", "horizontal_table_headers").split("/")
+        self.horizontal_table_headers = self.var.config.get( "horizontal_table_headers").split("/")
         table_columns = len(self.horizontal_table_headers)
         table_rows = 0
 
@@ -112,7 +112,7 @@ class NuclearNotes(QtWidgets.QWidget):
         # https: // stackoverflow.com / questions / 6957943 / how - to - add - new - row - to - existing - qtablewidget
         self.row_count = self.table_widget.rowCount()
         self.table_widget.insertRow(0)  # self.row_count
-        self.memory = self.var.config.get("test", "memory_columns").split("/")
+        self.memory = self.var.config.get( "memory_columns").split("/")
         length = len(self.memory)-1
 
         # Creating items for each cell in the table as it is created & setting text alignment to center
@@ -122,7 +122,7 @@ class NuclearNotes(QtWidgets.QWidget):
             self.table_widget.item(0, i).setTextAlignment(5)  # self.row_count
 
 
-        self.current_location = "(" + str(self.var.x_val) + "," + str(self.var.y_val) + ")"
+        self.current_location = "(" + str(self.var.x_pos) + "," + str(self.var.y_val) + ")"
         self.testPop = [self.var.vid_num, self.current_location, self.var.current_fov, self.var.notes_entry]
         for i in range(len(self.testPop)):
             self.table_widget.item(0, i).setText(self.testPop[i])  # self.row_count

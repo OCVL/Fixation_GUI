@@ -74,7 +74,7 @@ class Tabs(QTabWidget):
         self.n_frames = None
 
         # getting the default whether the grid is on or not from the config file
-        grid_def = int(self.var.config.get("test", "grid_visible"))
+        grid_def = int(self.var.config.get( "grid_visible"))
         if grid_def == 1:
             self.var.grid_vis = True
         else:
@@ -138,121 +138,6 @@ class Tabs(QTabWidget):
         # Main tab layout
         layout = QFormLayout()
 
-        # Grid Group and needed layouts
-        grid_config_group = QGroupBox("Grid Configuration")
-        grid_setup_layout = QVBoxLayout()
-        quick_size_layout = QHBoxLayout()
-
-        # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
-        grid_config_group.setFocusPolicy(Qt.NoFocus)
-
-        # Labels for each Grid section
-        quick_size_label = QLabel("Quick Sizes:")
-        # dim_menu_label = QLabel("Grid Dimension:")
-
-        # Default button size creation
-        self.grid_defaults = self.var.config.get("test", "grid_size_defaults").split("/")
-        # print(self.grid_defaults)
-        self.grid_size_default_1 = QRadioButton(self.grid_defaults[0])
-        self.grid_size_default_2 = QRadioButton(self.grid_defaults[1])
-        self.grid_size_default_3 = QRadioButton(self.grid_defaults[2])
-        # self.grid_size_default_3.setChecked(True)
-        self.none_selected = QRadioButton("hidden")
-
-        # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
-        self.grid_size_default_1.setFocusPolicy(Qt.NoFocus)
-        self.grid_size_default_2.setFocusPolicy(Qt.NoFocus)
-        self.grid_size_default_3.setFocusPolicy(Qt.NoFocus)
-
-        # Add buttons to the group to make them exclusive
-        grid_button_group = QButtonGroup()
-        grid_button_group.setExclusive(True)
-        grid_button_group.addButton(self.grid_size_default_1)
-        grid_button_group.addButton(self.grid_size_default_2)
-        grid_button_group.addButton(self.grid_size_default_3)
-        grid_button_group.addButton(self.none_selected)
-
-        # Connect the buttons to the slots
-        self.grid_size_default_1.clicked.connect(self.radioButtonGridSizeChange)
-        self.grid_size_default_2.clicked.connect(self.radioButtonGridSizeChange)
-        self.grid_size_default_3.clicked.connect(self.radioButtonGridSizeChange)
-        self.none_selected.toggled.connect(self.radioButtonGridSizeChange)
-
-        # Add the buttons to the layout
-        grid_setup_layout.addWidget(quick_size_label)
-        quick_size_layout.addWidget(self.grid_size_default_1)
-        quick_size_layout.addWidget(self.grid_size_default_2)
-        quick_size_layout.addWidget(self.grid_size_default_3)
-
-        # Add the quick sizes to the grid set up layout
-        grid_setup_layout.addLayout(quick_size_layout)
-
-        # Set up the other sizes in the dropdown menu
-        # self.dim_select = QComboBox()
-
-        # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
-        # self.dim_select.setFocusPolicy(Qt.NoFocus)
-
-        # Add all the different possible dims for grid
-        # for x in range(10, 61, 5):
-        #     self.dim_select.addItem(str(x) + "x" + str(x))
-
-        # Connect the dropdown menus (grid dims) to their slots
-        # self.dim_select.currentTextChanged.connect(self.dropDownGridSizeChange)
-
-        # Default from config file
-        self.var.dim = self.var.config.get("test", "grid_size_start_default")
-
-        # setting the radio button to the correct starting default size
-        if self.var.dim == self.grid_defaults[0]:
-            self.grid_size_default_1.setChecked(True)
-        elif self.var.dim == self.grid_defaults[1]:
-            self.grid_size_default_2.setChecked(True)
-        elif self.var.dim == self.grid_defaults[2]:
-            self.grid_size_default_3.setChecked(True)
-        # self.dim_select.setCurrentIndex(self.dim_select.findText(self.var.dim))
-
-        # Add the dropdown and its label to the grid set up layout
-        # grid_setup_layout.addWidget(dim_menu_label)
-        # grid_setup_layout.addWidget(self.dim_select)
-
-        # Selected Reference point/ reset button
-        self.ref_pt_button = QPushButton()
-        self.ref_pt_button.setText("Set Reference Point")
-        self.ref_pt_label = QLabel("")
-
-        # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
-        self.ref_pt_button.setFocusPolicy(Qt.NoFocus)
-
-        # Connect the reference point button to its slot
-        self.ref_pt_button.clicked.connect(self.referencePointBttnClicked)
-
-        # Add the Reference button and label to the main layout
-        layout.addWidget(QLabel(""))
-        grid_setup_layout.addWidget(self.ref_pt_button)
-        grid_setup_layout.addWidget(self.ref_pt_label)
-
-        # # Swap the view of T/N labels
-        # view_layout = QHBoxLayout()
-        # self.anatomical_view = QRadioButton("Anatomical View")
-        # self.anatomical_view.setChecked(True)
-        # self.subject_view = QRadioButton("Subject View")
-        #
-        # # Connect the View Radio buttons to the slot
-        # self.anatomical_view.toggled.connect(self.viewChange)
-        # self.subject_view.toggled.connect(self.viewChange)
-        #
-        # # Add view buttons to their layout and the main
-        # view_layout.addWidget(self.anatomical_view)
-        # view_layout.addWidget(self.subject_view)
-        #
-        # # Add view buttons to the grid set up layout
-        # grid_setup_layout.addLayout(view_layout)
-
-        # Add the grid set up layout to the grid Group layout and then add the group to the main layout as another row
-        grid_config_group.setLayout(grid_setup_layout)
-        layout.addRow(grid_config_group)
-
         # Image Calibration Group
         image_config_group = QGroupBox("Image Calibration")
         image_cal_layout = QVBoxLayout()
@@ -304,10 +189,10 @@ class Tabs(QTabWidget):
         self.label_size = QLabel()
         self.size_bar.setMinimum(1)
         self.size_bar.setMaximum(100)
-        self.size_bar.setValue(self.var.size)
+        self.size_bar.setValue(self.var.target_size)
         self.size_bar.setTickPosition(QSlider.TicksBelow)
         self.size_bar.setTickInterval(1)
-        self.label_size.setText("Target Size: " + str(self.var.size))
+        self.label_size.setText("Target Size: " + str(self.var.target_size))
         self.size_bar.valueChanged.connect(self.sizeChange)
 
         # Add scroll bar and label to the main widget
@@ -567,7 +452,7 @@ class Tabs(QTabWidget):
         #
         # # get the FOVs from the config file to be added to the dropdown menu
         # self.FOV_menu = QComboBox()
-        # self.var.savior_FOVs = self.var.config.get("test", "savior_FOVs").split("/")
+        # self.var.savior_FOVs = self.var.config.get( "savior_FOVs").split("/")
         #
         # # adds all the FOVs in the list
         # for x in self.var.savior_FOVs:
@@ -680,8 +565,8 @@ class Tabs(QTabWidget):
             painter.setTransform(QTransform.fromTranslate(32, 32))
 
             if button.isChecked():
-                targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=self.var.custom_color)
-                self.var.shape = TargetFactory.get_target(target_type, size=self.var.size, thickness=1, color=self.var.custom_color)
+                targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=self.var.target_color)
+                self.var.target_shape = TargetFactory.get_target(target_type, size=self.var.target_size, thickness=1, color=self.var.target_color)
             else:
                 targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=Qt.gray)
 
@@ -698,7 +583,7 @@ class Tabs(QTabWidget):
         """
         txt = "Target Size: " + str(self.size_bar.value())
         self.label_size.setText(txt)
-        self.var.size = self.size_bar.value()
+        self.var.target_size = self.size_bar.value()
         self.updateTargets()
 
     def onPressColor(self):
@@ -706,7 +591,7 @@ class Tabs(QTabWidget):
         Slot used to select the color of the fixation target
         """
         color = QColorDialog.getColor()  # Might want to make a class variable to change the color of the fixation target to the one selected
-        self.var.custom_color = color
+        self.var.target_color = color
         if color.isValid():
             self.updateTargets()
 
@@ -775,73 +660,73 @@ class Tabs(QTabWidget):
         v_fov = float(tmp[2])
         # need to make sure these end up being in the correct locations
         if txt =="TLC":
-            self.var.x_val = 0 - (h_fov / 4)
+            self.var.x_pos = 0 - (h_fov / 4)
             self.var.y_val = 0 + (v_fov / 4)
-            self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
-            self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.screen_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "TLC"
         elif txt == "MTE":
-            self.var.x_val = 0
+            self.var.x_pos = 0
             self.var.y_val = 0 + (v_fov / 4)
-            self.var.center_x = self.var.center_x_og
-            self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og
+            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.screen_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid
             self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "MTE"
         elif txt == "TRC":
-            self.var.x_val = 0 + (h_fov / 4)
+            self.var.x_pos = 0 + (h_fov / 4)
             self.var.y_val = 0 + (v_fov / 4)
-            self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
-            self.var.center_y = self.var.center_y_og - ((v_fov/4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.screen_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "TRC"
         elif txt == "MLE":
-            self.var.x_val = 0 - (h_fov / 4)
+            self.var.x_pos = 0 - (h_fov / 4)
             self.var.y_val = 0
-            self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
-            self.var.center_y = self.var.center_y_og
+            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_y = self.var.center_y_og
             self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid
             self.var.notes_entry = "MLE"
         elif txt == "CTR":
-            self.var.x_val = 0
+            self.var.x_pos = 0
             self.var.y_val = 0
-            self.var.center_x = self.var.center_x_og
-            self.var.center_y = self.var.center_y_og
+            self.var.target_center_x = self.var.center_x_og
+            self.var.target_center_y = self.var.center_y_og
             self.var.center_x_grid = self.var.center_x_og_grid
             self.var.center_y_grid = self.var.center_y_og_grid
         elif txt == "MRE":
-            self.var.x_val = 0 + (h_fov / 4)
+            self.var.x_pos = 0 + (h_fov / 4)
             self.var.y_val = 0
-            self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
-            self.var.center_y = self.var.center_y_og
+            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_y = self.var.center_y_og
             self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid
             self.var.notes_entry = "MRE"
         elif txt == "BLC":
-            self.var.x_val = 0 - (h_fov / 4)
+            self.var.x_pos = 0 - (h_fov / 4)
             self.var.y_val = 0 - (v_fov / 4)
-            self.var.center_x = self.var.center_x_og - ((h_fov/4) * self.var.screen_ppd)
-            self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.screen_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "BLC"
         elif txt == "MBE":
-            self.var.x_val = 0
+            self.var.x_pos = 0
             self.var.y_val = 0 - (v_fov / 4)
-            self.var.center_x = self.var.center_x_og
-            self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og
+            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.screen_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid
             self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "MBE"
         elif txt == "BRC":
-            self.var.x_val = 0 + (h_fov / 4)
+            self.var.x_pos = 0 + (h_fov / 4)
             self.var.y_val = 0 - (v_fov / 4)
-            self.var.center_x = self.var.center_x_og + ((h_fov/4) * self.var.screen_ppd)
-            self.var.center_y = self.var.center_y_og + ((v_fov/4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.screen_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "BRC"
@@ -917,11 +802,11 @@ class Tabs(QTabWidget):
         txt = str(button.text())
         if txt == "Set Reference Point":
             # Add a label to display what was selected as the current reference point
-            self.ref_pt_label.setText("Reference Point (" + str(round(self.var.x_val, 2)) + "," + str(round(self.var.y_val, 2)) + ")")
+            self.ref_pt_label.setText("Reference Point (" + str(round(self.var.x_pos, 2)) + "," + str(round(self.var.y_val, 2)) + ")")
             self.ref_pt_button.setText("Clear Reference Point")
             # set reference point to true and set the ref point values
             self.var.ref_point = True
-            self.var.x_ref = self.var.x_val
+            self.var.x_ref = self.var.x_pos
             self.var.y_ref = self.var.y_val
         elif txt == "Clear Reference Point":
             self.ref_pt_button.setText("Set Reference Point")
@@ -983,7 +868,7 @@ class Tabs(QTabWidget):
         Rounds value to 2 decimal places
         :return:
         """
-        self.horz.setText(str(round(self.var.x_val, 2)))
+        self.horz.setText(str(round(self.var.x_pos, 2)))
         self.vert.setText(str(round(self.var.y_val, 2)))
 
     def updateFOVText(self):
@@ -1003,7 +888,7 @@ class Tabs(QTabWidget):
         txt_box = self.sender()
         txt = txt_box.text()
         if txt_box == self.horz:
-            self.var.x_val = float(txt)
+            self.var.x_pos = float(txt)
         if txt_box == self.vert:
             self.var.y_val = float(txt)
 
