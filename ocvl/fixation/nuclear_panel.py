@@ -6,6 +6,7 @@ from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap, QImage
 from PySide6.QtWidgets import QWidget, QLabel, QSizePolicy, QGraphicsView, QGraphicsScene
 import numpy as np
 from ocvl.fixation.nuclear_controls import Tabs
+from ocvl.fixation.nuclear_notes import NuclearNotes
 
 
 class NuclearDisplay(QWidget):
@@ -17,6 +18,8 @@ class NuclearDisplay(QWidget):
         # setting up GUI panels
         self.righty = TargetRighty(self.var)
         self.var.control_ref = self.righty
+        self.bottom = TargetBottom(self.var)
+        self.var.notes_ref = self.bottom
 
         # Get the dims from the Configuration tabs
         self.var.dim = self.var.dim.split("x")
@@ -30,6 +33,7 @@ class NuclearDisplay(QWidget):
 
         # adding layouts to grid
         self.grid_layout.addLayout(self.layout2, 0, 0)
+        self.grid_layout.addWidget(self.bottom, 2, 0, 2, 1)
 
     @QtCore.Slot()
     def updateTarget(self):
@@ -274,6 +278,24 @@ class TargetRighty(QWidget):
         self.var = var
         # calls the control panel
         self.target = Tabs(self.var)
+
+        self.layout = QtWidgets.QHBoxLayout(self)
+        self.layout.addWidget(self.target)
+
+    def paintEvent(self, arg__0):
+        pass
+
+class TargetBottom(QWidget):
+    """
+    Class for the bottom panel of the window
+    """
+
+    def __init__(self, var):
+        super().__init__()
+
+        self.var = var
+        # calls the notes panel
+        self.target = NuclearNotes(self.var)
 
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.addWidget(self.target)
