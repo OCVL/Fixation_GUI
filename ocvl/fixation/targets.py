@@ -3,8 +3,8 @@ from enum import StrEnum
 
 from PySide6 import QtGui
 from PySide6.QtWidgets import QGraphicsItem
-from PySide6.QtCore import QRectF, QPointF
-from PySide6.QtGui import QColor, QPainterPath
+from PySide6.QtCore import QRectF, QPointF, QPoint
+from PySide6.QtGui import QColor, QPainterPath, QPen, QBrush, QPainter
 
 
 class TargetTypes(StrEnum):
@@ -87,6 +87,7 @@ class MalteseCross(Target):
         return QRectF(-self.size/0.4, -self.size/0.4, self.size/0.4, self.size/0.4)
 
     def paint(self, painter, option, widget):
+        painter.setRenderHint(QPainter.Antialiasing)
         pen = QtGui.QPen(self.color, self.thickness)
         painter.setPen(pen)
         painter.drawPath(self.path_to_draw)
@@ -121,6 +122,7 @@ class CrossHair(Target):
         return QRectF(-self.size/2, -self.size/2, self.size/2, self.size/2)
 
     def paint(self, painter, option, widget):
+        painter.setRenderHint(QPainter.Antialiasing)
         pen = QtGui.QPen(self.color, self.thickness)
         painter.setPen(pen)
         painter.drawPath(self.path_to_draw)
@@ -135,8 +137,6 @@ class BullsEye(Target):
 
         self.path_to_draw.moveTo(0, 0)
         self.path_to_draw.addEllipse(-self.size/2, -self.size/2, self.size, self.size)
-        self.path_to_draw.moveTo(0, 0)
-        self.path_to_draw.addRect(-self.size/10, -self.size/10, self.size/5, self.size/5)
         self.path_to_draw.closeSubpath()
 
     def setSize(self, newsize):
@@ -145,17 +145,20 @@ class BullsEye(Target):
 
         self.path_to_draw.moveTo(0, 0)
         self.path_to_draw.addEllipse(-self.size/2, -self.size/2, self.size, self.size)
-        self.path_to_draw.moveTo(0, 0)
-        self.path_to_draw.addRect(-self.size/10, -self.size/10, self.size/5, self.size/5)
         self.path_to_draw.closeSubpath()
 
     def boundingRect(self):
         return QRectF(-self.size/2, -self.size/2, self.size/2, self.size/2)
 
     def paint(self, painter, option, widget):
-        pen = QtGui.QPen(self.color, self.thickness)
+        painter.setRenderHint(QPainter.Antialiasing)
+        pen = QPen(self.color, self.thickness)
+        brush = QBrush(self.color)
         painter.setPen(pen)
         painter.drawPath(self.path_to_draw)
+        painter.setBrush(brush)
+        painter.setPen(QPen())
+        painter.drawEllipse(QPoint(), self.size/10, self.size/10)
 
 class TargetFactory:
     _targets = {

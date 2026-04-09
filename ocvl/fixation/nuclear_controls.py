@@ -326,13 +326,13 @@ class Tabs(QTabWidget):
             self.targetbuttons[target].setFixedSize(QSize(48, 48))
             self.targetbuttons[target].setFocusPolicy(Qt.NoFocus)
             self.targetbuttons[target].setCheckable(True)
-            self.targetbuttons[target].clicked.connect(self.onClick)
+            self.targetbuttons[target].clicked.connect(self.updateTargets)
             self.target_buttongroup.addButton(self.targetbuttons[target])
 
             fix_shape1.addWidget(self.targetbuttons[target])
 
         # Call the functions to draw the different targets
-        self.drawTargets()
+        self.updateTargets()
 
         fix_shape_main.addLayout(fix_shape1)
 
@@ -668,7 +668,7 @@ class Tabs(QTabWidget):
     """
     Functions below are used in the UI for fixationTargetControlTab
     """
-    def drawTargets(self):
+    def updateTargets(self):
         """
         Function that calls each function in charge of drawing on the fixation target to be selected
         """
@@ -681,7 +681,7 @@ class Tabs(QTabWidget):
 
             if button.isChecked():
                 targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=self.var.custom_color)
-                self.var.shape = targ
+                self.var.shape = TargetFactory.get_target(target_type, size=self.var.size, thickness=1, color=self.var.custom_color)
             else:
                 targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=Qt.gray)
 
@@ -691,18 +691,6 @@ class Tabs(QTabWidget):
             button.setIcon(canvas)
             button.setIconSize(QSize(32, 32))
 
-    """
-    Slots that are used in the UI for fixationTargetControlTab
-    """
-    def onClick(self):
-        """
-        Slot for the shape of the fixation target to be selected
-        """
-        button = self.sender()
-
-        self.drawTargets()
-
-
 
     def sizeChange(self):
         """
@@ -711,6 +699,7 @@ class Tabs(QTabWidget):
         txt = "Target Size: " + str(self.size_bar.value())
         self.label_size.setText(txt)
         self.var.size = self.size_bar.value()
+        self.updateTargets()
 
     def onPressColor(self):
         """
@@ -719,7 +708,7 @@ class Tabs(QTabWidget):
         color = QColorDialog.getColor()  # Might want to make a class variable to change the color of the fixation target to the one selected
         self.var.custom_color = color
         if color.isValid():
-            self.drawTargets()
+            self.updateTargets()
 
     """
     Slots that are used in the UI for imCalibrationControlTab

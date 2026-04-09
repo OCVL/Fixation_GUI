@@ -1,6 +1,7 @@
 
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsView
-from PySide6.QtGui import QScreen, QPainter
+from PySide6.QtGui import QScreen, QTransform
+
 from ocvl.fixation.targets import *
 
 class NuclearTarget(QGraphicsView):
@@ -12,9 +13,11 @@ class NuclearTarget(QGraphicsView):
     def __init__(self, var):
         super().__init__()
 
-        self.scene = QGraphicsScene()
+        self.scene = QGraphicsScene(0,0,800,800,self)
 
         self.setScene(self.scene)
+        self.setMaximumSize(800, 800)
+        self.setMinimumSize(800, 800)
 
         self.var = var
         display_monitor = 0
@@ -31,21 +34,44 @@ class NuclearTarget(QGraphicsView):
         else:
             self.var.target_vis = False
 
-        self.var.center_x = QPainter(self).window().width() / 2
-        self.var.center_y = QPainter(self).window().height() / 2
+        self.var.center_x_og = self.window().width() / 2
+        self.var.center_y_og = self.window().height() / 2
+
+        self.var.center_x = self.var.center_x_og
+        self.var.center_y = self.var.center_y_og
 
         self.current_target = self.var.shape
+        self.current_target.setTransform(QTransform.fromTranslate(self.var.center_x, self.var.center_y))
         self.scene.addItem(self.current_target)
+
         self.var.shapeChanged.connect(self.setTarget)
+        self.var.xChanged.connect(self.updateTransform)
+        self.var.yChanged.connect(self.updateTransform)
+
         self.setFrameStyle(0)
+        self.viewport().update()
+
+
+
 
     def setTarget(self, target: Target):
         self.scene.clear()
         self.viewport().update()
 
-        self.current_shape = target
+        self.current_target = target
 
-        self.scene.addItem(target)
+        offset = QTransform.fromTranslate(self.var.center_x, self.var.center_y)
+        offset.translate(self.var.x_val, self.var.y_val)
+
+        self.current_target.setTransform(offset)
+        self.scene.addItem(self.current_target)
 
         return target
 
+    def updateTransform(self):
+
+        offset = QTransform.fromTranslate(self.var.center_x, self.var.center_y)
+        offset.translate(self.var.x_val, self.var.y_val)
+
+        self.current_target.setTransform(offset)
+        self.viewport().update()

@@ -11,6 +11,8 @@ from ocvl.fixation.targets import CrossHair, Target
 # using property class
 class Variables(QObject):
     shapeChanged = Signal(Target)
+    xChanged = Signal(float)
+    yChanged = Signal(float)
 
     def __init__(self, animation_speed_val=None, x_val=0, y_val=0, dim=None, savior_FOVs=None, \
                  custom_color=Qt.white, eye='OX', sub_id='XXXXX', save_loc=None, device=None, left_label=None,
@@ -91,6 +93,7 @@ class Variables(QObject):
     # setter
     def set_x_val(self, value):
         self._x_val = value
+        self.xChanged.emit(self._x_val)
 
     # getter
     def get_y_val(self):
@@ -99,6 +102,7 @@ class Variables(QObject):
     # setter
     def set_y_val(self, value):
         self._y_val = value
+        self.yChanged.emit(self._y_val)
 
     # getter
     def get_dim(self):
@@ -386,8 +390,8 @@ class Variables(QObject):
     # creating property objects
     # sourced from tabs
     animation_speed_val = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
-    x_val = QtCore.Property(int, get_x_val, set_x_val)
-    y_val = QtCore.Property(int, get_y_val, set_y_val)
+    x_val = QtCore.Property(int, get_x_val, set_x_val, notify=xChanged)
+    y_val = QtCore.Property(int, get_y_val, set_y_val, notify=yChanged)
     dim = QtCore.Property(str, get_dim, set_dim)
     savior_FOVs = QtCore.Property(str, get_savior_FOVs, set_savior_FOVs)
     custom_color = QtCore.Property(QtGui.QColor, get_custom_color, set_custom_color)  # QtGui.QColor('green')
