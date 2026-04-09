@@ -3,7 +3,7 @@ import pandas
 from PySide6 import QtWidgets, QtCore, QtQuick, QtGui
 from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap, QImage
-from PySide6.QtWidgets import QWidget, QLabel, QSizePolicy
+from PySide6.QtWidgets import QWidget, QLabel, QSizePolicy, QGraphicsView, QGraphicsScene
 import numpy as np
 from ocvl.fixation.nuclear_controls import Tabs
 
@@ -40,7 +40,7 @@ class NuclearDisplay(QWidget):
         pass
 
 
-class TargetArea(QWidget):
+class TargetArea(QGraphicsView):
     """
     Class for the grid display
     """
@@ -48,7 +48,9 @@ class TargetArea(QWidget):
     def __init__(self, var):
         super().__init__()
 
-        self.setMinimumSize(700, 700)
+        self.setMinimumSize(512, 512)
+        self.scene = QGraphicsScene(0, 0, 512, 512, self)
+        self.setScene(self.scene)
 
         self.var = var
 

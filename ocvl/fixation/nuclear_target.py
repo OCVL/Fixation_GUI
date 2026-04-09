@@ -13,7 +13,7 @@ class NuclearTarget(QGraphicsView):
     def __init__(self, var):
         super().__init__()
 
-        self.scene = QGraphicsScene(0,0,800,800,self)
+        self.scene = QGraphicsScene(0, 0, 800, 800, self)
 
         self.setScene(self.scene)
         self.setMaximumSize(800, 800)
@@ -50,9 +50,6 @@ class NuclearTarget(QGraphicsView):
 
         self.setFrameStyle(0)
         self.viewport().update()
-
-
-
 
     def setTarget(self, target: Target):
         self.scene.clear()

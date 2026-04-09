@@ -7,10 +7,8 @@
     <list default="true" id="2a0b3cf8-dc52-4a7d-ac1c-a9c198de7599" name="Default Changelist" comment="-Added the ability to press F4 on the fixation target and have it start a record on the host application.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_panel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_target.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/targets.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/targets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/variable_properties.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/variable_properties.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,7 +198,7 @@
       <updated>1664483591457</updated>
       <workItem from="1775589379344" duration="3338000" />
       <workItem from="1775740951214" duration="459000" />
-      <workItem from="1775742336571" duration="15711000" />
+      <workItem from="1775742336571" duration="16663000" />
     </task>
     <servers />
   </component>

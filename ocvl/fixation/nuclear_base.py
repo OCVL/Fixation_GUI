@@ -35,7 +35,6 @@ class NuclearBase(QMainWindow):
         self.major_increment = float(increments[0])
         self.minor_increment = float(increments[1])
 
-
     def keyPressEvent(self, eventQKeyEvent):
         key = eventQKeyEvent.key()
         self.firstrelease = True
@@ -45,6 +44,7 @@ class NuclearBase(QMainWindow):
         if self.send_again:
             self.send_again = False
             self.keyReleaseEvent(eventQKeyEvent)
+
     def keyReleaseEvent(self, event):
         if self.firstrelease:
             self.processmultikeys(self.keylist)
@@ -80,7 +80,6 @@ class NuclearBase(QMainWindow):
             self.var.y_val = self.var.y_val - self.minor_increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
             self.var.x_val = self.var.x_val + self.minor_increment
-
 
 
         # call to function in nuclear_controls to update the coordinate text in the control panel
