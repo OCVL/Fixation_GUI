@@ -19,6 +19,7 @@ class NuclearBase(QMainWindow):
         self.config.read(self.config_name)
 
 
+
         # This... thing is effectively a global variable, and I hate everything about it, but I don't have the time
         # or interest to fix the whole code structure. -RFC
         self.var = variable_properties.StatusVariables()
@@ -37,11 +38,11 @@ class NuclearBase(QMainWindow):
         self.send_again = None
 
         # The number of ppd of the screen we'll be projecting to (e.g. Lightcrafter, Projector, etc).
-        self.var.screen_ppd = float(self.var.config.get("screen_ppd"))
+        self.var.screen_ppd = self.config.getfloat("target","screen_ppd", fallback=None)
 
         # The increment steps we'll use.
-        self.major_increment = float(self.var.config.get("major_increment", 1.0))
-        self.minor_increment = float(self.var.config.get("major_increment", 0.5))
+        self.major_increment = self.config.getfloat("ui", "major_increment", fallback=1.0)
+        self.minor_increment = self.config.getfloat("ui", "major_increment", fallback=0.5)
 
     def keyPressEvent(self, eventQKeyEvent):
         key = eventQKeyEvent.key()
