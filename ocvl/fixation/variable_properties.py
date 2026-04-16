@@ -16,16 +16,9 @@ class StatusVariables(QObject):
 
     def __init__(self, animation_speed=None, x_pos=0, y_pos=0, dim=None, \
                  custom_color=Qt.white, eye='OX', device=None, current_fov=(0.0, 0.0), target_shape=CrossHair(),
-                 size=16, thickness=5, center_x=None, center_y=None,
-                 grid_center_x=None, grid_center_y=None, screen_ppd=None, grid_vis=None,
-                 x_ref= None, y_ref=None, image_path=None):
+                 size=16, thickness=5, center_x=None, center_y=None, fixation_target_ppd=None):
 
         super().__init__()
-
-        # In degrees of visual angle
-        self.x_pos = x_pos
-        self.y_pos = y_pos
-        self.dim = dim
 
         # Information (maybe) coming from elsewhere
         self.device = device
@@ -38,12 +31,17 @@ class StatusVariables(QObject):
         self.target_size = size
         self.target_thickness = thickness
 
-        # Grid (display) variables
-        self.grid_center_x = grid_center_x
-        self.grid_center_y = grid_center_y
+        # In degrees
+        self.x_pos_deg = x_pos
+        self.y_pos_deg = y_pos
+        self.dim = dim
+        # In pixels
+        self.x_center_px = center_x
+        self.y_center_px = center_y
 
         # Grid to Target conversion variables
-        self.screen_ppd = screen_ppd
+        self.fixation_target_ppd = fixation_target_ppd
+        self.grid_view_ppd =
 
         self.animation_speed = animation_speed
 
@@ -359,8 +357,8 @@ class StatusVariables(QObject):
     # creating property objects
     # sourced from tabs
     animation_speed = QtCore.Property(float, get_animation_speed_val, set_animation_speed_val)
-    x_pos = QtCore.Property(int, get_x_val, set_x_val, notify=xChanged)
-    y_pos = QtCore.Property(int, get_y_val, set_y_val, notify=yChanged)
+    x_pos_deg = QtCore.Property(int, get_x_val, set_x_val, notify=xChanged)
+    y_pos_deg = QtCore.Property(int, get_y_val, set_y_val, notify=yChanged)
     dim = QtCore.Property(str, get_dim, set_dim)
     target_color = QtCore.Property(QtGui.QColor, get_custom_color, set_custom_color)  # QtGui.QColor('green')
     eye = QtCore.Property(str, get_eye, set_eye)
@@ -369,7 +367,7 @@ class StatusVariables(QObject):
     target_size = QtCore.Property(float, get_size, set_size)
     target_thickness = QtCore.Property(float, get_thickness, set_thickness)
 
-    screen_ppd = QtCore.Property(float, get_screen_ppd, set_screen_ppd)
+    fixation_target_ppd = QtCore.Property(float, get_screen_ppd, set_screen_ppd)
     fov_list = QtCore.Property(bool, get_fov_list, set_fov_list)
     ref_point = QtCore.Property(bool, get_ref_point, set_ref_point)
     x_ref = QtCore.Property(bool, get_x_ref, set_x_ref)

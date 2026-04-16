@@ -10,7 +10,7 @@ from ocvl.fixation.nuclear_target import MalteseCross, CrossHair, TargetTypes
 from ocvl.fixation.targets import TargetFactory
 
 
-class Tabs(QTabWidget):
+class ControlPanel(QTabWidget):
     """
     Main class for the control panel that contains various tabs, each with different functionality
     """
@@ -19,7 +19,7 @@ class Tabs(QTabWidget):
         """
         Initialization of the class variables
         """
-        super(Tabs, self).__init__(parent)
+        super(ControlPanel, self).__init__(parent)
         self.targetbuttons = {}
         self.temp_x = None
         self.temp_y = None
@@ -660,73 +660,73 @@ class Tabs(QTabWidget):
         v_fov = float(tmp[2])
         # need to make sure these end up being in the correct locations
         if txt =="TLC":
-            self.var.x_pos = 0 - (h_fov / 4)
+            self.var.x_pos_deg = 0 - (h_fov / 4)
             self.var.y_val = 0 + (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.screen_ppd)
-            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.fixation_target_ppd)
+            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.fixation_target_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "TLC"
         elif txt == "MTE":
-            self.var.x_pos = 0
+            self.var.x_pos_deg = 0
             self.var.y_val = 0 + (v_fov / 4)
             self.var.target_center_x = self.var.center_x_og
-            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.fixation_target_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid
             self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "MTE"
         elif txt == "TRC":
-            self.var.x_pos = 0 + (h_fov / 4)
+            self.var.x_pos_deg = 0 + (h_fov / 4)
             self.var.y_val = 0 + (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.screen_ppd)
-            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.fixation_target_ppd)
+            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.fixation_target_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "TRC"
         elif txt == "MLE":
-            self.var.x_pos = 0 - (h_fov / 4)
+            self.var.x_pos_deg = 0 - (h_fov / 4)
             self.var.y_val = 0
-            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.fixation_target_ppd)
             self.var.target_center_y = self.var.center_y_og
             self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid
             self.var.notes_entry = "MLE"
         elif txt == "CTR":
-            self.var.x_pos = 0
+            self.var.x_pos_deg = 0
             self.var.y_val = 0
             self.var.target_center_x = self.var.center_x_og
             self.var.target_center_y = self.var.center_y_og
             self.var.center_x_grid = self.var.center_x_og_grid
             self.var.center_y_grid = self.var.center_y_og_grid
         elif txt == "MRE":
-            self.var.x_pos = 0 + (h_fov / 4)
+            self.var.x_pos_deg = 0 + (h_fov / 4)
             self.var.y_val = 0
-            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.fixation_target_ppd)
             self.var.target_center_y = self.var.center_y_og
             self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid
             self.var.notes_entry = "MRE"
         elif txt == "BLC":
-            self.var.x_pos = 0 - (h_fov / 4)
+            self.var.x_pos_deg = 0 - (h_fov / 4)
             self.var.y_val = 0 - (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.screen_ppd)
-            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.fixation_target_ppd)
+            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.fixation_target_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "BLC"
         elif txt == "MBE":
-            self.var.x_pos = 0
+            self.var.x_pos_deg = 0
             self.var.y_val = 0 - (v_fov / 4)
             self.var.target_center_x = self.var.center_x_og
-            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.fixation_target_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid
             self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "MBE"
         elif txt == "BRC":
-            self.var.x_pos = 0 + (h_fov / 4)
+            self.var.x_pos_deg = 0 + (h_fov / 4)
             self.var.y_val = 0 - (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.screen_ppd)
-            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.screen_ppd)
+            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.fixation_target_ppd)
+            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.fixation_target_ppd)
             self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
             self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
             self.var.notes_entry = "BRC"
@@ -802,11 +802,11 @@ class Tabs(QTabWidget):
         txt = str(button.text())
         if txt == "Set Reference Point":
             # Add a label to display what was selected as the current reference point
-            self.ref_pt_label.setText("Reference Point (" + str(round(self.var.x_pos, 2)) + "," + str(round(self.var.y_val, 2)) + ")")
+            self.ref_pt_label.setText("Reference Point (" + str(round(self.var.x_pos_deg, 2)) + "," + str(round(self.var.y_val, 2)) + ")")
             self.ref_pt_button.setText("Clear Reference Point")
             # set reference point to true and set the ref point values
             self.var.ref_point = True
-            self.var.x_ref = self.var.x_pos
+            self.var.x_ref = self.var.x_pos_deg
             self.var.y_ref = self.var.y_val
         elif txt == "Clear Reference Point":
             self.ref_pt_button.setText("Set Reference Point")
@@ -868,7 +868,7 @@ class Tabs(QTabWidget):
         Rounds value to 2 decimal places
         :return:
         """
-        self.horz.setText(str(round(self.var.x_pos, 2)))
+        self.horz.setText(str(round(self.var.x_pos_deg, 2)))
         self.vert.setText(str(round(self.var.y_val, 2)))
 
     def updateFOVText(self):
@@ -888,7 +888,7 @@ class Tabs(QTabWidget):
         txt_box = self.sender()
         txt = txt_box.text()
         if txt_box == self.horz:
-            self.var.x_pos = float(txt)
+            self.var.x_pos_deg = float(txt)
         if txt_box == self.vert:
             self.var.y_val = float(txt)
 
@@ -909,7 +909,7 @@ class Tabs(QTabWidget):
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
-    widget = Tabs()
+    widget = ControlPanel()
     widget.resize(800, 800)
     widget.show()
 

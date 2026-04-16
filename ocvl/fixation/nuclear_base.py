@@ -1,44 +1,53 @@
-import configparser
+
+import json
 import os
 import sys
-from PySide6 import QtWidgets, QtCore
+from PySide6 import QtCore, QtWidgets
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import  QMainWindow
-from ocvl.fixation.nuclear_panel import NuclearDisplay
-import variable_properties
-from ocvl.fixation.nuclear_target import NuclearTarget
+from PySide6.QtWidgets import QMainWindow, QGridLayout, QWidget
+
+from ocvl.fixation.nuclear_controls import ControlPanel
+from ocvl.fixation.nuclear_notes import NotesPanel
+from ocvl.fixation.fixation_display import FixationDisplay
+
+
+class CenterPanel(QWidget):
+    def __init__(self, parent=None, config=None):
+        super(CenterPanel, self).__init__(parent)
+
+        if config is None:
+            self.config = dict()
+
+        self.layout = QGridLayout(self)
+
+        self.fix_disp = FixationDisplay(self.config)
+
+        self.control_panel = ControlPanel(self.config)
+
+        self.notes_panel = NotesPanel(self.config)
+
+        # Connections between
+
+
+
+        self.layout.addWidget(self.fix_disp, 0, 0)
+        self.layout.addWidget(self.control_panel, 0, 1)
+        self.layout.addWidget(self.notes_panel, 1, 1, 1, 2)
 
 
 class NuclearBase(QMainWindow):
     def __init__(self):
-        super().__init__()
+        super(NuclearBase).__init__()
 
-        # Read what we can from our settings file.
-        self.config = configparser.ConfigParser()
-        self.config_name = os.getcwd() + "\\settings.ini"
-        self.config.read(self.config_name)
+        with open(os.getcwd() + "\\settings.json", 'r') as config_json_path:
+            self.config = json.load(config_json_path)
 
-
-
-        # This... thing is effectively a global variable, and I hate everything about it, but I don't have the time
-        # or interest to fix the whole code structure. -RFC
-        self.var = variable_properties.StatusVariables()
-
-        # call to make a new window
-        # put if statement here to know if we need this to start up from info from the config file (animal land doesn't need the secondary display)
-        self.w = NuclearTarget(self.var)
-        self.w.show()
-
-        self.layout = QtWidgets.QHBoxLayout(self)
-        self.j = NuclearDisplay(self.var)
-        self.setCentralWidget(self.j)
+        self.center_panel = CenterPanel(self, self.config)
+        self.setCentralWidget(self.center_panel)
 
         self.keylist = []
         self.firstrelease = None
         self.send_again = None
-
-        # The number of ppd of the screen we'll be projecting to (e.g. Lightcrafter, Projector, etc).
-        self.var.screen_ppd = self.config.getfloat("target","screen_ppd", fallback=None)
 
         # The increment steps we'll use.
         self.major_increment = self.config.getfloat("ui", "major_increment", fallback=1.0)
@@ -74,21 +83,21 @@ class NuclearBase(QMainWindow):
         if key == [QtCore.Qt.Key_Left]:
             self.var.y_val = self.var.y_val + self.major_increment
         elif key == [QtCore.Qt.Key_Up]:
-            self.var.x_pos = self.var.x_pos - self.major_increment
+            self.var.x_pos_deg = self.var.x_pos_deg - self.major_increment
         elif key == [QtCore.Qt.Key_Right]:
             self.var.y_val = self.var.y_val - self.major_increment
         elif key == [QtCore.Qt.Key_Down]:
-            self.var.x_pos = self.var.x_pos + self.major_increment
+            self.var.x_pos_deg = self.var.x_pos_deg + self.major_increment
 
         # shift + arrow for minor increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
             self.var.y_val = self.var.y_val + self.minor_increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
-            self.var.x_pos = self.var.x_pos - self.minor_increment
+            self.var.x_pos_deg = self.var.x_pos_deg - self.minor_increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
             self.var.y_val = self.var.y_val - self.minor_increment
         elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
-            self.var.x_pos = self.var.x_pos + self.minor_increment
+            self.var.x_pos_deg = self.var.x_pos_deg + self.minor_increment
 
 
         # call to function in nuclear_controls to update the coordinate text in the control panel

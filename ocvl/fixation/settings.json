@@ -1,0 +1,26 @@
+{
+  "general": {
+    "device": "MEAO"
+  },
+  "fixation_target": {
+    "major_increment": 1,
+    "minor_increment": 0.5,
+    "operator_display": {
+      "width_in_px": 600,
+      "height_in_px": 600,
+      "ppd": 20,
+      "major_step": 5,
+      "minor_step": 1,
+      "major_grid_color": "whitesmoke",
+      "minor_grid_color": "lightgray",
+      "background_color": "dimgray"
+    },
+    "participant_display": {
+      "shape": "Bullseye",
+      "color": "orange",
+      "ppd": 20,
+      "x_center_px": -1,
+      "y_center_px": -1
+    }
+  }
+}

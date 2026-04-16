@@ -15,12 +15,12 @@ ANNOT_VAL_KEY = '/V'
 ANNOT_RECT_KEY = '/Rect'
 SUBTYPE_KEY = '/Subtype'
 WIDGET_SUBTYPE_KEY = '/Widget'
-class NuclearNotes(QtWidgets.QWidget):
+class NotesPanel(QtWidgets.QWidget):
     """
     Class for the notes panel
     """
     def __init__(self, var):
-        super().__init__()
+        super(NotesPanel).__init__()
 
         self.var = var
 
@@ -122,7 +122,7 @@ class NuclearNotes(QtWidgets.QWidget):
             self.table_widget.item(0, i).setTextAlignment(5)  # self.row_count
 
 
-        self.current_location = "(" + str(self.var.x_pos) + "," + str(self.var.y_val) + ")"
+        self.current_location = "(" + str(self.var.x_pos_deg) + "," + str(self.var.y_val) + ")"
         self.testPop = [self.var.vid_num, self.current_location, self.var.current_fov, self.var.notes_entry]
         for i in range(len(self.testPop)):
             self.table_widget.item(0, i).setText(self.testPop[i])  # self.row_count
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
     # can't run on its own unless you hard code the config file path as an argument below
-    widget = NuclearNotes()
+    widget = NotesPanel()
     widget.show()
     widget.resize(800, 600)
     sys.exit(app.exec())
