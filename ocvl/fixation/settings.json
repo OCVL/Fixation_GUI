@@ -20,11 +20,13 @@
     "participant_display": {
       "shape": "Bullseye",
       "color": "orange",
-      "width_in_px": 600,
-      "height_in_px": 600,
+      "diameter": 1,
+      "thickness": 0.1,
+      "width_in_px": 800,
+      "height_in_px": 800,
       "ppd": 20,
-      "x_center_px": 300,
-      "y_center_px": 300
+      "center_x_px": 300,
+      "center_y_px": 300
     }
   }
 }

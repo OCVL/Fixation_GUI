@@ -1,13 +1,15 @@
 import sys
 from PySide6 import QtWidgets
-from PySide6.QtCore import  QRectF, Slot, QPointF, QSize
-from PySide6.QtGui import QPen, QColor, QTransform, QBrush, QFont
+from PySide6.QtCore import QRectF, Slot, QPointF, QSize, QSizeF
+from PySide6.QtGui import QPen, QColor, QTransform, QBrush, QFont, QMouseEvent
 from PySide6.QtWidgets import QWidget, QGraphicsView, QGraphicsScene, QVBoxLayout, \
     QGraphicsItemGroup, QGraphicsLineItem
 import numpy as np
 
 from ocvl.fixation.constants import Eye
 from ocvl.fixation.participant_display import ParticipantDisplay
+from ocvl.fixation.targets import Target
+
 
 class FixationDisplay(QWidget):
 
@@ -19,8 +21,8 @@ class FixationDisplay(QWidget):
 
         self.op_disp_config = config.get("operator_display", dict())
 
-        self.participant_display = ParticipantDisplay(config.get("participant_display", dict()))
-        self.participant_display.show()
+        self._participant_display = ParticipantDisplay(config.get("participant_display", dict()))
+        self._participant_display.show()
 
         self.layout = QVBoxLayout(self)
 
@@ -31,19 +33,21 @@ class FixationDisplay(QWidget):
 
         self.fov = QSize(1, 1)
         self.eye = Eye.OS
-        self.target_position = QPointF(0,0)
-
+        self.target_position = QPointF(0, 0)
 
     @Slot()
     def onPositionChanged(self, new_pos: QPointF):
+        # In degrees of visual angle.
         self.target_position = new_pos
         self.operator_display.imaging_rect.\
             setTransform(QTransform.fromTranslate(self.operator_display.center.x() - self.target_position.x() * self.operator_display.ppd,
                                                   self.operator_display.center.y() - self.target_position.y() * self.operator_display.ppd))
 
-        self.participant_display.
+        self._participant_display.setPosition(self.target_position)
 
-
+    @Slot()
+    def onTargetChange(self, target: Target):
+        self._participant_display.setTarget(target)
 
     @Slot()
     def onEyeChanged(self, new_eye: Eye):
@@ -56,17 +60,24 @@ class FixationDisplay(QWidget):
             self.operator_display.right_label.setPlainText("Temporal")
 
     @Slot()
-    def onFOVChanged(self, new_size: QSize):
+    def onFOVChanged(self, new_size: QSizeF):
         self.fov = new_size
-        self.operator_display.imaging_rect.setRect(-self.fov.width() / 2, -self.fov.height() / 2, self.fov.width(), self.fov.height())
+        self.operator_display.imaging_rect.setRect((-self.fov.width() / 2.0) * self.operator_display.ppd,
+                                                   (-self.fov.height() / 2.0) * self.operator_display.ppd,
+                                                   self.fov.width() * self.operator_display.ppd,
+                                                   self.fov.height() * self.operator_display.ppd)
+
 
 class _OperatorDisplay(QGraphicsView):
     """
     Class for the grid display
     """
 
-    def __init__(self, config):
-        super(_OperatorDisplay, self).__init__()
+    def __init__(self, config: dict, parent=None):
+        super(_OperatorDisplay, self).__init__(parent)
+
+        self.mouse_pressed = False
+        self.setMouseTracking(True)
 
         self.op_config = config
 
@@ -159,6 +170,17 @@ class _OperatorDisplay(QGraphicsView):
         self.imaging_rect = self.scene.addRect(QRectF(-self.ppd/2, -self.ppd/2, self.ppd, self.ppd))
         self.imaging_rect.setPen(QPen(QBrush(QColor.fromString(str(self.op_config.get("raster_color", "dodgerblue")))), 3))
         self.imaging_rect.setTransform(QTransform.fromTranslate(self.center.x(), self.center.y()))
+
+    def mousePressEvent(self, event: QMouseEvent, /):
+        self.mouse_pressed = True
+
+    def mouseMoveEvent(self, event: QMouseEvent, /):
+        if self.mouse_pressed:
+            self.parentWidget().onPositionChanged((self.center-event.position()) / self.ppd)
+
+    def mouseReleaseEvent(self, event: QMouseEvent, /):
+        self.mouse_pressed = False
+        self.parentWidget().onPositionChanged((self.center - event.position()) / self.ppd)
 
 
 

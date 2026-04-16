@@ -1,5 +1,5 @@
 import math
-from enum import StrEnum
+from enum import StrEnum, auto
 
 from PySide6 import QtGui
 from PySide6.QtWidgets import QGraphicsItem
@@ -8,9 +8,9 @@ from PySide6.QtGui import QColor, QPainterPath, QPen, QBrush, QPainter
 
 
 class TargetTypes(StrEnum):
-    MALTESE_CROSS = "Maltese Cross",
-    CROSSHAIR = "Crosshair",
-    BULLSEYE = "Bullseye"
+    MALTESE_CROSS = auto(),
+    CROSSHAIR = auto(),
+    BULLSEYE = auto()
 
 class Target(QGraphicsItem):
     def __init__(self, name, size=5, thickness=1, color=QColor("white")):
@@ -168,7 +168,7 @@ class TargetFactory:
     }
 
     @staticmethod
-    def get_target(target_type: TargetTypes, size=5, thickness=1, color=QColor("white")) -> Target:
+    def get_target(target_type: TargetTypes, size: int = 5, thickness: int = 1, color: QColor = QColor("white")) -> Target:
         target_class = TargetFactory._targets.get(target_type)
         if target_class:
             return target_class(size, thickness, color)
