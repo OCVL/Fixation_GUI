@@ -3,7 +3,7 @@ import PySide6
 from PySide6 import QtWidgets, QtGui, QtCore
 import sys
 from PySide6.QtGui import *
-from PySide6.QtCore import Qt, QSize, QPointF, QEvent, QRegularExpression
+from PySide6.QtCore import Qt, QSize, QPointF, QEvent, QRegularExpression, Signal, Property
 from PySide6.QtWidgets import *
 
 from ocvl.fixation.targets import TargetFactory,MalteseCross, CrossHair, TargetTypes
@@ -13,77 +13,30 @@ class ControlPanel(QTabWidget):
     """
     Main class for the control panel that contains various tabs, each with different functionality
     """
+    colorChanged = Signal(str)
 
-    def __init__(self, var, parent=None):
-        """
-        Initialization of the class variables
-        """
-        super(ControlPanel, self).__init__(parent)
-        self.targetbuttons = {}
-        self.temp_x = None
-        self.temp_y = None
-        self.none_selected = None
-        self.var = var
+    def __init__(self, config: dict, parent=None):
+        super().__init__(parent)
 
-        # All the self class variables to be used in the various tabs
-        self.target_vis_bttn = None
-        self.ref_pt_label = None
-        self.ref_pt_button = None
-        self.MTE = None
-        self.TRC = None
-        self.TLC = None
-        self.MLE = None
-        self.BLC = None
-        self.MBE = None
-        self.BRC = None
-        self.MRE = None
-        self.CTR = None
-        self.grid_vis = None
-        self.animation_speed = None
-        self.animation = None
-        self.vert = None
-        self.horz = None
-        self.target_off_bttn = None
-        self.target_on_bttn = None
-        self.subject_view = None
-        self.anatomical_view = None
-        self.grid_size_default_3 = None
-        self.grid_size_default_2 = None
-        self.grid_size_default_1 = None
-        self.grid_defaults = None
-        self.grid_display_save = None
-        self.dim_select = None
-        self.FOV_menu = None
-        self.info = None
-        self.save_p_label = None
-        self.save_p_button = None
-        self.image_label = None
-        self.twinkle = None
-        self.bullseye = None
-        self.square = None
-        self.m_cross = None
-        self.square_out = None
-        self.s_cross = None
-        self.cross = None
-        self.label_size = None
-        self.test_label = None
-        self.size_bar = None
-        self.image_cal_button = None
-        self.load_bg_image_button = None
-        self.n_frames = None
-
-        # getting the default whether the grid is on or not from the config file
-        grid_def = int(self.var.config.get( "grid_visible"))
-        if grid_def == 1:
-            self.var.grid_vis = True
+        if config is None:
+            self.config = dict()
         else:
-            self.var.grid_vis = False
+            self.config = config
+
+        self.part_config = self.config.get("participant_display", dict())
+
+        # Target variables
+        self.target_color = self.part_config.get("color", "orange")
+        self.target_shape = self.part_config.get("color", TargetTypes.BULLSEYE)
+        self.target_diameter = self.part_config.get("diameter", 1)
+        self.target_thickness = self.part_config.get("thickness", 0.1)
+
+        self.targetbuttons = {}
 
         # Generate the Tabs for the window to hold the settings
-        self.tab1 = QWidget()
-        self.tab2 = QWidget()
-        self.tab3 = QWidget()
-        self.tab4 = QWidget()
+        self.setup_tab = QWidget()
+        # self.imaging_tab = QWidget()
+        # self.session_review = QWidget()
 
         # set to no focus to disable the arrow keys moving through the tabs (so they can be used for the target movement)
         self.setFocusPolicy(Qt.NoFocus)
@@ -91,22 +44,16 @@ class ControlPanel(QTabWidget):
         # Set the position of the tabs to be on the right
         self.setTabPosition(QTabWidget.East)
         self.setTabShape(QTabWidget.Triangular)
-        # with these lines commented out the panel is able to resize when the window size changes
-        # self.setMaximumWidth(350)
-        # self.setMaximumHeight(700)
-
 
         # Add the tabs generated to the parent window
-        self.addTab(self.tab1, "GUI Configuration")
-        self.addTab(self.tab2, "Imaging")
-        self.addTab(self.tab3, "Stimulus Control")
-        self.addTab(self.tab4, "Session Review")
+        self.addTab(self.setup_tab, "Setup")
+        # self.addTab(self.imaging_tab, "Imaging")
+        # self.addTab(self.session_review, "Session Review")
 
         # UI functions for the new tab layout
         self.guiSetUp()
-        self.imagingTab()
-        self.stimControlTab()
-        self.sessionReview()
+        # self.imagingTab()
+        # self.sessionReview()
 
         # Set the Title of the Window
         self.setWindowTitle("Control Settings")
@@ -182,21 +129,20 @@ class ControlPanel(QTabWidget):
         color_button.setFocusPolicy(Qt.NoFocus)
 
         # Generate the scroll bar for the size of the fixation target
-        self.size_bar = QSlider(Qt.Horizontal)
+        self.size_spinner = QDoubleSpinBox()
         # set to no focus to disable the arrow keys from moving the size
-        self.size_bar.setFocusPolicy(Qt.NoFocus)
+        self.size_spinner.setFocusPolicy(Qt.NoFocus)
         self.label_size = QLabel()
-        self.size_bar.setMinimum(1)
-        self.size_bar.setMaximum(100)
-        self.size_bar.setValue(self.var.target_size)
-        self.size_bar.setTickPosition(QSlider.TicksBelow)
-        self.size_bar.setTickInterval(1)
-        self.label_size.setText("Target Size: " + str(self.var.target_size))
-        self.size_bar.valueChanged.connect(self.sizeChange)
+        self.size_spinner.setMinimum(1 / self.part_config.get("ppd", 10))
+        self.size_spinner.setMaximum(5 * self.part_config.get("ppd", 10))
+        self.size_spinner.setValue(self.part_config.get("diameter", 1) * self.part_config.get("ppd", 10))
+
+        self.label_size.setText("Target Size (in degrees): ")
+        self.size_spinner.valueChanged.connect(self.sizeChange)
 
         # Add scroll bar and label to the main widget
         target_cal_layout.addWidget(self.label_size)
-        target_cal_layout.addWidget(self.size_bar)
+        target_cal_layout.addWidget(self.size_spinner)
 
         # Adding the buttons to the shape layouts
         fix_shape_main = QVBoxLayout()
@@ -230,7 +176,29 @@ class ControlPanel(QTabWidget):
         layout.addRow(target_config_group)
 
         # Set the main layout for the tab
-        self.tab1.setLayout(layout)
+        self.setup_tab.setLayout(layout)
+    #
+    # class MyObject(QObject):
+    #     def __init__(self):
+    #         super().__init__()
+    #         self._name = "Default"
+    #
+    #     def get_name(self):
+    #         return self._name
+    #
+    #     def set_name(self, value):
+    #         self._name = value
+    #
+    #     # Define a bindable property
+    #     name = Property(str, get_name, set_name, bindable=True)
+    #
+    # # Usage
+    # obj = MyObject()
+    # bindable_name = QBindable(obj, "name")
+    # bindable_name.setBinding(lambda: "Bound Value")
+    # print(obj.name)  # Output: Bound Value
+    #
+    # value = Property(str, fget=get_value, fset=set_value, notify=valueChanged)
 
     # will need to add slot to get checkbox to work also need to set default to be checked (grid visibility)
     def imagingTab(self):
@@ -445,62 +413,9 @@ class ControlPanel(QTabWidget):
         grid_vis_group.setLayout(grid_vis_layout)
         layout.addRow(grid_vis_group)
 
-        # # Group for Savior Controls
-        # savior_group = QGroupBox("Savior Control")
-        # savior_layout = QFormLayout()
-        #
-        # # get the FOVs from the config file to be added to the dropdown menu
-        # self.FOV_menu = QComboBox()
-        # self.var.savior_FOVs = self.var.config.get( "savior_FOVs").split("/")
-        #
-        # # adds all the FOVs in the list
-        # for x in self.var.savior_FOVs:
-        #     self.FOV_menu.addItem(x)
-        #
-        # # sets the selection to the first one
-        # self.FOV_menu.setCurrentIndex(0)
-        #
-        # # Add the components to the savior layout
-        # self.n_frames = QLineEdit()
-        # savior_layout.addRow("Number of Frames:", self.n_frames)
-        # savior_layout.addRow("Current FOV:", self.FOV_menu)
-        # self.FOV_menu.setFocusPolicy(Qt.NoFocus)
-        # self.n_frames.installEventFilter(self)
-        #
-        # # Add the savior layout to the savior group and then add the group to the main layout as another row
-        # savior_group.setLayout(savior_layout)
-        # layout.addRow(savior_group)
-
         # Sets the main layout of the tab
-        self.tab2.setLayout(layout)
+        self.imaging_tab.setLayout(layout)
 
-    # Currently Complete with all components
-    def stimControlTab(self):
-        """
-        Function for the UI properties and functionality of the Stimulus control tab
-        """
-        # Sets up the main layout of the tab
-        layout = QFormLayout()
-
-        # Set up the group and its layout for stimulus control
-        stim_group = QGroupBox("Stimulus Control")
-        stim_layout = QFormLayout()
-
-        # Add the components to the group layout
-        stim_layout.addRow("Port Number:", QLineEdit())
-        stim_layout.addRow(QLabel(""))
-        stim_layout.addRow(QLabel("Stimulus Parameters:"))
-        stim_layout.addRow("Frequency: ", QLineEdit())
-        stim_layout.addRow("Duration", QLineEdit())
-        stim_layout.addRow("Start Time", QLineEdit())
-        stim_layout.addRow("Frames After", QLineEdit())
-
-        # Add the stimulus layout to the group and then add the group to the main layout as another row
-        stim_group.setLayout(stim_layout)
-        layout.addRow(stim_group)
-
-        # Sets the tab's layout to the main layout
-        self.tab3.setLayout(layout)
 
     # Currently complete with all needed components
     def sessionReview(self):
@@ -547,7 +462,7 @@ class ControlPanel(QTabWidget):
         layout.addRow(info_group)
 
         # Set the tab's layout to the main one
-        self.tab4.setLayout(layout)
+        self.session_review.setLayout(layout)
 
     """
     Functions below are used in the UI for fixationTargetControlTab
@@ -565,7 +480,7 @@ class ControlPanel(QTabWidget):
 
             if button.isChecked():
                 targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=self.var.target_color)
-                self.var.target_shape = TargetFactory.get_target(target_type, size=self.var.target_size, thickness=1, color=self.var.target_color)
+                self.var.target_shape = TargetFactory.get_target(target_type, size=self.var.target_diameter, thickness=1, color=self.var.target_color)
             else:
                 targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=Qt.gray)
 
@@ -580,9 +495,9 @@ class ControlPanel(QTabWidget):
         """
         Slot for displaying the size of the fixation target as it moves
         """
-        txt = "Target Size: " + str(self.size_bar.value())
+        txt = "Target Size: " + str(self.size_spinner.value())
         self.label_size.setText(txt)
-        self.var.target_size = self.size_bar.value()
+        self.var.target_diameter = self.size_spinner.value()
         self.updateTargets()
 
     def onPressColor(self):

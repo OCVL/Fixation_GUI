@@ -29,7 +29,7 @@ class CenterPanel(QWidget):
 
         self.fix_disp = FixationDisplay(fixation_conf, self)
 
-        # self.control_panel = ControlPanel(self.config)
+        self.control_panel = ControlPanel(self.config)
 
         # self.notes_panel = NotesPanel(self.config)
 
@@ -37,7 +37,7 @@ class CenterPanel(QWidget):
         self.positionChanged.connect(self.fix_disp.onPositionChanged)
 
         self.layout.addWidget(self.fix_disp, 0, 0)
-        #self.layout.addWidget(self.control_panel, 0, 1)
+        self.layout.addWidget(self.control_panel, 0, 1)
         #self.layout.addWidget(self.notes_panel, 1, 1, 1, 2)
 
         # The increment steps we'll use.
