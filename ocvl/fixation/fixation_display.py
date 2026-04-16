@@ -13,8 +13,8 @@ from ocvl.fixation.targets import Target
 
 class FixationDisplay(QWidget):
 
-    def __init__(self, config=None):
-        super(FixationDisplay, self).__init__()
+    def __init__(self, config: dict = None, parent: QWidget = None):
+        super().__init__(parent)
 
         if config is None:
             config = dict()
@@ -27,7 +27,7 @@ class FixationDisplay(QWidget):
         self.layout = QVBoxLayout(self)
 
         # Get the dims from the Configuration tabs
-        self.operator_display = _OperatorDisplay(self.op_disp_config)
+        self.operator_display = _OperatorDisplay(self.op_disp_config, self, mouse_enabled=config.get("allow_mouse_movement", False))
 
         self.layout.addWidget(self.operator_display)
 
@@ -35,12 +35,15 @@ class FixationDisplay(QWidget):
         self.eye = Eye.OS
         self.target_position = QPointF(0, 0)
 
+    def getPosition(self):
+        return self.target_position
+
     @Slot()
     def onPositionChanged(self, new_pos: QPointF):
         # In degrees of visual angle.
         self.target_position = new_pos
         self.operator_display.imaging_rect.\
-            setTransform(QTransform.fromTranslate(self.operator_display.center.x() - self.target_position.x() * self.operator_display.ppd,
+            setTransform(QTransform.fromTranslate(self.operator_display.center.x() + self.target_position.x() * self.operator_display.ppd,
                                                   self.operator_display.center.y() - self.target_position.y() * self.operator_display.ppd))
 
         self._participant_display.setPosition(self.target_position)
@@ -73,13 +76,17 @@ class _OperatorDisplay(QGraphicsView):
     Class for the grid display
     """
 
-    def __init__(self, config: dict, parent=None):
-        super(_OperatorDisplay, self).__init__(parent)
+    def __init__(self, config: dict = None, parent: QWidget = None, mouse_enabled: bool = False):
+        super().__init__(parent)
 
         self.mouse_pressed = False
-        self.setMouseTracking(True)
+        if mouse_enabled:
+            self.setMouseTracking(True)
 
-        self.op_config = config
+        if config is None:
+            self.config = dict()
+        else:
+            self.op_config = config
 
         self.width = self.op_config.get("width_in_px", 600)
         self.height = self.op_config.get("height_in_px", 600)
@@ -176,11 +183,14 @@ class _OperatorDisplay(QGraphicsView):
 
     def mouseMoveEvent(self, event: QMouseEvent, /):
         if self.mouse_pressed:
-            self.parentWidget().onPositionChanged((self.center-event.position()) / self.ppd)
+            newpos = QPointF( event.position().x() - self.center.x(), self.center.y() - event.position().y())
+            self.parentWidget().onPositionChanged( newpos / self.ppd )
+
 
     def mouseReleaseEvent(self, event: QMouseEvent, /):
         self.mouse_pressed = False
-        self.parentWidget().onPositionChanged((self.center - event.position()) / self.ppd)
+        newpos = QPointF( event.position().x() - self.center.x(), self.center.y() - event.position().y())
+        self.parentWidget().onPositionChanged( newpos / self.ppd )
 
 
 

@@ -2,104 +2,67 @@
 import json
 import os
 import sys
-from PySide6 import QtCore, QtWidgets
-from PySide6.QtGui import Qt
+from PySide6 import QtWidgets
+from PySide6.QtCore import Signal, QPointF, QObject, QEvent
+from PySide6.QtGui import Qt, QKeyEvent
 from PySide6.QtWidgets import QMainWindow, QGridLayout, QWidget
 
 from ocvl.fixation.nuclear_controls import ControlPanel
 from ocvl.fixation.nuclear_notes import NotesPanel
 from ocvl.fixation.fixation_display import FixationDisplay
 
+
 class CenterPanel(QWidget):
-    def __init__(self, parent=None, config=None):
-        super(CenterPanel, self).__init__(parent)
+    positionChanged = Signal(QPointF)
+
+    def __init__(self, config: dict = None, parent: QWidget = None):
+        super().__init__(parent)
 
         if config is None:
             self.config = dict()
+        else:
+            self.config = config
+
+        fixation_conf = self.config.get("fixation_target", dict())
 
         self.layout = QGridLayout(self)
 
-        self.fix_disp = FixationDisplay(self.config)
+        self.fix_disp = FixationDisplay(fixation_conf, self)
 
-        self.control_panel = ControlPanel(self.config)
+        # self.control_panel = ControlPanel(self.config)
 
-        self.notes_panel = NotesPanel(self.config)
+        # self.notes_panel = NotesPanel(self.config)
 
-        # Connections between
-
+        # Connections
+        self.positionChanged.connect(self.fix_disp.onPositionChanged)
 
         self.layout.addWidget(self.fix_disp, 0, 0)
-        self.layout.addWidget(self.control_panel, 0, 1)
-        self.layout.addWidget(self.notes_panel, 1, 1, 1, 2)
+        #self.layout.addWidget(self.control_panel, 0, 1)
+        #self.layout.addWidget(self.notes_panel, 1, 1, 1, 2)
+
+        # The increment steps we'll use.
+        self.major_increment = fixation_conf.get("major_increment", 0.5)
+        self.minor_increment = fixation_conf.get("minor_increment", 0.1)
+        self.keyboard_enabled = config.get("allow_keyboard_movement", False)
 
 
 class NuclearBase(QMainWindow):
+
+    arrowPressed = Signal(QPointF)
+
     def __init__(self):
-        super(NuclearBase).__init__()
+        super().__init__()
 
         with open(os.getcwd() + "\\settings.json", 'r') as config_json_path:
             self.config = json.load(config_json_path)
 
-        self.center_panel = CenterPanel(self, self.config)
+        self.center_panel = CenterPanel(self.config, self)
         self.setCentralWidget(self.center_panel)
 
         self.keylist = []
         self.firstrelease = None
         self.send_again = None
 
-        # The increment steps we'll use.
-        self.major_increment = self.config.getfloat("ui", "major_increment", fallback=1.0)
-        self.minor_increment = self.config.getfloat("ui", "major_increment", fallback=0.5)
-
-    def keyPressEvent(self, eventQKeyEvent):
-        key = eventQKeyEvent.key()
-        self.firstrelease = True
-        self.keylist.append(key)
-        # print('pressed')
-        # resending the event to keyrelease if this was called from keyRelease
-        if self.send_again:
-            self.send_again = False
-            self.keyReleaseEvent(eventQKeyEvent)
-
-    def keyReleaseEvent(self, event):
-        if self.firstrelease:
-            self.processmultikeys(self.keylist)
-        self.firstrelease = False
-        # resending the event to keypress if the press wasn't originally recognized
-        if len(self.keylist) == 0:
-            self.send_again = True
-            self.keyPressEvent(event)
-            return
-        del self.keylist[-1]
-        # print('deleted')
-
-    def processmultikeys(self, key):
-        # print(key)
-        # will need to check what increment is actually 1 deg for fixation target and if multiplying by screen ppd is correct
-        # major increment
-
-        if key == [QtCore.Qt.Key_Left]:
-            self.var.y_val = self.var.y_val + self.major_increment
-        elif key == [QtCore.Qt.Key_Up]:
-            self.var.x_pos_deg = self.var.x_pos_deg - self.major_increment
-        elif key == [QtCore.Qt.Key_Right]:
-            self.var.y_val = self.var.y_val - self.major_increment
-        elif key == [QtCore.Qt.Key_Down]:
-            self.var.x_pos_deg = self.var.x_pos_deg + self.major_increment
-
-        # shift + arrow for minor increment
-        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Left]:
-            self.var.y_val = self.var.y_val + self.minor_increment
-        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Up]:
-            self.var.x_pos_deg = self.var.x_pos_deg - self.minor_increment
-        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Right]:
-            self.var.y_val = self.var.y_val - self.minor_increment
-        elif key == [QtCore.Qt.Key_Shift, QtCore.Qt.Key_Down]:
-            self.var.x_pos_deg = self.var.x_pos_deg + self.minor_increment
-
-
-        # call to function in nuclear_controls to update the coordinate text in the control panel
-        self.j.righty.target.updateCoordText()
 
     # Handles when the red X is clicked. Has it save some things before actually quitting
     # https://stackoverflow.com/questions/24532043/proper-way-to-handle-the-close-button-in-a-main-window-pyqt-red-x
@@ -112,12 +75,52 @@ class NuclearBase(QMainWindow):
         event.accept()
         sys.exit()
 
+class BigBrotherListener(QObject):
+    def __init__(self, little_brother: CenterPanel = None):
+        super().__init__()
+        self.little_brother = little_brother
+
+    def eventFilter(self, watched, event):
+
+
+        if event.type() == QEvent.KeyPress and self.little_brother.keyboard_enabled and not event.isAutoRepeat():
+            key = event.key()
+
+            old_pos = self.little_brother.fix_disp.getPosition()
+            new_pos = QPointF()
+
+            increment = self.little_brother.major_increment
+
+            # shift + arrow for minor increment
+            if event.modifiers() == Qt.ShiftModifier:
+                increment = self.little_brother.minor_increment
+
+            match key:
+                case Qt.Key_Left:
+                    new_pos = QPointF(old_pos.x() - increment, old_pos.y())
+                case Qt.Key_Up:
+                    new_pos = QPointF(old_pos.x(), old_pos.y() + increment)
+                case Qt.Key_Right:
+                    new_pos = QPointF(old_pos.x() + increment, old_pos.y())
+                case Qt.Key_Down:
+                    new_pos = QPointF(old_pos.x(), old_pos.y() - increment)
+
+            print(f"Old: {old_pos}, New: {new_pos}")
+            self.little_brother.positionChanged.emit(new_pos)
+            return True
+
+        # Call the base class implementation for other events
+        return super().eventFilter(watched, event)
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
+
     base = NuclearBase()
-    # base.resize(1000, 500)
-    base.show()
+    bigbro = BigBrotherListener(base.center_panel)
+    app.installEventFilter(bigbro)
+
     base.setFocusPolicy(Qt.StrongFocus)
+    base.show()
     sys.exit(app.exec())
 

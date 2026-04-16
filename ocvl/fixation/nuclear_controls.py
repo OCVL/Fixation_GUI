@@ -6,8 +6,7 @@ from PySide6.QtGui import *
 from PySide6.QtCore import Qt, QSize, QPointF, QEvent, QRegularExpression
 from PySide6.QtWidgets import *
 
-from ocvl.fixation.nuclear_target import MalteseCross, CrossHair, TargetTypes
-from ocvl.fixation.targets import TargetFactory
+from ocvl.fixation.targets import TargetFactory,MalteseCross, CrossHair, TargetTypes
 
 
 class ControlPanel(QTabWidget):

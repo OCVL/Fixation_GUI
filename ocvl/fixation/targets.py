@@ -172,4 +172,5 @@ class TargetFactory:
         target_class = TargetFactory._targets.get(target_type)
         if target_class:
             return target_class(size, thickness, color)
-        raise ValueError(f"Unknown shape type: {target_type}")
+        print(f"Unknown shape type: {target_type}, defaulting to bullseye.")
+        return TargetFactory._targets.get(TargetTypes.BULLSEYE)(size, thickness, color)

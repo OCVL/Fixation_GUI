@@ -50,7 +50,7 @@ class ParticipantDisplay(QGraphicsView):
 
         self.target = target
 
-        self.target.setTransform(QTransform.fromTranslate(self.center.x() - self.target_position.x() * self.ppd,
+        self.target.setTransform(QTransform.fromTranslate(self.center.x() + self.target_position.x() * self.ppd,
                                                           self.center.y() - self.target_position.y() * self.ppd))
 
         self.scene.addItem(self.target)
@@ -60,7 +60,7 @@ class ParticipantDisplay(QGraphicsView):
     def setPosition(self, new_pos: QPointF):
         self.target_position = new_pos
 
-        self.target.setTransform(QTransform.fromTranslate(self.center.x() - self.target_position.x() * self.ppd,
+        self.target.setTransform(QTransform.fromTranslate(self.center.x() + self.target_position.x() * self.ppd,
                                                           self.center.y() - self.target_position.y() * self.ppd))
 
         self.viewport().update()
