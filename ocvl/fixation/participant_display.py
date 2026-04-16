@@ -24,26 +24,16 @@ class ParticipantDisplay(QGraphicsView):
         self.move(monitor.left(), monitor.top())
 
         self.init = 1
-        defaults = self.config.config.get("fixation_default").split("/")
 
-        if defaults[0] == 'on':
-            self.config.target_vis = True
-        else:
-            self.config.target_vis = False
+        self.center = self.center_x_og
 
-        self.config.center_x_og = self.window().width() / 2
-        self.config.center_y_og = self.window().height() / 2
-
-        self.config.target_center_x = self.config.center_x_og
-        self.config.target_center_y = self.config.center_y_og
-
-        self.current_target = self.config.target_shape
+        self.current_target = self.target_shape
         self.current_target.setTransform(QTransform.fromTranslate(self.config.target_center_x, self.config.target_center_y))
         self.scene.addItem(self.current_target)
 
-        self.config.shapeChanged.connect(self.setTarget)
-        self.config.xChanged.connect(self.updateTransform)
-        self.config.yChanged.connect(self.updateTransform)
+        # self.shapeChanged.connect(self.setTarget)
+        # self.xChanged.connect(self.updateTransform)
+        # self.yChanged.connect(self.updateTransform)
 
         self.setFrameStyle(0)
         self.viewport().update()
@@ -54,18 +44,17 @@ class ParticipantDisplay(QGraphicsView):
 
         self.current_target = target
 
-        offset = QTransform.fromTranslate(self.config.target_center_x, self.config.target_center_y)
-        offset.translate(self.config.x_pos_deg, self.config.y_val)
+        offset = QTransform.fromTranslate(self.target_center_x, self.target_center_y)
+        offset.translate(self.x_pos_deg, self.y_val)
 
         self.current_target.setTransform(offset)
         self.scene.addItem(self.current_target)
 
         return target
 
-    def updateTransform(self):
+    def setPosition(self, new_pos: QPointF):
+        self.current_target.setTransform(QTransform.fromTranslate(
+                                        self.participant_display.center_x - self.target_position.x() * self.operator_display.ppd,
+                                        self.participant_display.center_y - self.target_position.y() * self.operator_display.ppd))
 
-        offset = QTransform.fromTranslate(self.config.target_center_x, self.config.target_center_y)
-        offset.translate(self.config.x_pos_deg, self.config.y_val)
-
-        self.current_target.setTransform(offset)
         self.viewport().update()

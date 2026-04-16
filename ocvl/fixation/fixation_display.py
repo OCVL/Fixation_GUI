@@ -1,16 +1,16 @@
 import sys
-from datetime import datetime
-import pandas
-from PySide6 import QtWidgets, QtCore, QtQuick, QtGui
-from PySide6.QtCore import QPoint, QRect, QLineF
-from PySide6.QtGui import QPainter, Qt, QPen, QColor, QPixmap, QImage, QTransform, QBrush, QFont
-from PySide6.QtWidgets import QWidget, QLabel, QSizePolicy, QGraphicsView, QGraphicsScene, QVBoxLayout, \
+from PySide6 import QtWidgets
+from PySide6.QtCore import  QRectF, Slot, QPointF, QSize
+from PySide6.QtGui import QPen, QColor, QTransform, QBrush, QFont
+from PySide6.QtWidgets import QWidget, QGraphicsView, QGraphicsScene, QVBoxLayout, \
     QGraphicsItemGroup, QGraphicsLineItem
 import numpy as np
+
+from ocvl.fixation.constants import Eye
 from ocvl.fixation.participant_display import ParticipantDisplay
 
-
 class FixationDisplay(QWidget):
+
     def __init__(self, config=None):
         super(FixationDisplay, self).__init__()
 
@@ -19,25 +19,46 @@ class FixationDisplay(QWidget):
 
         self.op_disp_config = config.get("operator_display", dict())
 
-        # self.participant_display = ParticipantDisplay(config.get("participant_display", dict()))
-        # self.participant_display.show()
+        self.participant_display = ParticipantDisplay(config.get("participant_display", dict()))
+        self.participant_display.show()
 
         self.layout = QVBoxLayout(self)
 
         # Get the dims from the Configuration tabs
-        self.target_area = _OperatorDisplay(self.op_disp_config)
+        self.operator_display = _OperatorDisplay(self.op_disp_config)
 
-        self.layout.addWidget(self.target_area)
+        self.layout.addWidget(self.operator_display)
+
+        self.fov = QSize(1, 1)
+        self.eye = Eye.OS
+        self.target_position = QPointF(0,0)
 
 
-    @QtCore.Slot()
-    def updateTarget(self):
-        pass
+    @Slot()
+    def onPositionChanged(self, new_pos: QPointF):
+        self.target_position = new_pos
+        self.operator_display.imaging_rect.\
+            setTransform(QTransform.fromTranslate(self.operator_display.center.x() - self.target_position.x() * self.operator_display.ppd,
+                                                  self.operator_display.center.y() - self.target_position.y() * self.operator_display.ppd))
 
-    @QtCore.Slot()
-    def gridSizeInDeg(self):
-        pass
+        self.participant_display.
 
+
+
+    @Slot()
+    def onEyeChanged(self, new_eye: Eye):
+        self.eye = new_eye
+        if self.eye == Eye.OS:
+            self.operator_display.left_label.setPlainText("Temporal")
+            self.operator_display.right_label.setPlainText("Nasal")
+        else:
+            self.operator_display.left_label.setPlainText("Nasal")
+            self.operator_display.right_label.setPlainText("Temporal")
+
+    @Slot()
+    def onFOVChanged(self, new_size: QSize):
+        self.fov = new_size
+        self.operator_display.imaging_rect.setRect(-self.fov.width() / 2, -self.fov.height() / 2, self.fov.width(), self.fov.height())
 
 class _OperatorDisplay(QGraphicsView):
     """
@@ -51,16 +72,12 @@ class _OperatorDisplay(QGraphicsView):
 
         self.width = self.op_config.get("width_in_px", 600)
         self.height = self.op_config.get("height_in_px", 600)
-        self.center_x = self.width / 2
-        self.center_y = self.height / 2
+        self.center = QPointF(self.width / 2, self.height / 2)
         self.ppd = self.op_config.get("ppd", 20)
 
         self.setMinimumSize(self.width, self.height)
         self.scene = QGraphicsScene(0, 0, self.width, self.height, self)
         self.setScene(self.scene)
-
-        self.left_label = "Temporal"
-        self.right_label = "Nasal"
 
         # Accepts anything described in https://doc.qt.io/qt-6/qcolor.html#fromString
         bkgrd_color = QColor.fromString(str(self.op_config.get("background_color", "dimgray")))
@@ -70,11 +87,11 @@ class _OperatorDisplay(QGraphicsView):
         # Make static items that are all centered in the operator display
         self.static_items = QGraphicsItemGroup()
 
-        minor_color = QColor.fromString(str(self.op_config.get("minor_color", "lightgray")))
+        minor_color = QColor.fromString(str(self.op_config.get("minor_color", "black")))
         minor_grid_pen = QPen(QBrush(minor_color), 1)
-        if self.op_config.get("major_color") is not None:
-            major_color = QColor.fromString(str(self.op_config.get("major_color", "whitesmoke")))
-            major_grid_pen = QPen(QBrush(major_color), 3)
+        if self.op_config.get("major_color", "chocolate") is not None:
+            major_color = QColor.fromString(str(self.op_config.get("major_color", "chocolate")))
+            major_grid_pen = QPen(QBrush(major_color), 2)
         else:
             major_grid_pen = None
 
@@ -116,18 +133,33 @@ class _OperatorDisplay(QGraphicsView):
                 liner.setPen(minor_grid_pen)
             self.static_items.addToGroup(liner)
 
-        self.static_items.setTransform(QTransform.fromTranslate(self.center_x, self.center_y))
+        self.static_items.setTransform(QTransform.fromTranslate(self.center.x(), self.center.y()))
         self.scene.addItem(self.static_items)
 
-        # Make labels
-        bkgrd_opposite = QColor(255-bkgrd_color.red(), 255-bkgrd_color.green(), 255-bkgrd_color.blue(), bkgrd_color.alpha())
+        # Make axis labels
         top_label = self.scene.addText("Superior", QFont("Arial", 12, QFont.Weight.Bold))
-        top_label.setDefaultTextColor(bkgrd_opposite)
-        top_label.setTransform(QTransform.fromTranslate(self.width / 2.0, 0))
+        top_label.setDefaultTextColor(QColor.fromString(str(self.op_config.get("label_color", "whitesmoke"))))
+        top_label.setTransform(QTransform.fromTranslate(self.width / 2.0 - top_label.boundingRect().width()/2, 0))
 
         bottom_label = self.scene.addText("Inferior", QFont("Arial", 12, QFont.Weight.Bold))
-        bottom_label.setDefaultTextColor(bkgrd_opposite)
-        bottom_label.setTransform(QTransform.fromTranslate(self.width / 2.0, self.height - bottom_label.boundingRect().height() ))
+        bottom_label.setDefaultTextColor(QColor.fromString(str(self.op_config.get("label_color", "whitesmoke"))))
+        bottom_label.setTransform(QTransform.fromTranslate((self.width / 2.0) - bottom_label.boundingRect().width()/2,
+                                                            self.height - bottom_label.boundingRect().height()))
+
+        self.left_label = self.scene.addText("Temporal", QFont("Arial", 12, QFont.Weight.Bold))
+        self.left_label.setDefaultTextColor(QColor.fromString(str(self.op_config.get("label_color", "whitesmoke"))))
+        self.left_label.setTransform(QTransform.fromTranslate(0, self.height / 2.0 - self.left_label.boundingRect().height()/2))
+
+        self.right_label = self.scene.addText("Nasal", QFont("Arial", 12, QFont.Weight.Bold))
+        self.right_label.setDefaultTextColor(QColor.fromString(str(self.op_config.get("label_color", "whitesmoke"))))
+        self.right_label.setTransform(QTransform.fromTranslate(self.width - self.right_label.boundingRect().width(),
+                                                               self.height / 2.0 - self.right_label.boundingRect().height()/2))
+
+        # Make our imaging FOV rectangle
+        self.imaging_rect = self.scene.addRect(QRectF(-self.ppd/2, -self.ppd/2, self.ppd, self.ppd))
+        self.imaging_rect.setPen(QPen(QBrush(QColor.fromString(str(self.op_config.get("raster_color", "dodgerblue")))), 3))
+        self.imaging_rect.setTransform(QTransform.fromTranslate(self.center.x(), self.center.y()))
+
 
 
 if __name__ == "__main__":

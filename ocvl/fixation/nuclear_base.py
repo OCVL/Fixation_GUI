@@ -10,7 +10,6 @@ from ocvl.fixation.nuclear_controls import ControlPanel
 from ocvl.fixation.nuclear_notes import NotesPanel
 from ocvl.fixation.fixation_display import FixationDisplay
 
-
 class CenterPanel(QWidget):
     def __init__(self, parent=None, config=None):
         super(CenterPanel, self).__init__(parent)
@@ -27,7 +26,6 @@ class CenterPanel(QWidget):
         self.notes_panel = NotesPanel(self.config)
 
         # Connections between
-
 
 
         self.layout.addWidget(self.fix_disp, 0, 0)
