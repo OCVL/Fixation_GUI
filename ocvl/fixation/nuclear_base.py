@@ -35,8 +35,9 @@ class CenterPanel(QWidget):
         # self.notes_panel = NotesPanel(self.config)
 
         # Connections
-        self.positionChanged.connect(self.fix_disp.onPositionChanged)
+        self.fix_disp.positionChanged.connect(self.parent().onPositionChanged)
         self.control_panel.targetChanged.connect(self.fix_disp.onTargetChange)
+
         self.control_panel.center_fovea_button.clicked.connect(self.fix_disp.setPositionAsCenter)
 
         self.layout.addWidget(self.fix_disp, 0, 0)
@@ -46,7 +47,7 @@ class CenterPanel(QWidget):
         # The increment steps we'll use.
         self.major_increment = fixation_conf.get("major_increment", 0.5)
         self.minor_increment = fixation_conf.get("minor_increment", 0.1)
-        self.keyboard_enabled = config.get("allow_keyboard_movement", False)
+        self.keyboard_enabled = fixation_conf.get("allow_keyboard_movement", False)
 
 
 class NuclearBase(QMainWindow):
@@ -99,20 +100,45 @@ class NuclearBase(QMainWindow):
                     self.shook_hands = True
 
                 elif sub_msg == "Why won't you die?":
+                    print("Because behind this mask is an *idea*, Mr. Creedy- and ideas are bulletproof.")
                     self.shook_hands = False
                     self.server.close()
 
+                    if not self.server.listen(QHostAddress("127.0.0.1"), port=13675):
+                        print("Failed to listen on localhost:13675")
+                else:
+                    print(sub_msg)
+                    # Try and parse what the update was.
+                    eq_msg = sub_msg.split("=")
+                    if len(eq_msg) == 2:
+                        var = eq_msg[0]
+                        val = eq_msg[1]
+                        if var == "fovX":
+                            print("Updating the XFOV..." +val)
+                            curFOV = self.center_panel.fix_disp.getFOV()
 
+                            curFOV.setWidth(float(val))
+                            self.center_panel.fix_disp.onFOVChanged(curFOV)
+
+                        elif var == "fovY":
+                            curFOV = self.center_panel.fix_disp.getFOV()
+                            print("Updating the YFOV..." + val)
+                            curFOV.setHeight(float(val))
+                            self.center_panel.fix_disp.onFOVChanged(curFOV)
+
+    @Slot()
+    def onPositionChanged(self, new_pos: QPointF):
+        if self.shook_hands:
+            msg = f"location=({new_pos.x()},{new_pos.y()});"
+            self.socket.write(msg.encode('utf-8'))
 
 
     # Handles when the red X is clicked. Has it save some things before actually quitting
     # https://stackoverflow.com/questions/24532043/proper-way-to-handle-the-close-button-in-a-main-window-pyqt-red-x
     def closeEvent(self, event):
-        print("User has clicked the red x on the main window")
-        # if AOIP call to convert notes to pdf
 
-        # closes the secondary target screen
-        self.w.close()
+        # closes the participant target screen
+        self.center_panel.fix_disp._participant_display.close()
         event.accept()
         sys.exit()
 
@@ -123,11 +149,10 @@ class BigBrotherListener(QObject):
 
     def eventFilter(self, watched, event):
 
-
         if event.type() == QEvent.KeyPress and self.little_brother.keyboard_enabled and not event.isAutoRepeat():
             key = event.key()
 
-            old_pos = self.little_brother.fix_disp.getPosition()
+            old_pos = self.little_brother.fix_disp.target_position
             new_pos = QPointF()
 
             increment = self.little_brother.major_increment
@@ -146,8 +171,8 @@ class BigBrotherListener(QObject):
                 case Qt.Key_Down:
                     new_pos = QPointF(old_pos.x(), old_pos.y() - increment)
 
-            print(f"Old: {old_pos}, New: {new_pos}")
-            self.little_brother.positionChanged.emit(new_pos)
+            #print(f"Old: {old_pos}, New: {new_pos}")
+            self.little_brother.fix_disp.target_position = new_pos
             return True
 
         # Call the base class implementation for other events

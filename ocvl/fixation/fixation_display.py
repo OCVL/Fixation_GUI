@@ -1,6 +1,6 @@
 import sys
 from PySide6 import QtWidgets
-from PySide6.QtCore import QRectF, Slot, QPointF, QSize, QSizeF
+from PySide6.QtCore import QRectF, Slot, QPointF, QSize, QSizeF, Property, Signal
 from PySide6.QtGui import QPen, QColor, QTransform, QBrush, QFont, QMouseEvent
 from PySide6.QtWidgets import QWidget, QGraphicsView, QGraphicsScene, QVBoxLayout, \
     QGraphicsItemGroup, QGraphicsLineItem
@@ -12,6 +12,8 @@ from ocvl.fixation.targets import Target
 
 
 class FixationDisplay(QWidget):
+
+    positionChanged = Signal(QPointF)
 
     def __init__(self, config: dict = None, parent: QWidget = None):
         super().__init__(parent)
@@ -33,20 +35,50 @@ class FixationDisplay(QWidget):
 
         self.fov = QSize(1, 1)
         self.eye = Eye.OS
-        self.target_position = QPointF(0, 0)
+        self._target_position = QPointF(0, 0)
 
-    def getPosition(self):
-        return self.target_position
 
-    @Slot()
-    def onPositionChanged(self, new_pos: QPointF):
+    #
+    # class MyObject(QObject):
+    #     def __init__(self):
+    #         super().__init__()
+    #         self._name = "Default"
+    #
+    #     def get_name(self):
+    #         return self._name
+    #
+    #     def set_name(self, value):
+    #         self._name = value
+    #
+    #     # Define a bindable property
+    #     name = Property(str, get_name, set_name, bindable=True)
+    #
+    # # Usage
+    # obj = MyObject()
+    # bindable_name = QBindable(obj, "name")
+    # bindable_name.setBinding(lambda: "Bound Value")
+    # print(obj.name)  # Output: Bound Value
+    #
+
+    @Property(QPointF, notify=positionChanged)
+    def target_position(self):
+        return self._target_position
+
+    @target_position.setter
+    def target_position(self, position: QPointF):
         # In degrees of visual angle.
-        self.target_position = new_pos
-        self.operator_display.imaging_rect.\
-            setTransform(QTransform.fromTranslate(self.operator_display.center.x() + self.target_position.x() * self.operator_display.ppd,
-                                                  self.operator_display.center.y() - self.target_position.y() * self.operator_display.ppd))
+        self._target_position = position
 
-        self._participant_display.setPosition(self.target_position)
+        self.operator_display.imaging_rect.\
+            setTransform(QTransform.fromTranslate(self.operator_display.center.x() + self._target_position.x() * self.operator_display.ppd,
+                                                  self.operator_display.center.y() - self._target_position.y() * self.operator_display.ppd))
+
+        self._participant_display.setPosition(self._target_position)
+
+        self.positionChanged.emit(position)
+
+    def getFOV(self):
+        return self.fov
 
     @Slot()
     def onTargetChange(self, target: Target):
@@ -74,8 +106,8 @@ class FixationDisplay(QWidget):
     def setPositionAsCenter(self):
         self.target_position = QPointF(0, 0)
         self.operator_display.imaging_rect.\
-            setTransform(QTransform.fromTranslate(self.operator_display.center.x() + self.target_position.x() * self.operator_display.ppd,
-                                                  self.operator_display.center.y() - self.target_position.y() * self.operator_display.ppd))
+            setTransform(QTransform.fromTranslate(self.operator_display.center.x() + self._target_position.x() * self.operator_display.ppd,
+                                                  self.operator_display.center.y() - self._target_position.y() * self.operator_display.ppd))
 
         self._participant_display.setCenter(self._participant_display.target_position)
 

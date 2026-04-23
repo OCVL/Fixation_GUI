@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2a0b3cf8-dc52-4a7d-ac1c-a9c198de7599" name="Default Changelist" comment="-Added the ability to press F4 on the fixation target and have it start a record on the host application.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocvl/fixation/fixation_display.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/fixation_display.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocvl/fixation/nuclear_controls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,27 +38,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.fixation_display.executor": "Debug",
-    "Python.nuclear_base.executor": "Debug",
-    "Python.nuclear_base38.executor": "Debug",
-    "Python.wxFixProc38.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "meao__dev",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/jgrieshop/Documents/GitHub/Fixation_GUI_NUCLEAR/ocvl/fixation/nuclear_base.py",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.fixation_display.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.nuclear_base.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.nuclear_base38.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.wxFixProc38.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;meao__dev&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/jgrieshop/Documents/GitHub/Fixation_GUI_NUCLEAR/ocvl/fixation/nuclear_base.py&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="PyDebuggerOptionsProvider">
     <option name="mySupportQtDebugging" value="false" />
   </component>
@@ -223,7 +223,8 @@
       <workItem from="1775589379344" duration="3338000" />
       <workItem from="1775740951214" duration="459000" />
       <workItem from="1775742336571" duration="16663000" />
-      <workItem from="1776348056006" duration="38140000" />
+      <workItem from="1776348056006" duration="38316000" />
+      <workItem from="1776969043643" duration="4641000" />
     </task>
     <servers />
   </component>
@@ -251,7 +252,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Fixation_GUI$wxFixProc38.coverage" NAME="wxFixProc38 Coverage Results" MODIFIED="1775589511214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
     <SUITE FILE_PATH="coverage/Fixation_GUI$fixation_display.coverage" NAME="fixation_display Coverage Results" MODIFIED="1776368613186" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
-    <SUITE FILE_PATH="coverage/Fixation_GUI$nuclear_base.coverage" NAME="nuclear_base Coverage Results" MODIFIED="1776962111636" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
+    <SUITE FILE_PATH="coverage/Fixation_GUI$nuclear_base.coverage" NAME="nuclear_base Coverage Results" MODIFIED="1776975806519" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
     <SUITE FILE_PATH="coverage/Fixation_GUI$nuclear_base38.coverage" NAME="nuclear_base38 Coverage Results" MODIFIED="1775590988646" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocvl/fixation" />
   </component>
 </project>
