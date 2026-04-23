@@ -131,7 +131,7 @@ class ControlPanel(QTabWidget):
         self.size_spinner.setValue(self.part_config.get("diameter", 1))
         self.size_spinner.setSingleStep(1 / self.part_config.get("ppd", 10))
 
-        self.label_size.setText(f"Diameter: {self.part_config.get("diameter", 1):.2f}{chr(0x00B0)}")
+        self.label_size.setText(f"Diameter:")
         self.size_spinner.valueChanged.connect(self.sizeChange)
 
         # Add scroll bar and label to the main widget
@@ -433,7 +433,6 @@ class ControlPanel(QTabWidget):
         """
         Slot for displaying the size of the fixation target as it moves
         """
-        self.label_size.setText(f"Diameter: {newval:.2f}{chr(0x00B0)}")
         self.target_diameter = newval
         self.updateTargets()
 

@@ -2,9 +2,10 @@
 import json
 import os
 import sys
-from PySide6 import QtWidgets
-from PySide6.QtCore import Signal, QPointF, QObject, QEvent
+from PySide6 import QtWidgets, QtAsyncio
+from PySide6.QtCore import Signal, QPointF, QObject, QEvent, Slot
 from PySide6.QtGui import Qt, QKeyEvent
+from PySide6.QtNetwork import QTcpServer, QHostAddress
 from PySide6.QtWidgets import QMainWindow, QGridLayout, QWidget
 
 from ocvl.fixation.nuclear_controls import ControlPanel
@@ -61,9 +62,47 @@ class NuclearBase(QMainWindow):
         self.center_panel = CenterPanel(self.config, self)
         self.setCentralWidget(self.center_panel)
 
-        self.keylist = []
-        self.firstrelease = None
-        self.send_again = None
+        self.server = QTcpServer(self)
+        self.socket = None
+        self.shook_hands = False
+
+        self.server.newConnection.connect(self.onConnect)
+        if not self.server.listen(QHostAddress("127.0.0.1"), port=13675):
+            print("Failed to listen on localhost:13675")
+            self.server.close()
+
+    @Slot()
+    def onConnect(self):
+        self.socket = self.server.nextPendingConnection()
+        self.socket.readyRead.connect(self.dataToRead)
+        print("Connected to client")
+
+    @Slot()
+    def dataToRead(self):
+
+        if self.socket.isValid():
+
+            data = self.socket.readAll().data()
+
+            message = data.decode('utf-8')
+            print(f"Received {message!r}")
+
+            split_msg = message.split(";")
+            for sub_msg in split_msg:
+                response = ""
+
+                if sub_msg == "Hello there!":
+                    response = "General Kenobi you are a bold one"
+                    self.socket.write(response.encode('utf-8'))
+
+                elif sub_msg == "And thennnnn...":
+                    self.shook_hands = True
+
+                elif sub_msg == "Why won't you die?":
+                    self.shook_hands = False
+                    self.server.close()
+
+
 
 
     # Handles when the red X is clicked. Has it save some things before actually quitting
@@ -113,7 +152,6 @@ class BigBrotherListener(QObject):
 
         # Call the base class implementation for other events
         return super().eventFilter(watched, event)
-
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
