@@ -49,6 +49,8 @@ class ParticipantDisplay(QGraphicsView):
         self.viewport().update()
 
         self.target = target
+        self.target.setThickness(self.target.thickness * self.ppd)
+        self.target.setSize(self.target.size * self.ppd)
 
         self.target.setTransform(QTransform.fromTranslate(self.center.x() + self.target_position.x() * self.ppd,
                                                           self.center.y() - self.target_position.y() * self.ppd))

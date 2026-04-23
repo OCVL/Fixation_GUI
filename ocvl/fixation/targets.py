@@ -168,7 +168,7 @@ class TargetFactory:
     }
 
     @staticmethod
-    def get_target(target_type: TargetTypes, size: int = 5, thickness: int = 1, color: QColor = QColor("white")) -> Target:
+    def get_target(target_type: TargetTypes, size: int = 5, thickness: float = 1.0, color: QColor = QColor("white")) -> Target:
         target_class = TargetFactory._targets.get(target_type)
         if target_class:
             return target_class(size, thickness, color)

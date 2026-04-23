@@ -80,8 +80,11 @@ class _OperatorDisplay(QGraphicsView):
         super().__init__(parent)
 
         self.mouse_pressed = False
+        self.mouse_enabled = mouse_enabled
         if mouse_enabled:
             self.setMouseTracking(True)
+        else:
+            self.setMouseTracking(False)
 
         if config is None:
             self.config = dict()
@@ -182,15 +185,16 @@ class _OperatorDisplay(QGraphicsView):
         self.mouse_pressed = True
 
     def mouseMoveEvent(self, event: QMouseEvent, /):
-        if self.mouse_pressed:
+        if self.mouse_enabled and self.mouse_pressed:
             newpos = QPointF( event.position().x() - self.center.x(), self.center.y() - event.position().y())
             self.parentWidget().onPositionChanged( newpos / self.ppd )
 
 
     def mouseReleaseEvent(self, event: QMouseEvent, /):
         self.mouse_pressed = False
-        newpos = QPointF( event.position().x() - self.center.x(), self.center.y() - event.position().y())
-        self.parentWidget().onPositionChanged( newpos / self.ppd )
+        if self.mouse_enabled:
+            newpos = QPointF( event.position().x() - self.center.x(), self.center.y() - event.position().y())
+            self.parentWidget().onPositionChanged( newpos / self.ppd )
 
 
 

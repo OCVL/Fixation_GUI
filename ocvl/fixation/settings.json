@@ -5,8 +5,8 @@
   "fixation_target": {
     "major_increment": 0.5,
     "minor_increment": 0.1,
-    "allow_mouse_movement": false,
-    "allow_keyboard_movement": false,
+    "allow_mouse_movement": true,
+    "allow_keyboard_movement": true,
 
     "operator_display": {
       "width_in_px": 600,

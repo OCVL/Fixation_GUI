@@ -3,17 +3,17 @@ import PySide6
 from PySide6 import QtWidgets, QtGui, QtCore
 import sys
 from PySide6.QtGui import *
-from PySide6.QtCore import Qt, QSize, QPointF, QEvent, QRegularExpression, Signal, Property
+from PySide6.QtCore import Qt, QSize, QPointF, QEvent, QRegularExpression, Signal, Property, Slot
 from PySide6.QtWidgets import *
 
-from ocvl.fixation.targets import TargetFactory,MalteseCross, CrossHair, TargetTypes
+from ocvl.fixation.targets import TargetFactory, MalteseCross, CrossHair, TargetTypes, Target
 
 
 class ControlPanel(QTabWidget):
     """
     Main class for the control panel that contains various tabs, each with different functionality
     """
-    colorChanged = Signal(str)
+    targetChanged = Signal(Target)
 
     def __init__(self, config: dict, parent=None):
         super().__init__(parent)
@@ -26,8 +26,8 @@ class ControlPanel(QTabWidget):
         self.part_config = self.config.get("participant_display", dict())
 
         # Target variables
-        self.target_color = self.part_config.get("color", "orange")
-        self.target_shape = self.part_config.get("color", TargetTypes.BULLSEYE)
+        self.target_color = QColor(self.part_config.get("color", "orange"))
+        self.target_shape = self.part_config.get("shape", TargetTypes.BULLSEYE)
         self.target_diameter = self.part_config.get("diameter", 1)
         self.target_thickness = self.part_config.get("thickness", 0.1)
 
@@ -118,15 +118,8 @@ class ControlPanel(QTabWidget):
         layout.addRow(image_config_group)
 
         # Target set up group and its layout
-        target_config_group = QGroupBox("Target Set Up")
+        target_config_group = QGroupBox("Target Properties")
         target_cal_layout = QVBoxLayout()
-
-        # Color wheel for selecting the color of the target
-        color_button = QPushButton("Select Color")
-        target_cal_layout.addWidget(color_button)
-        color_button.clicked.connect(self.onPressColor)
-
-        color_button.setFocusPolicy(Qt.NoFocus)
 
         # Generate the scroll bar for the size of the fixation target
         self.size_spinner = QDoubleSpinBox()
@@ -135,14 +128,22 @@ class ControlPanel(QTabWidget):
         self.label_size = QLabel()
         self.size_spinner.setMinimum(1 / self.part_config.get("ppd", 10))
         self.size_spinner.setMaximum(5 * self.part_config.get("ppd", 10))
-        self.size_spinner.setValue(self.part_config.get("diameter", 1) * self.part_config.get("ppd", 10))
+        self.size_spinner.setValue(self.part_config.get("diameter", 1))
+        self.size_spinner.setSingleStep(1 / self.part_config.get("ppd", 10))
 
-        self.label_size.setText("Target Size (in degrees): ")
+        self.label_size.setText(f"Diameter: {self.part_config.get("diameter", 1):.2f}{chr(0x00B0)}")
         self.size_spinner.valueChanged.connect(self.sizeChange)
 
         # Add scroll bar and label to the main widget
         target_cal_layout.addWidget(self.label_size)
         target_cal_layout.addWidget(self.size_spinner)
+
+        # Color wheel for selecting the color of the target
+        color_button = QPushButton("Select Color")
+        target_cal_layout.addWidget(color_button)
+        color_button.clicked.connect(self.onPressColor)
+
+        color_button.setFocusPolicy(Qt.NoFocus)
 
         # Adding the buttons to the shape layouts
         fix_shape_main = QVBoxLayout()
@@ -158,6 +159,9 @@ class ControlPanel(QTabWidget):
             self.targetbuttons[target].setCheckable(True)
             self.targetbuttons[target].clicked.connect(self.updateTargets)
             self.target_buttongroup.addButton(self.targetbuttons[target])
+
+            if target == self.target_shape:
+                self.targetbuttons[target].setChecked(True)
 
             fix_shape1.addWidget(self.targetbuttons[target])
 
@@ -479,10 +483,10 @@ class ControlPanel(QTabWidget):
             painter.setTransform(QTransform.fromTranslate(32, 32))
 
             if button.isChecked():
-                targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=self.var.target_color)
-                self.var.target_shape = TargetFactory.get_target(target_type, size=self.var.target_diameter, thickness=1, color=self.var.target_color)
+                targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=self.target_color)
+                self.targetChanged.emit(TargetFactory.get_target(target_type, size=self.target_diameter, thickness=self.target_thickness, color=self.target_color))
             else:
-                targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=Qt.gray)
+                targ = TargetFactory.get_target(target_type, size=32, thickness=5, color=QColor("darkgray"))
 
             targ.paint(painter, QStyleOptionGraphicsItem(), None)
             painter.end()
@@ -490,29 +494,29 @@ class ControlPanel(QTabWidget):
             button.setIcon(canvas)
             button.setIconSize(QSize(32, 32))
 
-
-    def sizeChange(self):
+    @Slot()
+    def sizeChange(self, newval: float):
         """
         Slot for displaying the size of the fixation target as it moves
         """
-        txt = "Target Size: " + str(self.size_spinner.value())
-        self.label_size.setText(txt)
-        self.var.target_diameter = self.size_spinner.value()
+        self.label_size.setText(f"Diameter: {newval:.2f}{chr(0x00B0)}")
+        self.target_diameter = newval
         self.updateTargets()
 
+    @Slot()
     def onPressColor(self):
         """
         Slot used to select the color of the fixation target
         """
         color = QColorDialog.getColor()  # Might want to make a class variable to change the color of the fixation target to the one selected
-        self.var.target_color = color
+        self.target_color = color
         if color.isValid():
             self.updateTargets()
 
     """
     Slots that are used in the UI for imCalibrationControlTab
     """
-
+    @Slot()
     def onPressCal(self):
         button = self.sender()
         txt = str(button.text())
