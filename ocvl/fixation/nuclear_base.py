@@ -36,6 +36,7 @@ class CenterPanel(QWidget):
         # Connections
         self.positionChanged.connect(self.fix_disp.onPositionChanged)
         self.control_panel.targetChanged.connect(self.fix_disp.onTargetChange)
+        self.control_panel.center_fovea_button.clicked.connect(self.fix_disp.setPositionAsCenter)
 
         self.layout.addWidget(self.fix_disp, 0, 0)
         self.layout.addWidget(self.control_panel, 0, 1)

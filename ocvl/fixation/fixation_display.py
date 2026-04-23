@@ -70,6 +70,15 @@ class FixationDisplay(QWidget):
                                                    self.fov.width() * self.operator_display.ppd,
                                                    self.fov.height() * self.operator_display.ppd)
 
+    @Slot()
+    def setPositionAsCenter(self):
+        self.target_position = QPointF(0, 0)
+        self.operator_display.imaging_rect.\
+            setTransform(QTransform.fromTranslate(self.operator_display.center.x() + self.target_position.x() * self.operator_display.ppd,
+                                                  self.operator_display.center.y() - self.target_position.y() * self.operator_display.ppd))
+
+        self._participant_display.setCenter(self._participant_display.target_position)
+
 
 class _OperatorDisplay(QGraphicsView):
     """

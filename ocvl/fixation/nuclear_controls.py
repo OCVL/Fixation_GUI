@@ -96,12 +96,12 @@ class ControlPanel(QTabWidget):
         self.load_bg_image_button.setText("Load Background Image")  # Open file explore and select image
         self.image_cal_button = QPushButton()
         self.image_cal_button.setText("Start Image Calibration")
-        center_fovea_button = QPushButton()
-        center_fovea_button.setText("Center Fovea")
+        self.center_fovea_button = QPushButton()
+        self.center_fovea_button.setText("Center Fovea")
 
         self.load_bg_image_button.setFocusPolicy(Qt.NoFocus)
         self.image_cal_button.setFocusPolicy(Qt.NoFocus)
-        center_fovea_button.setFocusPolicy(Qt.NoFocus)
+        self.center_fovea_button.setFocusPolicy(Qt.NoFocus)
 
         # Add the image calibration button to its slot when pressed
         self.image_cal_button.clicked.connect(self.onPressCal)
@@ -111,7 +111,7 @@ class ControlPanel(QTabWidget):
         image_cal_layout.addWidget(self.load_bg_image_button)
         image_cal_layout.addWidget(self.image_label)
         image_cal_layout.addWidget(self.image_cal_button)
-        image_cal_layout.addWidget(center_fovea_button)
+        image_cal_layout.addWidget(self.center_fovea_button)
 
         # Add the protocol layout to the group layout and then add the group to the main layout as another row
         image_config_group.setLayout(image_cal_layout)
@@ -246,7 +246,6 @@ class ControlPanel(QTabWidget):
         info_group.setLayout(info_layout)
         layout.addRow(info_group)
 
-
         # Protocol Advance group
         protocol_group = QGroupBox("Protocol")
         protocol_adv_layout = QVBoxLayout()
@@ -330,71 +329,6 @@ class ControlPanel(QTabWidget):
 
         # Add the target button layout to the target control layout
         target_control_layout.addLayout(target_display_bttns)
-
-        # Add label for quick location to the target control layout
-        target_control_layout.addWidget(QLabel("Quick Locations:"))
-
-        # Quick Location Push buttons generated along with gridlayout for the buttons
-        quick_bttn_layout = QGridLayout()
-
-        # Push Buttons to be used for Quick Locations
-        self.TRC = QPushButton("TRC")
-        self.MTE = QPushButton("MTE")
-        self.TLC = QPushButton("TLC")
-        self.MLE = QPushButton("MLE")
-        self.BLC = QPushButton("BLC")
-        self.MBE = QPushButton("MBE")
-        self.BRC = QPushButton("BRC")
-        self.MRE = QPushButton("MRE")
-        self.CTR = QPushButton("CTR")
-
-        self.TRC.setFocusPolicy(Qt.NoFocus)
-        self.MTE.setFocusPolicy(Qt.NoFocus)
-        self.TLC.setFocusPolicy(Qt.NoFocus)
-        self.MLE.setFocusPolicy(Qt.NoFocus)
-        self.BLC.setFocusPolicy(Qt.NoFocus)
-        self.MBE.setFocusPolicy(Qt.NoFocus)
-        self.BRC.setFocusPolicy(Qt.NoFocus)
-        self.MRE.setFocusPolicy(Qt.NoFocus)
-        self.CTR.setFocusPolicy(Qt.NoFocus)
-
-
-        # Change the shape of the buttons to be squares
-        size = 30
-        self.TRC.setFixedSize(QSize(size, size))
-        self.MTE.setFixedSize(QSize(size, size))
-        self.TLC.setFixedSize(QSize(size, size))
-        self.MLE.setFixedSize(QSize(size, size))
-        self.BLC.setFixedSize(QSize(size, size))
-        self.MBE.setFixedSize(QSize(size, size))
-        self.BRC.setFixedSize(QSize(size, size))
-        self.MRE.setFixedSize(QSize(size, size))
-        self.CTR.setFixedSize(QSize(size, size))
-
-        # Set these quick location buttons to their needed slot
-        self.TRC.clicked.connect(self.onPressQuickLocs)
-        self.MTE.clicked.connect(self.onPressQuickLocs)
-        self.TLC.clicked.connect(self.onPressQuickLocs)
-        self.MLE.clicked.connect(self.onPressQuickLocs)
-        self.CTR.clicked.connect(self.onPressQuickLocs)
-        self.MRE.clicked.connect(self.onPressQuickLocs)
-        self.BLC.clicked.connect(self.onPressQuickLocs)
-        self.MBE.clicked.connect(self.onPressQuickLocs)
-        self.BRC.clicked.connect(self.onPressQuickLocs)
-
-        # Add all the quick loc buttons to their grid layout
-        quick_bttn_layout.addWidget(self.TRC, 0, 2)
-        quick_bttn_layout.addWidget(self.MTE, 0, 1)
-        quick_bttn_layout.addWidget(self.TLC, 0, 0)
-        quick_bttn_layout.addWidget(self.MLE, 1, 0)
-        quick_bttn_layout.addWidget(self.BLC, 2, 0)
-        quick_bttn_layout.addWidget(self.MBE, 2, 1)
-        quick_bttn_layout.addWidget(self.BRC, 2, 2)
-        quick_bttn_layout.addWidget(self.MRE, 1, 2)
-        quick_bttn_layout.addWidget(self.CTR, 1, 1)
-
-        # Add the quick buttons to the main target control layout
-        target_control_layout.addLayout(quick_bttn_layout)
 
         # Add all the target control elements to the group layout and then add it to the main layout as another row
         target_control_group.setLayout(target_control_layout)
@@ -548,7 +482,7 @@ class ControlPanel(QTabWidget):
             ("image", ".jpg"),
             ("image", ".tif")])
         print(image_path)
-        self.var.image_path = image_path
+        self.image_path = image_path
         self.image_label.setText(str(image_path))
 
     """
@@ -569,90 +503,6 @@ class ControlPanel(QTabWidget):
             self.save_p_label.setText("")
         else:
             self.save_p_label.setText("Advance in Protocol")
-
-    def onPressQuickLocs(self):
-        button = self.sender()
-        txt = str(button.text())
-        tmp = self.var.current_fov.split(" ")
-        h_fov = float(tmp[0])
-        v_fov = float(tmp[2])
-        # need to make sure these end up being in the correct locations
-        if txt =="TLC":
-            self.var.x_pos_deg = 0 - (h_fov / 4)
-            self.var.y_val = 0 + (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.fixation_target_ppd)
-            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.fixation_target_ppd)
-            self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
-            self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
-            self.var.notes_entry = "TLC"
-        elif txt == "MTE":
-            self.var.x_pos_deg = 0
-            self.var.y_val = 0 + (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og
-            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.fixation_target_ppd)
-            self.var.center_x_grid = self.var.center_x_og_grid
-            self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
-            self.var.notes_entry = "MTE"
-        elif txt == "TRC":
-            self.var.x_pos_deg = 0 + (h_fov / 4)
-            self.var.y_val = 0 + (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.fixation_target_ppd)
-            self.var.target_center_y = self.var.center_y_og - ((v_fov / 4) * self.var.fixation_target_ppd)
-            self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
-            self.var.center_y_grid = self.var.center_y_og_grid - ((v_fov / 4) * self.var.grid_mult)
-            self.var.notes_entry = "TRC"
-        elif txt == "MLE":
-            self.var.x_pos_deg = 0 - (h_fov / 4)
-            self.var.y_val = 0
-            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.fixation_target_ppd)
-            self.var.target_center_y = self.var.center_y_og
-            self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
-            self.var.center_y_grid = self.var.center_y_og_grid
-            self.var.notes_entry = "MLE"
-        elif txt == "CTR":
-            self.var.x_pos_deg = 0
-            self.var.y_val = 0
-            self.var.target_center_x = self.var.center_x_og
-            self.var.target_center_y = self.var.center_y_og
-            self.var.center_x_grid = self.var.center_x_og_grid
-            self.var.center_y_grid = self.var.center_y_og_grid
-        elif txt == "MRE":
-            self.var.x_pos_deg = 0 + (h_fov / 4)
-            self.var.y_val = 0
-            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.fixation_target_ppd)
-            self.var.target_center_y = self.var.center_y_og
-            self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
-            self.var.center_y_grid = self.var.center_y_og_grid
-            self.var.notes_entry = "MRE"
-        elif txt == "BLC":
-            self.var.x_pos_deg = 0 - (h_fov / 4)
-            self.var.y_val = 0 - (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og - ((h_fov / 4) * self.var.fixation_target_ppd)
-            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.fixation_target_ppd)
-            self.var.center_x_grid = self.var.center_x_og_grid - ((h_fov / 4) * self.var.grid_mult)
-            self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
-            self.var.notes_entry = "BLC"
-        elif txt == "MBE":
-            self.var.x_pos_deg = 0
-            self.var.y_val = 0 - (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og
-            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.fixation_target_ppd)
-            self.var.center_x_grid = self.var.center_x_og_grid
-            self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
-            self.var.notes_entry = "MBE"
-        elif txt == "BRC":
-            self.var.x_pos_deg = 0 + (h_fov / 4)
-            self.var.y_val = 0 - (v_fov / 4)
-            self.var.target_center_x = self.var.center_x_og + ((h_fov / 4) * self.var.fixation_target_ppd)
-            self.var.target_center_y = self.var.center_y_og + ((v_fov / 4) * self.var.fixation_target_ppd)
-            self.var.center_x_grid = self.var.center_x_og_grid + ((h_fov / 4) * self.var.grid_mult)
-            self.var.center_y_grid = self.var.center_y_og_grid + ((v_fov / 4) * self.var.grid_mult)
-            self.var.notes_entry = "BRC"
-        else:
-            print("Something went wrong!")
-
-        # call to update the coordinates in the horz and vert text boxes
-        self.updateCoordText()
 
     """
     slots for the Grid Configuration Tab

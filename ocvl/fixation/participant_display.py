@@ -66,3 +66,14 @@ class ParticipantDisplay(QGraphicsView):
                                                           self.center.y() - self.target_position.y() * self.ppd))
 
         self.viewport().update()
+
+    def setCenter(self, center: QPointF):
+
+        self.center = QPointF(self.center.x() + center.x() * self.ppd,
+                              self.center.y() - center.y() * self.ppd)
+        self.target_position = QPointF(0, 0)
+
+        self.target.setTransform(QTransform.fromTranslate(self.center.x() + self.target_position.x() * self.ppd,
+                                                          self.center.y() - self.target_position.y() * self.ppd))
+
+        self.viewport().update()
